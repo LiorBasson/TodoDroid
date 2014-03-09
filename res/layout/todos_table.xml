@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/todos_table_screen_linlay"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"    
+    android:orientation="vertical" >
+    
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+	    <EditText
+	        android:id="@+id/et_Search"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="0.8"
+	        android:hint="Search"
+	        />
+	    
+	    <Button
+	        android:id="@+id/bt_Search"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="0.1"
+	         android:text="Q"
+	        />
+	     
+	    <Button
+	        android:id="@+id/bt_AddTodo"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="0.1"
+	        android:text="+"
+	      	/>
+	  
+	</LinearLayout>
+	   
+    <ScrollView 
+    android:id="@+id/layout" 
+    android:layout_height="match_parent" 
+    android:layout_width="match_parent"      
+    android:layout_weight="1"
+    android:scrollbars="vertical"        
+    android:layout_marginTop="5dip"     
+    android:scrollbarStyle="insideOverlay"
+    android:fillViewport="true">   
+
+    
+         <TableLayout
+            android:id="@+id/table_ToDos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="vertical" 
+            android:scrollbarStyle="insideOverlay"
+            android:scrollbarFadeDuration="2000"
+            android:scrollbarDefaultDelayBeforeFade="2000"            
+            android:isScrollContainer="true">
+            
+
+            <TableRow
+                android:id="@+id/tableRow1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scrollbars="none" >
+                <TextView
+		            android:text="Todo"
+		            android:gravity="left"
+		            android:layout_weight="0.4"		
+		            android:singleLine="true"
+		            android:background="#666666"
+		            android:textColor="#CCCCCC"
+		            android:padding="3dip"	/>
+		        <TextView
+		            android:text="Category"
+		            android:gravity="left"
+		            android:layout_weight="0.15"
+		            android:singleLine="true"
+		            android:background="#666666"
+		            android:textColor="#CCCCCC"
+		            android:padding="3dip" />
+		        <TextView
+		            android:text="Due Date"
+		            android:gravity="left"
+		            android:layout_weight="0.4"
+		            android:singleLine="true"
+		            android:background="#666666"
+		            android:textColor="#CCCCCC"
+		            android:padding="3dip" />
+		        <TextView
+		            android:text="Done"
+		            android:gravity="left"
+		            android:layout_weight="0.05"
+		            android:singleLine="true"
+		            android:background="#666666"
+		            android:textColor="#CCCCCC"
+		            android:padding="3dip" />
+            </TableRow>
+        </TableLayout>
+        
+ </ScrollView>
+        
+    <Button
+            android:id="@+id/bt_ToDebugScr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="To Debugg" />
+</LinearLayout>

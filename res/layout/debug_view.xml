@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView  xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"     
+    android:layout_height="match_parent" 
+    android:layout_width="match_parent"         
+    android:scrollbars="vertical"      
+    tools:context=".MainActivity">      
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">    
+    
+   <Button
+        android:id="@+id/fullseq"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="31dp"
+        android:text="Full sequence AI1" />
+   
+   <Button
+        android:id="@+id/fullseqmeth"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/fullseq"
+        android:layout_toLeftOf="@+id/fullseq"
+        android:text="Methods Full Seq" />
+
+    <Button
+        android:id="@+id/printAll"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/fullseq"
+        android:layout_below="@+id/fullseq"
+        android:text="PrintAllItemsInDB" />
+    
+    <Button
+        android:id="@+id/clrdb"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/printAll"
+        android:layout_alignParentLeft="true"
+        android:text="Clear DB" />
+
+    <Button
+        android:id="@+id/bt_newTodo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/printAll"
+        android:text="New Todo" />
+    
+    <TextView
+        android:id="@+id/tView_title2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/bt_newTodo"
+        android:text="Title" />
+
+    <EditText
+        android:id="@+id/eText_title2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/tView_title2"
+        android:ems="10"
+        android:hint="fill in todo title here" />
+
+    <TextView
+        android:id="@+id/tView_tag2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/eText_title2"
+        android:text="Category" />
+
+    <Spinner
+        android:id="@+id/spinner_tag2"
+        android:spinnerMode="dropdown"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/tView_tag2" />
+
+    <CheckBox
+        android:id="@+id/chkBx_taskCompleted2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/spinner_tag2"
+        android:text="Completed" />
+
+    <Button
+        android:id="@+id/bt_TodoTableView"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/chkBx_taskCompleted2"
+        android:layout_below="@+id/chkBx_taskCompleted2"
+        android:text="ToDos Table" />
+  
+  </RelativeLayout>
+    
+</ScrollView>
+
