@@ -11,7 +11,9 @@ import android.os.Bundle;
 import android.R.color;
 import android.R.integer;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
@@ -91,7 +93,7 @@ public class MainActivity extends Activity
 			
 			@Override
 			public void onClick(View v) {
-				helpOnTableCreation();								
+												
 			}
 		});
 		
@@ -620,6 +622,40 @@ public class MainActivity extends Activity
 	}
 	
 	
+	@Override
+	public void onBackPressed() 
+	{
+		userVerificationToExit();
+	}
+	
+	
+	private void userVerificationToExit()
+	{
+		final AlertDialog.Builder aDBuilder = new AlertDialog.Builder(this);
+		try
+		{	
+			aDBuilder.setMessage("Are you sure you want to exit?");
+			aDBuilder.setTitle("Exit!");
+			
+			aDBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) 
+				{
+					// temporary solution or legit? (to call finish() from this handler)
+					finish();					
+				}
+			});	
+			aDBuilder.setNeutralButton("Cancel", null);
+			
+			aDBuilder.create().show();							
+		}
+		catch (Exception e)
+		{
+			Log.d("DialogBox_ExitApp", "DialogBox throws the next exception: ", e);
+		}		
+	}
+		
 	public void toastt(String message, boolean IsLongDuration)
     {
     	
