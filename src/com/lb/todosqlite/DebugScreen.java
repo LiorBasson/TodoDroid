@@ -5,9 +5,12 @@ import java.util.List;
 import com.lb.todosqlite.helper.DatabaseHelper;
 import com.lb.todosqlite.model.Tag;
 import com.lb.todosqlite.model.Todo;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract.Data;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MotionEvent;
@@ -34,8 +37,6 @@ public class DebugScreen extends Activity
 	String TagNameNewSelected = "";	
 	//final int requestCode_TableViewer = 213;
 	final int requestCode_AddNewTag = 212;
-
-	
 	
 	
 	@Override
@@ -44,6 +45,11 @@ public class DebugScreen extends Activity
 		setContentView(R.layout.debug_view);
 		
 		Log.d("MainActivity", "onCreate() started");
+		
+		Intent newIntent = new Intent();
+		Intent getIntent = getIntent();
+		Bundle extras = getIntent.getExtras();
+		
 		
 		Button fullSAI1BT = (Button) findViewById(R.id.fullseq);
 		fullSAI1BT.setOnClickListener(new OnClickListener() 
@@ -115,8 +121,6 @@ public class DebugScreen extends Activity
 			@Override
 			public void onClick(View v) 
 			{								
-//				Intent todoTableViewer = new Intent(getApplicationContext(), DebugScreen.class);
-//				startActivityForResult(todoTableViewer, requestCode_TableViewer);			
 				Intent resultIntent = getIntent();
 				setResult(RESULT_OK, resultIntent);
 				

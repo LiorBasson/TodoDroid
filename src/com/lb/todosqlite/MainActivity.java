@@ -7,9 +7,11 @@ import com.lb.todosqlite.helper.DatabaseHelper;
 import com.lb.todosqlite.model.Tag;
 import com.lb.todosqlite.model.Todo;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.R.color;
 import android.R.integer;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -52,11 +54,12 @@ import android.widget.TableRow.LayoutParams;
 
 public class MainActivity extends Activity 
 {
-	final int requestCode_AddNewToDo = 211;
+	// vars for additional screens handling 
+	final int requestCode_AddNewToDo = 211; // the next ReqCode is in use in AddNewToDo.java: final int requestCode_AddNewTag = 212;
 	final int requestCode_DeubgScr = 213;
-	final String spinnerDefaultValue = "Select Todo category";
-	final String defaultInternalTagName = "None";
-	
+	final int requestCode_ViewToDo = 214;
+	final int requestCode_EditToDo = 215;		
+	// vars for later color theme use
 	final String colorCodeForTableBG = "#000000";
 	final String colorCodeForTableText = "#FFFFFF";
 	final String colorCodeForTRInFocus = "#003366";
@@ -65,11 +68,10 @@ public class MainActivity extends Activity
 	final String colorCodeForButtonsTxt = "#FFFFFF";
 	final String colorCodeForTableHeaderBG = "#666666";
 	final String colorCodeForTableHeaderTxt = "#CCCCCC";
-
-	
-
-
-
+	// general vars
+	final String spinnerDefaultValue = "Select Todo category";
+	final String defaultInternalTagName = "None";
+	// vars for debug
 	int searchCount = 0;
 	
 	@Override
@@ -107,6 +109,7 @@ public class MainActivity extends Activity
 				
 				Intent todoTableViewer = new Intent(getApplicationContext(), AddNewToDo.class);
 				startActivityForResult(todoTableViewer, requestCode_AddNewToDo);	
+				
 			}
 		});
 		
@@ -119,8 +122,15 @@ public class MainActivity extends Activity
 			@Override
 			public void onClick(View v) {
 				
-				Intent todoTableViewer = new Intent(getApplicationContext(), DebugScreen.class);
-				startActivityForResult(todoTableViewer, requestCode_DeubgScr);		
+				Intent debugScreen = new Intent(getApplicationContext(), DebugScreen.class);
+				Intent getIntent = getIntent();
+				debugScreen.putExtra("com.lb.todosqlite.debugscreen.requestCode_DeubgScr", requestCode_DeubgScr); 
+				getIntent.putExtra("com.lb.todosqlite.MainActivity.requestCode_DeubgScr", requestCode_DeubgScr);
+				int debugTodoID = 1;
+				debugScreen.putExtra("com.lb.todosqlite.debugscreen.debugTodoID", debugTodoID); 
+				getIntent.putExtra("com.lb.todosqlite.MainActivity.debugTodoID", debugTodoID);
+				startActivity(debugScreen);
+				//startActivityForResult(debugScreen, requestCode_DeubgScr);		
 			}
 		});
 		
@@ -194,7 +204,6 @@ public class MainActivity extends Activity
 			
 			if (todos.size()==0)
 				{
-					toastt("Hooray! nothing to do?",false); // TODO: replace with a view greeting and suggesting to add todos
 					TableRow welcome = new TableRow(getApplicationContext());
 					
 					ImageView iv = new ImageView(getApplicationContext());
@@ -579,7 +588,7 @@ public class MainActivity extends Activity
 	public void deleteTodo(int todoID)
 	{
 		DatabaseHelper db = new DatabaseHelper(getApplicationContext());
-		db.deleteToDo(todoID, true); // TODO: verify new implementation which deletes TodoTag table and Tag table relevant rows
+		db.deleteToDo(todoID, true); 
 		db.closeDB();
 		
 		try

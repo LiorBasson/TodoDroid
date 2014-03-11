@@ -86,27 +86,27 @@ public class AddNewToDo extends Activity
 			@Override
 			public void onClick(View v) {
 				// TODO: check if can change to specific relevant previous intent returned by getIntent() instead of a "new Intent()"
-				Intent intent = getIntent();
+				Intent resultIntent = getIntent();
 				
 				isCancelPressed = false;
-				intent.putExtra("com.lb.todosqlite.addnewtag.isCancelPressed", isCancelPressed);
+				resultIntent.putExtra("com.lb.todosqlite.addnewtag.isCancelPressed", isCancelPressed);
 				
 				// TODO: check which View relevant in this screen
 				EditText et_TodoTitle = (EditText) findViewById(R.id.eText_title);
 				String reqTodoTitle =et_TodoTitle.getText().toString();  
-				intent.putExtra("com.lb.todosqlite.addnewtodo.todoTitle", reqTodoTitle);
+				resultIntent.putExtra("com.lb.todosqlite.addnewtodo.todoTitle", reqTodoTitle);
 				
 				String reqTodoCategory = tagNameLastSelected;
-				intent.putExtra("com.lb.todosqlite.addnewtodo.categorySelected", reqTodoCategory);
+				resultIntent.putExtra("com.lb.todosqlite.addnewtodo.categorySelected", reqTodoCategory);
 				
 				// TODO: later change to DueDate. for now implementing "Creation Date"
 				SimpleDateFormat dateFormat = new SimpleDateFormat(
 			    		   "dd-MM-yyyy HH:mm:ss", Locale.getDefault()); 
 			       Date date = new Date();
 			    String reqCreationDate = dateFormat.format(date);			    
-				intent.putExtra("com.lb.todosqlite.addnewtodo.creationDate", reqCreationDate);
+				resultIntent.putExtra("com.lb.todosqlite.addnewtodo.creationDate", reqCreationDate);
 				
-                setResult(RESULT_OK, intent);
+                setResult(RESULT_OK, resultIntent);
                 finish();
 			}
 		});
