@@ -21,16 +21,19 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+                
             </intent-filter>
         </activity>
         <activity
-            android:name="com.lb.todosqlite.AddNewToDo">
+            android:name="com.lb.todosqlite.AddNewToDo"
+            android:label="Add New ToDo">
         </activity>
         <activity
-            android:name="com.lb.todosqlite.AddNewTag">
+            android:name="com.lb.todosqlite.AddNewTag"
+            android:label="Add New Tag">
         </activity>
          <activity
-            android:name="com.lb.todosqlite.DebugScreen" android:configChanges="orientation|screenSize">
+            android:name="com.lb.todosqlite.DebugScreen" android:configChanges="orientation|screenSize">            	
             </activity>
         
     </application>

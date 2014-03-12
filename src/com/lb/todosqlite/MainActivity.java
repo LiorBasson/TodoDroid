@@ -124,10 +124,12 @@ public class MainActivity extends Activity
 				
 				Intent debugScreen = new Intent(getApplicationContext(), DebugScreen.class);
 				Intent getIntent = getIntent();
-				debugScreen.putExtra("com.lb.todosqlite.debugscreen.requestCode_DeubgScr", requestCode_DeubgScr); 
+				debugScreen.putExtra("req_code_dbg_scr", requestCode_DeubgScr); 
+				//debugScreen.putExtra("com.lb.todosqlite.debugscreen.requestCode_DeubgScr", requestCode_DeubgScr); 
 				getIntent.putExtra("com.lb.todosqlite.MainActivity.requestCode_DeubgScr", requestCode_DeubgScr);
 				int debugTodoID = 1;
-				debugScreen.putExtra("com.lb.todosqlite.debugscreen.debugTodoID", debugTodoID); 
+				debugScreen.putExtra("dbg_todo_id", debugTodoID); 
+				//debugScreen.putExtra("com.lb.todosqlite.debugscreen.debugTodoID", debugTodoID); 
 				getIntent.putExtra("com.lb.todosqlite.MainActivity.debugTodoID", debugTodoID);
 				startActivity(debugScreen);
 				//startActivityForResult(debugScreen, requestCode_DeubgScr);		
@@ -256,7 +258,7 @@ public class MainActivity extends Activity
 								ntv.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 0.15f));
 								if (todo.getStatus()== 1)
 									ntv.setText("[X]");
-								else ntv.setText("[ ]");								
+								else ntv.setText("[   ]");								
 								break;
 							}
 						}			
@@ -301,12 +303,10 @@ public class MainActivity extends Activity
 						MenuItem editTodo =  null;
 						MenuItem checkTodo =  null;
 						MenuItem deleteTodo =  null;
-						String vieweToString = null;
 						int rowTodoID = -1;					
 						
 						if (!(menu == null) && !(v == null))
 						{
-							vieweToString = v.toString();
 							rowTodoID = v.getId();
 							Todo selectedTodo = getTodoByID(rowTodoID);
 							String contMenuTitle = selectedTodo.getNote();
@@ -316,8 +316,9 @@ public class MainActivity extends Activity
 							else endSubString = 19;
 							contMenuTitle = contMenuTitle.substring(0, endSubString) + "...";
 							
+							
 							menu.setHeaderTitle(contMenuTitle);
-							viewTodo = menu.add(rowTodoID, 1, Menu.NONE, "View");									
+							viewTodo = menu.add(rowTodoID, 1, Menu.NONE, "View");
 							editTodo =  menu.add(rowTodoID, 2, Menu.NONE, "Edit");
 							checkTodo =  menu.add(rowTodoID, 3, Menu.NONE, "Un/Check As Completed");
 							deleteTodo =  menu.add(rowTodoID, 4, Menu.NONE, "Delete");

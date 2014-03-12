@@ -8,6 +8,7 @@ import com.lb.todosqlite.model.Todo;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract.Data;
@@ -49,7 +50,8 @@ public class DebugScreen extends Activity
 		Intent newIntent = new Intent();
 		Intent getIntent = getIntent();
 		Bundle extras = getIntent.getExtras();
-		
+		String intentAction = getIntent().getAction();
+		Uri intentData = getIntent().getData();
 		
 		Button fullSAI1BT = (Button) findViewById(R.id.fullseq);
 		fullSAI1BT.setOnClickListener(new OnClickListener() 
@@ -107,6 +109,11 @@ public class DebugScreen extends Activity
 			@Override
 			public void onClick(View v) 
 			{
+				
+				String url = "http://www.the-eucalyptus.com";
+				Intent browserIntent = new Intent(Intent.ACTION_VIEW);
+				browserIntent.setData(Uri.parse(url));
+				startActivity(browserIntent); 
 				
 				toastt("handling is in development", false);
 				btnPressed_NewTodo();				
