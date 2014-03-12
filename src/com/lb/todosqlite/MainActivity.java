@@ -17,6 +17,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -77,6 +79,8 @@ public class MainActivity extends Activity
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		// TODO: theme with  getApplication().setTheme(resid)?
 		
 		setContentView(R.layout.todos_table);
 		
@@ -617,7 +621,18 @@ public class MainActivity extends Activity
 	
 	public void launchViewTodo(int todoID)
 	{
-		toastt("Will inflate a view which will only display the todo", false);
+		SharedPreferences sp =  getApplication().getSharedPreferences("editTodo", 0);
+	    Editor ed =  sp.edit();
+	    ed.putInt("userReqCode", requestCode_ViewToDo);
+        ed.putInt("todoID", todoID);
+	    ed.putString("todo_dummy", "Dummy text: it might be better to use this instead of the default public void onClick(View v). should be checked later");
+	    ed.commit();
+	   
+	    Intent viewTodoIntent = new Intent(getApplicationContext(), viewTodo.class);	        
+	    viewTodoIntent.putExtra("todoID", todoID);
+	    startActivityForResult(viewTodoIntent, requestCode_ViewToDo);
+		
+		toastt("In development - Will inflate a view which will only display the todo", false);
 	}
 	
 	public void launchEditTodo(int todoID)
