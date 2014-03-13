@@ -42,6 +42,7 @@ public class AddNewToDo extends Activity
 	String TagNameNewSelected = "";
 	int btnNewTodoCount = 0;
 	boolean isCancelPressed;
+	boolean isDebugMode = false;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +57,7 @@ public class AddNewToDo extends Activity
 		}
 		catch (Exception e)
 		{
-			toastt("Failed to handle Spinner creation", false);
+			toastDebugInfo("Failed to handle Spinner creation", false);
 			Log.d("MainActivity", "Failed to handle Spinner. see exception: ", e);
 		}
 		
@@ -139,14 +140,14 @@ public class AddNewToDo extends Activity
 											// TODO: Set and Update spinner with new tag name
 											updateTagNameOnCreation(tagName); //TagNameNewSelected = tagName;
 										}
-										else toastt("Couldn't find tagNameToCreate Extra", false);								
+										else toastDebugInfo("Couldn't find tagNameToCreate Extra", false);								
 								}
 								else restoreTagNameOnCreateCancelled();									
 						}
 						catch (Exception e)
 						{
 							Log.d("OnActivityResult", "OnActivityResult gathering data thrown an xception: ", e);
-							toastt("OnActivityResult gathering data thrown an xception",true);
+							toastDebugInfo("OnActivityResult gathering data thrown an xception",true);
 						}
 					}
 					else restoreTagNameOnCreateCancelled();
@@ -183,7 +184,7 @@ public class AddNewToDo extends Activity
 				
 				@Override
 				public boolean onTouch(View v, MotionEvent event) {
-					toastt("Spinner onTouch invoked", false);
+					toastDebugInfo("Spinner onTouch invoked", false);
 					return false;
 				}
 			});
@@ -209,13 +210,13 @@ public class AddNewToDo extends Activity
 						TagNameNewSelected = selectedItemValue;
 					}					
 					
-					toastt("OnItemSelected via parent: " + selectedItemValue ,false);								
+					toastDebugInfo("OnItemSelected via parent: " + selectedItemValue ,false);								
 				}
 
 				@Override
 				public void onNothingSelected(AdapterView<?> arg0) {
 					// TODO Auto-generated method stub
-					toastt("onNothingSelected() invoked" ,false);
+					toastDebugInfo("onNothingSelected() invoked" ,false);
 				}
 			});    	
 	    }
@@ -242,7 +243,7 @@ public class AddNewToDo extends Activity
 		else sp.setSelection(0);
 		
 		tagNameLastSelected = tagN;
-		toastt("the new category = " + tagN, false);
+		toastDebugInfo("the new category = " + tagN, false);
 	}
 	
 	public void restoreTagNameOnCreateCancelled()
@@ -256,18 +257,32 @@ public class AddNewToDo extends Activity
 		else position = spAdapter.getPosition(tagNameLastSelected);
 		
 		sp.setSelection(position);		
-		toastt("restoring to " + tagNameLastSelected, false);
+		toastDebugInfo("restoring to " + tagNameLastSelected, false);
 	}
 
-	public void toastt(String message, boolean IsLongDuration)
+	public void toastDebugInfo(String message, boolean IsLongDuration)
     {
-    	
-    	int duration;
-    	if (IsLongDuration)
-    		duration = Toast.LENGTH_LONG;
-    	else duration = Toast.LENGTH_SHORT;    	
-    	
-    	Toast t = Toast.makeText(this, message, duration);
-    	t.show();
-    }			
+		if (isDebugMode) {
+	    	int duration;
+	    	if (IsLongDuration)
+	    		duration = Toast.LENGTH_LONG;
+	    	else duration = Toast.LENGTH_SHORT;    	
+	    	
+	    	Toast t = Toast.makeText(this, message, duration);
+	    	t.show();
+		}
+    }	
+	
+	public void dtoastDebugInfo(String message, boolean IsLongDuration)
+    {    	
+    	if (isDebugMode) {
+			int duration;
+			if (IsLongDuration)
+				duration = Toast.LENGTH_LONG;
+			else
+				duration = Toast.LENGTH_SHORT;
+			Toast t = Toast.makeText(this, message, duration);
+			t.show();
+		}
+    }
 }

@@ -38,6 +38,7 @@ public class DebugScreen extends Activity
 	String TagNameNewSelected = "";	
 	//final int requestCode_TableViewer = 213;
 	final int requestCode_AddNewTag = 212;
+	boolean isDebugMode = false;
 	
 	
 	@Override
@@ -99,7 +100,7 @@ public class DebugScreen extends Activity
 		}
 		catch (Exception e)
 		{
-			toastt("Failed to handle Spinner creation", false);
+			toastDebugInfo("Failed to handle Spinner creation", false);
 			Log.d("MainActivity", "Failed to handle Spinner. see exception: ", e);
 		}
 		
@@ -115,7 +116,7 @@ public class DebugScreen extends Activity
 				browserIntent.setData(Uri.parse(url));
 				startActivity(browserIntent); 
 				
-				toastt("handling is in development", false);
+				toastDebugInfo("handling is in development", false);
 				btnPressed_NewTodo();				
 			}
 		});
@@ -339,7 +340,7 @@ public class DebugScreen extends Activity
 		deleteAllTodosInSpecifiedTag();
 		updateSpecifiedTagName();
 		
-		toastt("fullSeqMethods() was called", false);
+		toastDebugInfo("fullSeqMethods() was called", false);
 		Log.d("MainActivity", "fullSeqMethods() Ended"); 
 	}
 	
@@ -458,7 +459,7 @@ public class DebugScreen extends Activity
         // Don't forget to close database connection
         db.closeDB();
         
-        toastt("fullSeqAllInOne() was called", false);
+        toastDebugInfo("fullSeqAllInOne() was called", false);
         Log.d("MainActivity", "fullSeqAllInOne() Ended"); 
 	}
     
@@ -493,7 +494,7 @@ public class DebugScreen extends Activity
     	// TODO: print TodoTags table? verify no Todo which wasn't "Registered" to a Tag exists?
     	
     	db.closeDB();    	
-    	toastt("printDB() was called", false);
+    	toastDebugInfo("printDB() was called", false);
     	Log.d("MainActivity", "printDB() Ended");
     }
     
@@ -518,7 +519,7 @@ public class DebugScreen extends Activity
     	db.clearDB();
     	
     	db.closeDB();
-    	toastt("clearDB() was called (End)", false);
+    	toastDebugInfo("clearDB() was called (End)", false);
     	Log.d("MainActivity", "clearDB() Ended");
     }
     
@@ -547,7 +548,7 @@ public class DebugScreen extends Activity
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				// TODO Auto-generated method stub
-				toastt("Spinner onTouch invoked", false);
+				toastDebugInfo("Spinner onTouch invoked", false);
 				removeSpinnerPrompt();
 				return false;
 			}
@@ -570,13 +571,13 @@ public class DebugScreen extends Activity
 						String dummyForDebbugging = "";						
 					}					
 				
-				toastt("OnItemSelected via parent: " + parent.getItemAtPosition(position).toString() ,false);								
+				toastDebugInfo("OnItemSelected via parent: " + parent.getItemAtPosition(position).toString() ,false);								
 			}
 
 			@Override
 			public void onNothingSelected(AdapterView<?> arg0) {
 				// TODO Auto-generated method stub
-				toastt("onNothingSelected() invoked" ,false);
+				toastDebugInfo("onNothingSelected() invoked" ,false);
 			}
 		});
     	
@@ -617,7 +618,7 @@ public class DebugScreen extends Activity
 		sp.setSelection(position);
 		
 		tagNameLastSelected = tagName;
-		toastt("the new category = " + tagName, false);
+		toastDebugInfo("the new category = " + tagName, false);
 	}
 	
 	public void restoreTagNameOnCreateCancelled()
@@ -631,7 +632,7 @@ public class DebugScreen extends Activity
 		else position = spAdapter.getPosition(tagNameLastSelected);
 		
 		sp.setSelection(position);		
-		toastt("restoring to " + tagNameLastSelected, false);
+		toastDebugInfo("restoring to " + tagNameLastSelected, false);
 	}
 
 	public void btnPressed_NewTodo()
@@ -640,16 +641,17 @@ public class DebugScreen extends Activity
 		addSpinnerPrompt();
 	}
     
-    public void toastt(String message, boolean IsLongDuration)
+    public void toastDebugInfo(String message, boolean IsLongDuration)
     {
-    	
-    	int duration;
-    	if (IsLongDuration)
-    		duration = Toast.LENGTH_LONG;
-    	else duration = Toast.LENGTH_SHORT;    	
-    	
-    	Toast t = Toast.makeText(this, message, duration);
-    	t.show();
+    	if (isDebugMode) {
+	    	int duration;
+	    	if (IsLongDuration)
+	    		duration = Toast.LENGTH_LONG;
+	    	else duration = Toast.LENGTH_SHORT;    	
+	    	
+	    	Toast t = Toast.makeText(this, message, duration);
+	    	t.show();
+    	}
     }
 	
 	

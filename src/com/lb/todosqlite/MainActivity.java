@@ -74,7 +74,7 @@ public class MainActivity extends Activity
 	final String spinnerDefaultValue = "Select Todo category";
 	final String defaultInternalTagName = "None";
 	// vars for debug
-	boolean isToastDebug = false;
+	boolean isDebugMode = false;
 	int searchCount = 0;
 	
 	@Override
@@ -119,10 +119,10 @@ public class MainActivity extends Activity
 		});
 		
 		
-		Button bt_backToMain = (Button) findViewById(R.id.bt_ToDebugScr);
+		Button bt_DebugScreen = (Button) findViewById(R.id.bt_ToDebugScr);
 		//bt_backToMain.setBackgroundColor(Color.parseColor(colorCodeForButtonsBG));
-		bt_backToMain.setTextColor(Color.parseColor(colorCodeForButtonsTxt));
-		bt_backToMain.setOnClickListener(new OnClickListener() {
+		bt_DebugScreen.setTextColor(Color.parseColor(colorCodeForButtonsTxt));
+		bt_DebugScreen.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
@@ -148,6 +148,10 @@ public class MainActivity extends Activity
 		
 		getWindow().setSoftInputMode(
 			      WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+		
+		// TODO: set value to 'isDebugMode' according to settings in preferences
+		if (!(isDebugMode))
+			bt_DebugScreen.setVisibility(View.INVISIBLE);
 	}
 	
 	@Override
@@ -683,15 +687,16 @@ public class MainActivity extends Activity
 	}
 		
 	public void toastDebugInfo(String message, boolean IsLongDuration)
-    {
-    	
-    	int duration;
-    	if (IsLongDuration)
-    		duration = Toast.LENGTH_LONG;
-    	else duration = Toast.LENGTH_SHORT;    	
-    	
-    	Toast t = Toast.makeText(this, message, duration);
-    	t.show();
+    {    	
+    	if (isDebugMode) {
+			int duration;
+			if (IsLongDuration)
+				duration = Toast.LENGTH_LONG;
+			else
+				duration = Toast.LENGTH_SHORT;
+			Toast t = Toast.makeText(this, message, duration);
+			t.show();
+		}
     }
 
 	
