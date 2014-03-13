@@ -22,43 +22,51 @@ public class AddNewTag extends Activity
 		isCancelPressed = true;
 		
 		Button btCancel = (Button) findViewById(R.id.bt_CancelTagCreation);
-		btCancel.setOnClickListener(new OnClickListener() {
-			
+		btCancel.setOnClickListener(new OnClickListener() 
+		{			
 			@Override
-			public void onClick(View v) {
-				// TODO: check if can change to specific relevant previous intent returned by getIntent() instead of a "new Intent()"
-				Intent intent = getIntent();
-				
-				isCancelPressed = true;
-				intent.putExtra("com.lb.todosqlite.addnewtag.isCancelPressed", isCancelPressed);
-				
-                setResult(RESULT_OK, intent);
-                finish();
-				
+			public void onClick(View v) 
+			{
+				onCancelPressed();
 			}
 		});
 		
 		Button btCreate = (Button) findViewById(R.id.bt_ApplyTagCreation);
-		btCreate.setOnClickListener(new OnClickListener() {
-			
+		btCreate.setOnClickListener(new OnClickListener() 
+		{			
 			@Override
-			public void onClick(View v) {
-				// TODO: check if can change to specific relevant previous intent returned by getIntent() instead of a "new Intent()"
-				Intent intent = getIntent();
-				
-				isCancelPressed = false;
-				intent.putExtra("com.lb.todosqlite.addnewtag.isCancelPressed", isCancelPressed);
-				
-				EditText et_newTag = (EditText) findViewById(R.id.et_NewTagName);
-				String reqTagName =et_newTag.getText().toString();  
-				
-				intent.putExtra("com.lb.todosqlite.addnewtag.tagNameToCreate", reqTagName);
-				
-                setResult(RESULT_OK, intent);
-                finish();
+			public void onClick(View v) 
+			{
+				onCreatePressed();
 			}
 		});
+	}
+	
+	public void onCreatePressed()
+	{
+		// TODO: check if can change to specific relevant previous intent returned by getIntent() instead of a "new Intent()"
+		Intent intent = getIntent();
 		
+		isCancelPressed = false;
+		intent.putExtra("com.lb.todosqlite.addnewtag.isCancelPressed", isCancelPressed);
 		
+		EditText et_newTag = (EditText) findViewById(R.id.et_NewTagName);
+		String reqTagName =et_newTag.getText().toString();  		
+		intent.putExtra("com.lb.todosqlite.addnewtag.tagNameToCreate", reqTagName);
+		
+        setResult(RESULT_OK, intent);
+        finish();
+	}
+	
+	public void onCancelPressed()
+	{
+		// TODO: check if can change to specific relevant previous intent returned by getIntent() instead of a "new Intent()"
+		Intent intent = getIntent();
+		
+		isCancelPressed = true;
+		intent.putExtra("com.lb.todosqlite.addnewtag.isCancelPressed", isCancelPressed);
+		
+        setResult(RESULT_OK, intent);
+        finish();		
 	}
 }

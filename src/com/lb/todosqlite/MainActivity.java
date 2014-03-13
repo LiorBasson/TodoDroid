@@ -77,8 +77,10 @@ public class MainActivity extends Activity
 	boolean isDebugMode = false;
 	int searchCount = 0;
 	
+	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) 
+	{
 		super.onCreate(savedInstanceState);
 		
 		// TODO: theme with  getApplication().setTheme(resid)?
@@ -87,7 +89,7 @@ public class MainActivity extends Activity
 		
 		// TODO: handle the screen rotation recreating activity screen - currently workaround in manifest
 		
-		fillUpTableOnCreation();	
+		fillUpTableFromDB();	
 		
 		
 		LinearLayout ll = (LinearLayout) findViewById(R.id.todos_table_screen_linlay);
@@ -175,7 +177,7 @@ public class MainActivity extends Activity
 						
 						createToDo(todoTitle, categorySelected, creationDate);
 						clearTableData();
-						fillUpTableOnCreation();
+						fillUpTableFromDB();
 					}
 					toastDebugInfo("returned from AddNewToDo Screen", false);
 					break;
@@ -193,7 +195,7 @@ public class MainActivity extends Activity
 		String Dummy = "";
 	}
 	
-	public void fillUpTableOnCreation()
+	public void fillUpTableFromDB()
 	{
 		try {
 			TableLayout todosTable = (TableLayout) findViewById(R.id.table_ToDos);
@@ -406,48 +408,6 @@ public class MainActivity extends Activity
 		}
 	}
 	
-	
-	// TODO: Remove or replace into Debugg screen class
-	public void helpOnTableCreation()
-	{
-		searchCount++;
-		
-		try {
-			TableLayout todosTable = (TableLayout) findViewById(R.id.table_ToDos);
-			int c1 = todosTable.getChildCount();
-			
-			int i = 0;
-			TableRow tr = (TableRow) todosTable.getChildAt(i);
-			int c2 = tr.getChildCount();
-			
-			int j = 0;
-			TextView tv = (TextView) tr.getChildAt(j);
-
-			tv.setText("ToDoDoDo" + searchCount);
-			
-			int k = 1;
-						
-			TableRow ntr = new TableRow(getApplicationContext());
-			
-				for (int index = 0; index < c2; index++) 
-				{
-					TextView ntv = new TextView(getApplicationContext());
-					ntv.setText("Text" + index);
-					if (index == 0)
-						ntv.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 0.4f));
-					
-					ntr.addView(ntv);
-					
-				}
-			todosTable.addView(ntr,1);
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			toastDebugInfo("helpOnTableCreation() caught an exception", false);
-		}
-	}
-	
-	
 	public void createToDo(String todoTitle, String categorySelected, String creationDate)
 	{
 		int getStatusFromUserWasntImplementedYet = 0;
@@ -469,79 +429,13 @@ public class MainActivity extends Activity
 				if ( categorySelected.equals(tag.getTagName()) )
 					tagID  = tag.getId();					
 			}				 
-		}
-		
+		}		
 		Todo todo = new Todo(todoTitle, getStatusFromUserWasntImplementedYet);
 		long todoID = db.createToDo(todo, new long[] {tagID});
-		//TODO: to remove if no drama occurred after commented
-//		Todo TodoFromDB = db.getTodo(todoID);
-//		
-//		AddTableDataRow(TodoFromDB);
-		
+				
 		db.closeDB();
 	}
-	
-	
-	//TODO: to remove if no drama occurred after commented. deprecated due to use of ClearTableRows() and FillTableOnCreation()
-	/*public void  AddTableDataRowggggggg(Todo newTodo)
-	{
-		try 
-		{
-			TableLayout todosTable = (TableLayout) findViewById(R.id.table_ToDos);
-						
-			int titlesRowIndex = 0;
-			TableRow tr = (TableRow) todosTable.getChildAt(titlesRowIndex);
-			int numberOfColumns = tr.getChildCount();
-		
-					
-					
-				TableRow ntr = new TableRow(getApplicationContext());
 				
-					for (int index = 0; index < numberOfColumns; index++) 
-					{
-						TextView ntv = new TextView(getApplicationContext());
-						ntv.setText("Text" + index);
-						
-						switch (index)
-						{
-							case 0:
-							{
-								ntv.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 0.4f));
-								ntv.setText(newTodo.getNote());	
-								break;
-							}
-							case 1:
-							{
-								DatabaseHelper db = new DatabaseHelper(getApplicationContext());
-								List<Tag> categories = db.getTagsByToDo(newTodo.getId());
-								String category = "";
-								for (Tag ctg : categories)
-									{category = category + "[" + ctg.getTagName() + "] ";}
-								
-								ntv.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 0.15f));
-								ntv.setText(category);
-								db.closeDB();
-								break;
-							}
-							case 2:
-							{
-								ntv.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 0.4f));
-								ntv.setText(newTodo.getCreationDate());		
-								break;
-							}
-						}			
-						ntr.addView(ntv);						
-					}
-				todosTable.addView(ntr,1);
-			
-			
-		} catch (Exception e) {
-			Log.d("MainActivity", "AddTableDataRow() caught an exception: ", e);
-			toastt("AddTableDataRow() caught an exception", false);
-		}
-	}
-*/
-	
 	// Get Todo  (int todoID)
 	public Todo getTodoByID(int todoID)
 	{
@@ -589,7 +483,7 @@ public class MainActivity extends Activity
 		db.closeDB();
 		
 		clearTableData();
-		fillUpTableOnCreation();
+		fillUpTableFromDB();
 		
 		//toastt("toggleTodoStatus() invoked", false);		
 	}
@@ -650,15 +544,13 @@ public class MainActivity extends Activity
 		TableLayout todosTable = (TableLayout) findViewById(R.id.table_ToDos);
 		todosTable.removeViews(1, todosTable.getChildCount()-1);
 	}
-	
-	
+		
 	@Override
 	public void onBackPressed() 
 	{
 		userVerificationToExit();
 	}
-	
-	
+		
 	private void userVerificationToExit()
 	{
 		final AlertDialog.Builder aDBuilder = new AlertDialog.Builder(this);
@@ -698,7 +590,5 @@ public class MainActivity extends Activity
 			t.show();
 		}
     }
-
-	
 	
 }

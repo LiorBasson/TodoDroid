@@ -27,20 +27,16 @@ public class viewTodo extends Activity
 
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		
+	protected void onCreate(Bundle savedInstanceState) 
+	{
+		super.onCreate(savedInstanceState);		
 		setContentView(R.layout.view_todo);
 		
 		SharedPreferences sp = getApplication().getSharedPreferences("editTodo", 0);
-		int userReqCode = sp.getInt("userReqCode", -1); // TODO: REMOVE - apparently won't be implemented
 		int todo_id = sp.getInt("todoID", -1);
-		String dummy_todo_note = sp.getString("todo_dummy", "null"); // TODO: REMOVE - only for debug purposes
-		
+				
 		updateThemeColors();
 		fillViewesOnCreate(todo_id);
-		
-		Bundle b = getIntent().getExtras();		// TODO: REMOVE - only for debug purposes
 	}
 	
 	public void fillViewesOnCreate(int todoID) 

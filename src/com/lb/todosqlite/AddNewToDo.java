@@ -45,7 +45,8 @@ public class AddNewToDo extends Activity
 	boolean isDebugMode = false;
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) 
+	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.new_todo);
 		
@@ -110,54 +111,43 @@ public class AddNewToDo extends Activity
                 finish();
 			}
 		});
-		
-		
 	}
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) 
 	{
-		int m_resultCode = 0;
-		
-		switch (requestCode)
+		if (requestCode == requestCode_AddNewTag)
 		{
-			case requestCode_AddNewTag:
+			if (resultCode == RESULT_OK)
 			{
-				if (requestCode == requestCode_AddNewTag)
-					if (resultCode == RESULT_OK)
-					{
-						try 
-						{
-							Bundle bdl = data.getExtras();
-							
-							if (bdl.containsKey("com.lb.todosqlite.addnewtag.isCancelPressed"))
-								if (!bdl.getBoolean("com.lb.todosqlite.addnewtag.isCancelPressed")) 
-								{							
-										if (bdl.containsKey("com.lb.todosqlite.addnewtag.tagNameToCreate"))
-										{
-											String tagName = bdl.getString("com.lb.todosqlite.addnewtag.tagNameToCreate");
-											
-											// TODO: Set and Update spinner with new tag name
-											updateTagNameOnCreation(tagName); //TagNameNewSelected = tagName;
-										}
-										else toastDebugInfo("Couldn't find tagNameToCreate Extra", false);								
+				try 
+				{
+					Bundle bdl = data.getExtras();
+					
+					if (bdl.containsKey("com.lb.todosqlite.addnewtag.isCancelPressed"))
+						if (!bdl.getBoolean("com.lb.todosqlite.addnewtag.isCancelPressed")) 
+						{							
+								if (bdl.containsKey("com.lb.todosqlite.addnewtag.tagNameToCreate"))
+								{
+									String tagName = bdl.getString("com.lb.todosqlite.addnewtag.tagNameToCreate");
+									
+									// TODO: Set and Update spinner with new tag name
+									updateTagNameOnCreation(tagName); //TagNameNewSelected = tagName;
 								}
-								else restoreTagNameOnCreateCancelled();									
+								else toastDebugInfo("Couldn't find tagNameToCreate Extra", false);								
 						}
-						catch (Exception e)
-						{
-							Log.d("OnActivityResult", "OnActivityResult gathering data thrown an xception: ", e);
-							toastDebugInfo("OnActivityResult gathering data thrown an xception",true);
-						}
-					}
-					else restoreTagNameOnCreateCancelled();
-			}			
-		}
-		
-		String Dummy = "";
+						else restoreTagNameOnCreateCancelled();									
+				}
+				catch (Exception e)
+				{
+					Log.d("OnActivityResult", "OnActivityResult gathering data thrown an xception: ", e);
+					toastDebugInfo("OnActivityResult gathering data thrown an xception",true);
+				}
+			}
+			else restoreTagNameOnCreateCancelled();
+		}					
 	}
 
-	// Spinner   
 	public void spinnerHandling()
     {
 	    	Spinner sp = (Spinner) findViewById(R.id.spinner_tag);
@@ -179,47 +169,35 @@ public class AddNewToDo extends Activity
 	    	ArrayAdapter<String> spAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, spinnerCategories);
 	    	spAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 	    	sp.setAdapter(spAdapter);
-	    	
-	    	sp.setOnTouchListener(new OnTouchListener() {
-				
-				@Override
-				public boolean onTouch(View v, MotionEvent event) {
-					toastDebugInfo("Spinner onTouch invoked", false);
-					return false;
-				}
-			});
-	    	
-	    	sp.setOnItemSelectedListener(new OnItemSelectedListener() {
-
+	    		    	
+	    	sp.setOnItemSelectedListener(new OnItemSelectedListener() 
+	    	{	
 				@Override
 				public void onItemSelected(AdapterView<?> parent, View itemSelected,
-						int position, long id) {	
+						int position, long id) 
+				{	
 					String selectedItemValue = parent.getItemAtPosition(position).toString();
 					
 					if ( selectedItemValue.equals(requestToCreateNewTag) )
 						{
 							// calls AddNewTag screen and class
-							Intent addNewTagIntent = new Intent(itemSelected.getContext(), AddNewTag.class);
-							
+							Intent addNewTagIntent = new Intent(itemSelected.getContext(), AddNewTag.class);							
 							startActivityForResult(addNewTagIntent, requestCode_AddNewTag);						
 						}
 					else 
 					{
-						// TODO: update variables with selection for sending as result
 						tagNameLastSelected = selectedItemValue;
 						TagNameNewSelected = selectedItemValue;
-					}					
-					
+					}										
 					toastDebugInfo("OnItemSelected via parent: " + selectedItemValue ,false);								
 				}
 
 				@Override
 				public void onNothingSelected(AdapterView<?> arg0) {
-					// TODO Auto-generated method stub
 					toastDebugInfo("onNothingSelected() invoked" ,false);
 				}
-			});    	
-	    }
+		});    	
+	}
 	
 	public void updateTagNameOnCreation(String tagName)
 	{
@@ -272,17 +250,5 @@ public class AddNewToDo extends Activity
 	    	t.show();
 		}
     }	
-	
-	public void dtoastDebugInfo(String message, boolean IsLongDuration)
-    {    	
-    	if (isDebugMode) {
-			int duration;
-			if (IsLongDuration)
-				duration = Toast.LENGTH_LONG;
-			else
-				duration = Toast.LENGTH_SHORT;
-			Toast t = Toast.makeText(this, message, duration);
-			t.show();
-		}
-    }
+
 }
