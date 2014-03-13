@@ -402,7 +402,7 @@ public class MainActivity extends Activity
 	}
 	
 	
-	
+	// TODO: Remove or replace into Debugg screen class
 	public void helpOnTableCreation()
 	{
 		searchCount++;

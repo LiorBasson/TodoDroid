@@ -32,6 +32,10 @@
             android:name="com.lb.todosqlite.AddNewTag"
             android:label="Add New Tag">
         </activity>
+        <activity
+            android:name="com.lb.todosqlite.viewTodo"
+            android:label="View Todo">
+        </activity>
          <activity
             android:name="com.lb.todosqlite.DebugScreen" android:configChanges="orientation|screenSize">            	
             </activity>
