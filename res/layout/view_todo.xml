@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_ViewTodo_RootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
@@ -53,17 +54,6 @@
         android:hint="date"
         android:inputType="date" />
 
-    <EditText
-        android:id="@+id/et_DueDate_Time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/et_DueDate_Date"
-        android:layout_alignBottom="@+id/et_DueDate_Date"
-        android:layout_toRightOf="@+id/et_DueDate_Date"
-        android:ems="10"
-        android:hint="time"
-        android:inputType="time" />
-
     <TextView
         android:id="@+id/tv_TodoNoteLable"
         android:layout_width="wrap_content"
@@ -92,5 +82,5 @@
         android:ems="10"
         android:inputType="textMultiLine"
         android:hint="Todo text will be populated here..." />
-
+    
 </RelativeLayout>

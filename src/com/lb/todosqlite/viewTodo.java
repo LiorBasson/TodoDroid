@@ -12,14 +12,19 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class viewTodo extends Activity
 {
 	final int requestCode_ViewToDo = 214;
 	final int requestCode_EditToDo = 215;
-	final String themeColorCode_LableBG = "#FFCC66"; // final and hardcoded for the meantime 
+	final String themeColorCode_LableBG = "#FF9966"; // final and hardcoded for the meantime 
+	final String colorCodeForTableBG = "#000000";
+	final String colorCodeForText = "#CCCCCC";
+
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -28,28 +33,23 @@ public class viewTodo extends Activity
 		setContentView(R.layout.view_todo);
 		
 		SharedPreferences sp = getApplication().getSharedPreferences("editTodo", 0);
-		int userReqCode = sp.getInt("userReqCode", -1);
+		int userReqCode = sp.getInt("userReqCode", -1); // TODO: REMOVE - apparently won't be implemented
 		int todo_id = sp.getInt("todoID", -1);
-		String dummy_todo_note = sp.getString("todo_dummy", "null");
+		String dummy_todo_note = sp.getString("todo_dummy", "null"); // TODO: REMOVE - only for debug purposes
 		
+		updateThemeColors();
 		fillViewesOnCreate(todo_id);
 		
-		Bundle b = getIntent().getExtras();
-		
-		//TODO: use BackButton?
+		Bundle b = getIntent().getExtras();		// TODO: REMOVE - only for debug purposes
 	}
 	
 	public void fillViewesOnCreate(int todoID) 
 	{
-		// consider later if to put DB services in separate method?
 		DatabaseHelper db = new DatabaseHelper(getApplicationContext());
 		Todo todo = db.getTodo(todoID);
 		List<Tag> tags = db.getTagsByToDo(todoID);
-		db.closeDB();
+		db.closeDB();		
 		
-		// TODO: fetch view element and fill in the data from todo and tags
-		TextView catLable = (TextView) findViewById(R.id.tv_CatLable);
-		catLable.setBackgroundColor(Color.parseColor(themeColorCode_LableBG));
 		EditText categories =  (EditText) findViewById(R.id.et_Category);
 		categories.setEnabled(false); // TODO: replace with a global variable if planning to reuse for EditTodo	(for all view elements?)	
 		for (Tag tag : tags)
@@ -64,15 +64,29 @@ public class viewTodo extends Activity
 		
 		EditText duedateDate = (EditText) findViewById(R.id.et_DueDate_Date);
 		duedateDate.setEnabled(false);
-		EditText duedateTime = (EditText) findViewById(R.id.et_DueDate_Time);
-		duedateTime.setEnabled(false);
-		// TODO: fill up date and time according to required formats
+		duedateDate.setText(todo.getCreationDate());
+		
 		
 		EditText todoNote = (EditText) findViewById(R.id.et_TodoNote);
 		todoNote.setEnabled(false);
-		todoNote.setText(todo.getNote());
+		todoNote.setText(todo.getNote());		
 	}
 	
-	
-
+	public void updateThemeColors()
+	{
+		RelativeLayout viewLayout = (RelativeLayout) findViewById(R.id.rl_ViewTodo_RootLayout);
+		viewLayout.setBackgroundColor(Color.parseColor(colorCodeForTableBG));
+		TextView catLable = (TextView) findViewById(R.id.tv_CatLable);
+		catLable.setBackgroundColor(Color.parseColor(themeColorCode_LableBG));
+		TextView statusLable = (TextView) findViewById(R.id.tv_StatusLable);
+		statusLable.setBackgroundColor(Color.parseColor(themeColorCode_LableBG));
+		TextView dueDateLable = (TextView) findViewById(R.id.tv_DueDateLable);
+		dueDateLable.setBackgroundColor(Color.parseColor(themeColorCode_LableBG));
+		TextView todoNoteLable = (TextView) findViewById(R.id.tv_TodoNoteLable);
+		todoNoteLable.setBackgroundColor(Color.parseColor(themeColorCode_LableBG));
+		
+		CheckBox status = (CheckBox) findViewById(R.id.cb_Status);
+		status.setTextColor(Color.parseColor(colorCodeForText));
+		status.setBackgroundColor(Color.parseColor(themeColorCode_LableBG));
+	}
 }
