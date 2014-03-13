@@ -74,6 +74,7 @@ public class MainActivity extends Activity
 	final String spinnerDefaultValue = "Select Todo category";
 	final String defaultInternalTagName = "None";
 	// vars for debug
+	boolean isToastDebug = false;
 	int searchCount = 0;
 	
 	@Override
@@ -172,18 +173,18 @@ public class MainActivity extends Activity
 						clearTableData();
 						fillUpTableOnCreation();
 					}
-					toastt("returned from AddNewToDo Screen", false);
+					toastDebugInfo("returned from AddNewToDo Screen", false);
 					break;
 							
 				}
 				case requestCode_DeubgScr:
 				{
-					toastt("returned from Debug Screen", false);
+					toastDebugInfo("returned from Debug Screen", false);
 					break;
 				}
 				
 			}
-		else toastt("returned with !(Result_OK)", false);
+		else toastDebugInfo("returned with !(Result_OK)", false);
 		
 		String Dummy = "";
 	}
@@ -280,7 +281,7 @@ public class MainActivity extends Activity
 						boolean isfocustaken = v.requestFocus();
 						int tagIdByRowId = v.getId();
 																		
-						toastt("TR onLongClick() for todo: " + tagIdByRowId, true);
+						toastDebugInfo("TR onLongClick() for todo: " + tagIdByRowId, true);
 						
 						return false;
 					}
@@ -339,7 +340,7 @@ public class MainActivity extends Activity
 									
 									launchViewTodo(todoID);
 									
-									toastt("TR onMenuItemClick() was invoked for menuItemID= " + id + " GroupID= " + todoID, false);
+									toastDebugInfo("TR onMenuItemClick() was invoked for menuItemID= " + id + " GroupID= " + todoID, false);
 									return false;
 								}
 							});
@@ -353,7 +354,7 @@ public class MainActivity extends Activity
 									int idg = item.getGroupId();									
 									launchEditTodo(idg);
 									
-									toastt("TR onMenuItemClick() was invoked for menuItemID= " + id + " GroupID= " + idg, false);
+									toastDebugInfo("TR onMenuItemClick() was invoked for menuItemID= " + id + " GroupID= " + idg, false);
 									return false;
 								}
 							});
@@ -367,7 +368,7 @@ public class MainActivity extends Activity
 									int idg = item.getGroupId(); 									
 									toggleTodoStatus(idg);
 									
-									toastt("TR onMenuItemClick() was invoked for menuItemID= " + id + " GroupID= " + idg, false);
+									toastDebugInfo("TR onMenuItemClick() was invoked for menuItemID= " + id + " GroupID= " + idg, false);
 									return false;
 								}
 							});
@@ -381,13 +382,13 @@ public class MainActivity extends Activity
 									int idg = item.getGroupId();
 									deleteTodo(idg);
 									
-									toastt("TR onMenuItemClick() was invoked for menuItemID= " + id + " GroupID= " + idg, false);
+									toastDebugInfo("TR onMenuItemClick() was invoked for menuItemID= " + id + " GroupID= " + idg, false);
 									return false;
 								}
 							});
 						}
 						
-						toastt("TR onCreateContextMenu() was invoked for vID= " + rowTodoID, false);
+						toastDebugInfo("TR onCreateContextMenu() was invoked for vID= " + rowTodoID, false);
 					}
 				});
 				
@@ -397,7 +398,7 @@ public class MainActivity extends Activity
 			
 		} catch (Exception e) {
 			Log.d("MainActivity", "fillUpTableOnCreation() caught an exception: ", e);
-			toastt("fillUpTableOnCreation() caught an exception", false);
+			toastDebugInfo("fillUpTableOnCreation() caught an exception", false);
 		}
 	}
 	
@@ -438,7 +439,7 @@ public class MainActivity extends Activity
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			toastt("helpOnTableCreation() caught an exception", false);
+			toastDebugInfo("helpOnTableCreation() caught an exception", false);
 		}
 	}
 	
@@ -563,7 +564,7 @@ public class MainActivity extends Activity
 		
 		//update table row (apparently with clearTableRows() and fillTableOCreation()
 		
-		toastt("Will updateTodoAndTags", false);
+		toastDebugInfo("Will updateTodoAndTags", false);
 	}
 	
 	// Un/Check Todo as completed (int todoID)
@@ -616,7 +617,7 @@ public class MainActivity extends Activity
 		{
 			Log.d("MainActivity","deleteTodo() caught an exception", e);
 		}
-		toastt("Will delete the todo", false);		
+		toastDebugInfo("Will delete the todo", false);		
 	}
 	
 	public void launchViewTodo(int todoID)
@@ -632,12 +633,12 @@ public class MainActivity extends Activity
 	    viewTodoIntent.putExtra("todoID", todoID);
 	    startActivityForResult(viewTodoIntent, requestCode_ViewToDo);
 		
-		toastt("In development - Will inflate a view which will only display the todo", false);
+		toastDebugInfo("In development - Will inflate a view which will only display the todo", false);
 	}
 	
 	public void launchEditTodo(int todoID)
 	{
-		toastt("Will inflate a view which alows editing the todo", false);
+		toastDebugInfo("Will inflate a view which alows editing the todo", false);
 	}
 	
 	public void clearTableData()
@@ -681,7 +682,7 @@ public class MainActivity extends Activity
 		}		
 	}
 		
-	public void toastt(String message, boolean IsLongDuration)
+	public void toastDebugInfo(String message, boolean IsLongDuration)
     {
     	
     	int duration;
