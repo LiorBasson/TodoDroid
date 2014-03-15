@@ -26,15 +26,18 @@
         </activity>
         <activity
             android:name="com.lb.todosqlite.AddNewToDo"
-            android:label="Add New ToDo">
+            android:label="Add New ToDo"
+            android:configChanges="orientation|screenSize" >
         </activity>
         <activity
             android:name="com.lb.todosqlite.AddNewTag"
-            android:label="Add New Tag">
+            android:label="Add New Tag"
+            android:configChanges="orientation|screenSize" >
         </activity>
         <activity
             android:name="com.lb.todosqlite.viewTodo"
-            android:label="View Todo">
+            android:label="View Todo"
+            android:configChanges="orientation|screenSize" >
         </activity>
          <activity
             android:name="com.lb.todosqlite.DebugScreen" android:configChanges="orientation|screenSize">            	
