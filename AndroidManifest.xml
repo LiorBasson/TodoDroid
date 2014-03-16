@@ -19,9 +19,7 @@
             android:configChanges="orientation|screenSize" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-                
+                <category android:name="android.intent.category.LAUNCHER" />                
             </intent-filter>
         </activity>
         <activity
@@ -35,12 +33,18 @@
             android:configChanges="orientation|screenSize" >
         </activity>
         <activity
-            android:name="com.lb.todosqlite.viewTodo"
+            android:name="com.lb.todosqlite.ViewTodo"
             android:label="View Todo"
             android:configChanges="orientation|screenSize" >
         </activity>
          <activity
-            android:name="com.lb.todosqlite.DebugScreen" android:configChanges="orientation|screenSize">            	
+            android:name="com.lb.todosqlite.EditTodo"
+            android:label="Edit Todo"
+            android:configChanges="orientation|screenSize" >
+        </activity>
+         <activity
+            android:name="com.lb.todosqlite.DebugScreen" 
+            android:configChanges="orientation|screenSize">            	
             </activity>
         
     </application>

@@ -17,7 +17,7 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class viewTodo extends Activity
+public class ViewTodo extends Activity
 {
 	final int requestCode_ViewToDo = 214;
 	final int requestCode_EditToDo = 215;
@@ -32,7 +32,7 @@ public class viewTodo extends Activity
 		super.onCreate(savedInstanceState);		
 		setContentView(R.layout.view_todo);
 		
-		SharedPreferences sp = getApplication().getSharedPreferences("editTodo", 0);
+		SharedPreferences sp = getApplication().getSharedPreferences("viewTodo", 0);
 		int todo_id = sp.getInt("todoID", -1);
 				
 		updateThemeColors();
@@ -60,7 +60,7 @@ public class viewTodo extends Activity
 		
 		EditText duedateDate = (EditText) findViewById(R.id.et_DueDate_Date);
 		duedateDate.setEnabled(false);
-		duedateDate.setText(todo.getCreationDate());
+		duedateDate.setText(todo.getDueDate());
 		
 		
 		EditText todoNote = (EditText) findViewById(R.id.et_TodoNote);

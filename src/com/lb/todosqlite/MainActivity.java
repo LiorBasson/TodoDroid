@@ -188,6 +188,12 @@ public class MainActivity extends Activity
 					toastDebugInfo("returned from Debug Screen", false);
 					break;
 				}
+				case requestCode_EditToDo:
+				{
+					clearTableData();
+					fillUpTableFromDB();
+					break;
+				}
 				
 			}
 		else toastDebugInfo("returned with !(Result_OK)", false);
@@ -261,7 +267,7 @@ public class MainActivity extends Activity
 							case 2:
 							{
 								ntv.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 0.4f));
-								ntv.setText(todo.getCreationDate());		
+								ntv.setText(todo.getDueDate());		
 								break;
 							}
 							case 3:
@@ -520,23 +526,32 @@ public class MainActivity extends Activity
 	
 	public void launchViewTodo(int todoID)
 	{
-		SharedPreferences sp =  getApplication().getSharedPreferences("editTodo", 0);
+		SharedPreferences sp =  getApplication().getSharedPreferences("viewTodo", 0);
 	    Editor ed =  sp.edit();
 	    ed.putInt("userReqCode", requestCode_ViewToDo);
         ed.putInt("todoID", todoID);
 	    ed.putString("todo_dummy", "Dummy text: it might be better to use this instead of the default public void onClick(View v). should be checked later");
 	    ed.commit();
 	   
-	    Intent viewTodoIntent = new Intent(getApplicationContext(), viewTodo.class);	        
+	    Intent viewTodoIntent = new Intent(getApplicationContext(), ViewTodo.class);	        
 	    viewTodoIntent.putExtra("todoID", todoID);
 	    startActivityForResult(viewTodoIntent, requestCode_ViewToDo);
 		
-		toastDebugInfo("In development - Will inflate a view which will only display the todo", false);
+		toastDebugInfo("launchViewTodo() - Will inflate a view which will only display the todo", false);
 	}
 	
 	public void launchEditTodo(int todoID)
 	{
-		toastDebugInfo("Will inflate a view which alows editing the todo", false);
+		SharedPreferences sp =  getApplication().getSharedPreferences("editTodo", 0);
+	    Editor ed =  sp.edit();
+	    ed.putInt("userReqCode", requestCode_EditToDo);
+        ed.putInt("todoID", todoID);
+	    ed.commit();
+	   
+	    Intent viewTodoIntent = new Intent(getApplicationContext(), EditTodo.class);	        
+	    viewTodoIntent.putExtra("todoID", todoID);
+	    startActivityForResult(viewTodoIntent, requestCode_EditToDo);
+		toastDebugInfo("launchEditTodo() - Will inflate a view which alows editing the todo", false);
 	}
 	
 	public void clearTableData()

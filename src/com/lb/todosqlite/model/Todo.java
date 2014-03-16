@@ -2,10 +2,10 @@ package com.lb.todosqlite.model;
 
 public class Todo 
 {
-	int id;
+	int id; // TODO: change to long. follow refactoring for all usages
     String note;
     int status;
-    String created_at;
+    String dueDate;
  
     // constructors
     public Todo() 
@@ -41,9 +41,9 @@ public class Todo
         this.status = status;
     }
      
-    public void setCreatedAt(String created_at)
+    public void setDueDate(String dueDate)
     {
-        this.created_at = created_at;
+        this.dueDate = dueDate;
     }
  
     // getters
@@ -62,9 +62,9 @@ public class Todo
         return this.status;
     }
     
-    public String getCreationDate()
+    public String getDueDate()
     {
     	
-    	return this.created_at;
+    	return this.dueDate;
     }
 }

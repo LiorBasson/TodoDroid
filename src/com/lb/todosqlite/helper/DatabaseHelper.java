@@ -34,7 +34,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
  
     // Common column names
     private static final String KEY_ID = "id";
-    private static final String KEY_CREATED_AT = "created_at";
+    private static final String KEY_DUE_DATE = "created_at"; // TODO: rename to DueDate. does that means require new db version #? and upgrade handling?
  
     // NOTES Table - column names
     private static final String KEY_TODO = "todo";
@@ -51,19 +51,19 @@ public class DatabaseHelper extends SQLiteOpenHelper
     // Todo table create statement
     private static final String CREATE_TABLE_TODO = "CREATE TABLE "
             + TABLE_TODO + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_TODO
-            + " TEXT," + KEY_STATUS + " INTEGER," + KEY_CREATED_AT
+            + " TEXT," + KEY_STATUS + " INTEGER," + KEY_DUE_DATE
             + " DATETIME" + ")";
  
     // Tag table create statement
     private static final String CREATE_TABLE_TAG = "CREATE TABLE " + TABLE_TAG
             + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_TAG_NAME + " TEXT,"
-            + KEY_CREATED_AT + " DATETIME" + ")";
+            + KEY_DUE_DATE + " DATETIME" + ")";
  
     // todo_tag table create statement
     private static final String CREATE_TABLE_TODO_TAG = "CREATE TABLE "
             + TABLE_TODO_TAG + "(" + KEY_ID + " INTEGER PRIMARY KEY,"
             + KEY_TODO_ID + " INTEGER," + KEY_TAG_ID + " INTEGER,"
-            + KEY_CREATED_AT + " DATETIME" + ")";
+            + KEY_DUE_DATE + " DATETIME" + ")";
  
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -99,7 +99,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
     	ContentValues values = new ContentValues();
     	values.put(KEY_TODO, todo.getNote());
     	values.put(KEY_STATUS, todo.getStatus());
-    	values.put(KEY_CREATED_AT, getDateTime());
+    	values.put(KEY_DUE_DATE, todo.getDueDate());
     
     	// insert row
     	long todo_id = db.insert(TABLE_TODO, null, values);
@@ -130,7 +130,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
        Todo td = new Todo();
        td.setId(c.getInt(c.getColumnIndex(KEY_ID)));
        td.setNote((c.getString(c.getColumnIndex(KEY_TODO))));
-       td.setCreatedAt(c.getString(c.getColumnIndex(KEY_CREATED_AT)));
+       td.setDueDate(c.getString(c.getColumnIndex(KEY_DUE_DATE)));
        td.setStatus(c.getInt(c.getColumnIndex(KEY_STATUS)));
     
        return td;
@@ -153,7 +153,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
                Todo td = new Todo();
                td.setId(c.getInt((c.getColumnIndex(KEY_ID))));
                td.setNote((c.getString(c.getColumnIndex(KEY_TODO))));
-               td.setCreatedAt(c.getString(c.getColumnIndex(KEY_CREATED_AT)));
+               td.setDueDate(c.getString(c.getColumnIndex(KEY_DUE_DATE)));
                td.setStatus(c.getInt((c.getColumnIndex(KEY_STATUS))));
     
                // adding to todo list
@@ -186,7 +186,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
                Todo td = new Todo();
                td.setId(c.getInt((c.getColumnIndex(KEY_ID))));
                td.setNote((c.getString(c.getColumnIndex(KEY_TODO))));
-               td.setCreatedAt(c.getString(c.getColumnIndex(KEY_CREATED_AT)));
+               td.setDueDate(c.getString(c.getColumnIndex(KEY_DUE_DATE)));
                td.setStatus(c.getInt((c.getColumnIndex(KEY_STATUS))));
     
                // adding to todo list
@@ -333,7 +333,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
   
      ContentValues values = new ContentValues();
      values.put(KEY_TAG_NAME, tag.getTagName());
-     values.put(KEY_CREATED_AT, getDateTime());
+     values.put(KEY_DUE_DATE, getDateTime());
   
      // insert row
      long tag_id = db.insert(TABLE_TAG, null, values);
@@ -408,7 +408,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
        ContentValues values = new ContentValues();
        values.put(KEY_TODO_ID, todo_id);
        values.put(KEY_TAG_ID, tag_id);
-       values.put(KEY_CREATED_AT, getDateTime());
+       values.put(KEY_DUE_DATE, getDateTime());
 
        long id = db.insert(TABLE_TODO_TAG, null, values);
 
