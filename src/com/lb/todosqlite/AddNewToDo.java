@@ -9,13 +9,20 @@ import java.util.Locale;
 
 import org.apache.http.entity.StringEntity;
 
+import com.lb.todosqlite.dialogs.DatePickerFragment;
 import com.lb.todosqlite.helper.DatabaseHelper;
 import com.lb.todosqlite.model.Tag;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.DatePickerDialog.OnDateSetListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.CalendarContract.CalendarEntity;
+import android.provider.CalendarContract.Calendars;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
 import android.text.format.Time;
 import android.text.method.DateTimeKeyListener;
 import android.util.Log;
@@ -26,12 +33,16 @@ import android.view.View.OnTouchListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.DigitalClock;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemSelectedListener;
 
-public class AddNewToDo extends Activity
+public class AddNewToDo extends FragmentActivity
 {
 	
 	final int requestCode_AddNewTag = 212;
@@ -52,6 +63,18 @@ public class AddNewToDo extends Activity
 		
 		tagNameLastSelected = spinnerDefaultValue;
 		
+		TimePicker tp = (TimePicker) findViewById(R.id.tp_DueDate_ant);
+		tp.setIs24HourView(true);
+		
+		TextView tv_trial = (TextView) findViewById(R.id.tv_ddTrial);
+		tv_trial.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				launchDatePickerDialog();				
+			}
+		});
+				
 		try 
 		{
 			spinnerHandling();
@@ -104,7 +127,10 @@ public class AddNewToDo extends Activity
 				SimpleDateFormat dateFormat = new SimpleDateFormat(
 			    		   "dd-MM-yyyy HH:mm:ss", Locale.getDefault()); 
 			       Date date = new Date();
-			    String reqCreationDate = dateFormat.format(date);			    
+			    String reqCreationDate = dateFormat.format(date);
+			    
+			    TextView tv = (TextView) findViewById(R.id.tv_ddTrial);
+			    String ddTxt = tv.getText().toString();
 				resultIntent.putExtra("com.lb.todosqlite.addnewtodo.creationDate", reqCreationDate);
 				
                 setResult(RESULT_OK, resultIntent);
@@ -238,6 +264,26 @@ public class AddNewToDo extends Activity
 		toastDebugInfo("restoring to " + tagNameLastSelected, false);
 	}
 
+	public void launchDatePickerDialog()
+	{
+		//TODO: for edit dates check how to set a constructor which sets my dates		
+		/*int year = Calendar.YEAR;
+		int monthOfYear = Calendar.MONTH;
+		int dayOfMonth = Calendar.DAY_OF_MONTH;*/
+		
+		DialogFragment df = new DatePickerFragment();
+		
+		df.show(getSupportFragmentManager(), "setDueDate");
+	}
+	
+	/*public void onDateSetHandler(int year, int monthOfYear, int dayOfMonth)
+	{
+		
+		TextView tv = (TextView) findViewById(R.id.tv_ddTrial);
+		tv.setText(dayOfMonth + "/" + monthOfYear + "/" + year);
+	}*/
+	
+	
 	public void toastDebugInfo(String message, boolean IsLongDuration)
     {
 		if (isDebugMode) {
