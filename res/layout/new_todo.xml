@@ -38,7 +38,7 @@
         android:id="@+id/tv_DueDateLabel_ant"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="DueDate" />
+        android:text="Due Date" />
     <LinearLayout
 	    android:layout_width="wrap_content"
     	android:layout_height="wrap_content"

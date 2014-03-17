@@ -47,7 +47,7 @@ public class MainActivity extends Activity
 	final int requestCode_DeubgScr = 213;
 	final int requestCode_ViewToDo = 214;
 	final int requestCode_EditToDo = 215;		
-	// vars for later color theme use  // TODO: check if a thumb rule that for Hex color code (#XxYyZz) where Yy is below 66 then considered dark and above 66 (>99) then considered light.  
+	// vars for later color theme use  // TODO: check if it is a graphics thumb rule that for Hex color code (#XxYyZz) where Yy is below 66 then considered dark and above 66 (>99) then considered light.  
 	final String colorCodeForTableBG = "#000000";
 	final String colorCodeForTableText = "#FFFFFF";
 	final String colorCodeForTRInFocus = "#003366";
