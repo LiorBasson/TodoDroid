@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Locale;
 
 import android.app.DatePickerDialog.OnDateSetListener;
+import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -26,6 +27,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.lb.todosqlite.dialogs.DatePickerFragment;
+import com.lb.todosqlite.dialogs.TimePickerFragment;
 import com.lb.todosqlite.helper.DatabaseHelper;
 import com.lb.todosqlite.model.Tag;
 
@@ -43,7 +45,8 @@ public class AddNewToDo extends FragmentActivity
 	int btnNewTodoCount = 0;
 	boolean isCancelPressed;
 	boolean isDebugMode = true; // TODO: enabled for debug. set to false again
-	OnDateSetListener ondate;
+	OnDateSetListener onDate;
+	OnTimeSetListener onTime;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
@@ -54,20 +57,26 @@ public class AddNewToDo extends FragmentActivity
 		tagNameLastSelected = spinnerDefaultValue;
 		
 				
-		TextView tv_trial = (TextView) findViewById(R.id.tv_DDDate_ant);
-		String dateTime = getDateTime();
-		tv_trial.setText(getDate());
-		String time = getTime();
-		
-		
-		tv_trial.setOnClickListener(new OnClickListener() {
+		TextView tv_DDDate = (TextView) findViewById(R.id.tv_DDDate_ant);
+		tv_DDDate.setText(getDate());		
+		tv_DDDate.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				launchDatePickerDialog();				
 			}
 		});
-				
+			
+		TextView tv_DDTime = (TextView) findViewById(R.id.tv_DDTime_ant);
+		tv_DDTime.setText(getTime());
+		tv_DDTime.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				launchTimePickerDialog();
+			}
+		});
+		
 		try 
 		{
 			spinnerHandling();
@@ -128,13 +137,22 @@ public class AddNewToDo extends FragmentActivity
 			}
 		});
 		
-		ondate = new OnDateSetListener() 
+		onDate = new OnDateSetListener() 
 		{
 			  @Override
 			  public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) 
 			  {
 				  onDateSetHandler(view, year, monthOfYear, dayOfMonth);
 			  }
+		};
+		
+		onTime = new OnTimeSetListener() {
+			
+			@Override
+			public void onTimeSet(TimePicker view, int hourOfDay, int minute) 
+			{
+				onTimeSetHandler(view, hourOfDay, minute); 
+			}
 		};
 
 	}
@@ -269,33 +287,48 @@ public class AddNewToDo extends FragmentActivity
 
 	public void launchDatePickerDialog()
 	{
-		//TODO: for edit dates check how to set a constructor which sets my dates
-		// dateFormat
 		DatePickerFragment df = new DatePickerFragment();		
 		
-		if (dateFormat.equals("YYYY-MM-DD"))
-		{			
-			TextView tv_OldDate = (TextView) findViewById(R.id.tv_DDDate_ant);
-			String oldDateString = tv_OldDate.getText().toString();
-			
-			
-			int oldYear = getYearOfDateFormat(oldDateString);
-			int oldMonth = getMonthOfDateFormat(oldDateString);
-			int oldDay = getDayOfDateFormat(oldDateString);	
-			
-			// TODO: change key name to follow Android's conventions (with namespace)
-			Bundle bd = new Bundle();
-			bd.putInt("oldYear", oldYear);
-			bd.putInt("oldMonth", oldMonth);
-			bd.putInt("oldDay", oldDay);		
-			df.setArguments(bd);
-		}			
+		TextView tv_OldDate = (TextView) findViewById(R.id.tv_DDDate_ant);
+		String oldDateString = tv_OldDate.getText().toString();		
 		
-		df.setCallBack(ondate);
+		int oldYear = getYearOfDateFormat(oldDateString);
+		int oldMonth = getMonthOfDateFormat(oldDateString);
+		int oldDay = getDayOfDateFormat(oldDateString);	
+		
+		// TODO: change key name to follow Android's conventions (with namespace)
+		Bundle bd = new Bundle();
+		bd.putInt("oldYear", oldYear);
+		bd.putInt("oldMonth", oldMonth);
+		bd.putInt("oldDay", oldDay);		
+		df.setArguments(bd);
+			
+		
+		df.setCallBack(onDate);
 		
 		df.show(getSupportFragmentManager(), "setDueDate");
 		
 		toastDebugInfo("launchDatePickerDialog() exit method after show invoked", true);
+	}
+	
+	public void launchTimePickerDialog()
+	{
+		TimePickerFragment tf = new TimePickerFragment();		
+		
+		TextView tv_OldTime = (TextView) findViewById(R.id.tv_DDTime_ant);
+		String oldTimeString = tv_OldTime.getText().toString();				
+		int oldHour = Integer.parseInt(oldTimeString.substring(0, 2));
+		int oldMinuets = Integer.parseInt(oldTimeString.substring(3, 5));		
+		Bundle bd = new Bundle();
+		bd.putInt("oldHour", oldHour);
+		bd.putInt("oldMinuets", oldMinuets);
+		tf.setArguments(bd);			
+		
+		tf.setCallBack(onTime);
+		
+		tf.show(getSupportFragmentManager(), "setDueDateTime");
+		
+		toastDebugInfo("launchTimePickerDialog() exit method after show invoked", true);
 	}
 
 	private String getDateTime() 
@@ -382,8 +415,6 @@ public class AddNewToDo extends FragmentActivity
 		return day;
 	}
 	
-	
-	
 	public void onDateSetHandler(DatePicker view, int year, int monthOfYear, int dayOfMonth)
 	{
 		
@@ -391,6 +422,11 @@ public class AddNewToDo extends FragmentActivity
 		tv.setText(year + "-" + (monthOfYear+1) + "-" + dayOfMonth);
 	}
 	
+	public void onTimeSetHandler(TimePicker view, int hourOfDay, int minute) 
+	{
+		TextView tv = (TextView) findViewById(R.id.tv_DDTime_ant);
+		tv.setText(hourOfDay + ":" + minute);
+	}
 	
 	public void toastDebugInfo(String message, boolean IsLongDuration)
     {
