@@ -16,11 +16,7 @@ import android.widget.DatePicker;
 public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener 
 {
 	OnDateSetListener ondateSet;
-	 public void setCallBack(OnDateSetListener onDateSet) {
-	  ondateSet = onDateSet;
-	 }
 	
-		
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) 
 	{
@@ -59,5 +55,10 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
 //		userSelectedDate.putInt("dayToSet", dayOfMonth);		
 		
 	}	
+	
+	public void setCallBack(OnDateSetListener onDateSet) 
+	{
+		ondateSet = onDateSet;
+	}
 	
 }
