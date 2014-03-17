@@ -168,14 +168,14 @@ public class MainActivity extends Activity
 					Bundle bd = data.getExtras();
 					if ((bd.containsKey("com.lb.todosqlite.addnewtag.isCancelPressed")) && !(bd.getBoolean("com.lb.todosqlite.addnewtag.isCancelPressed")))
 					{
-						String todoTitle = bd.getString("com.lb.todosqlite.addnewtodo.todoTitle");	// "com.lb.todosqlite.addnewtodo.todoTitle"
-						String categorySelected = bd.getString("com.lb.todosqlite.addnewtodo.categorySelected");  // "com.lb.todosqlite.addnewtodo.categorySelected"
-						String creationDate = bd.getString("com.lb.todosqlite.addnewtodo.creationDate");  // "com.lb.todosqlite.addnewtodo.creationDate"
+						String todoTitle = bd.getString("com.lb.todosqlite.addnewtodo.todoTitle");	
+						String categorySelected = bd.getString("com.lb.todosqlite.addnewtodo.categorySelected");  
+						String dueDate = bd.getString("com.lb.todosqlite.addnewtodo.dueDate");  
 						
 						if (categorySelected.equals(spinnerDefaultValue))
 							categorySelected = defaultInternalTagName;
 						
-						createToDo(todoTitle, categorySelected, creationDate);
+						createToDo(todoTitle, categorySelected, dueDate);
 						clearTableData();
 						fillUpTableFromDB();
 					}
@@ -414,9 +414,9 @@ public class MainActivity extends Activity
 		}
 	}
 	
-	public void createToDo(String todoTitle, String categorySelected, String creationDate)
+	public void createToDo(String todoTitle, String categorySelected, String dueDate)
 	{
-		int getStatusFromUserWasntImplementedYet = 0;
+		int defaultTodoStatus = 0;
 		// updates DB with new Todo
 		DatabaseHelper db = new DatabaseHelper(getApplicationContext());
 				
@@ -436,7 +436,8 @@ public class MainActivity extends Activity
 					tagID  = tag.getId();					
 			}				 
 		}		
-		Todo todo = new Todo(todoTitle, getStatusFromUserWasntImplementedYet);
+		Todo todo = new Todo(todoTitle, defaultTodoStatus);
+		todo.setDueDate(dueDate);  // TODO: consider adding a date format validator
 		long todoID = db.createToDo(todo, new long[] {tagID});
 				
 		db.closeDB();

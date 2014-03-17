@@ -2,45 +2,32 @@ package com.lb.todosqlite;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import org.apache.http.entity.StringEntity;
-
-import com.lb.todosqlite.dialogs.DatePickerFragment;
-import com.lb.todosqlite.helper.DatabaseHelper;
-import com.lb.todosqlite.model.Tag;
-
-import android.app.Activity;
-import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.CalendarContract.CalendarEntity;
-import android.provider.CalendarContract.Calendars;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
-import android.text.format.Time;
-import android.text.method.DateTimeKeyListener;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.DigitalClock;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemSelectedListener;
+
+import com.lb.todosqlite.dialogs.DatePickerFragment;
+import com.lb.todosqlite.helper.DatabaseHelper;
+import com.lb.todosqlite.model.Tag;
 
 public class AddNewToDo extends FragmentActivity
 {
@@ -49,11 +36,14 @@ public class AddNewToDo extends FragmentActivity
 	final String requestToCreateNewTag = "Create New Category...";
 	final String spinnerDefaultValue = "Select Todo category";
 	final String defaultInternalTagName = "None";  // categoryOnspinnerDefaultValue
+	final String dateFormat = "YYYY-MM-DD";
+	final String timeFormat = "HH-MM-SS";
 	String tagNameLastSelected = "";
 	String TagNameNewSelected = "";
 	int btnNewTodoCount = 0;
 	boolean isCancelPressed;
-	boolean isDebugMode = false;
+	boolean isDebugMode = true; // TODO: enabled for debug. set to false again
+	OnDateSetListener ondate;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
@@ -63,10 +53,13 @@ public class AddNewToDo extends FragmentActivity
 		
 		tagNameLastSelected = spinnerDefaultValue;
 		
-		TimePicker tp = (TimePicker) findViewById(R.id.tp_DueDate_ant);
-		tp.setIs24HourView(true);
+				
+		TextView tv_trial = (TextView) findViewById(R.id.tv_DDDate_ant);
+		String dateTime = getDateTime();
+		tv_trial.setText(getDate());
+		String time = getTime();
 		
-		TextView tv_trial = (TextView) findViewById(R.id.tv_ddTrial);
+		
 		tv_trial.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -115,7 +108,6 @@ public class AddNewToDo extends FragmentActivity
 				isCancelPressed = false;
 				resultIntent.putExtra("com.lb.todosqlite.addnewtag.isCancelPressed", isCancelPressed);
 				
-				// TODO: check which View relevant in this screen
 				EditText et_TodoTitle = (EditText) findViewById(R.id.eText_title);
 				String reqTodoTitle =et_TodoTitle.getText().toString();  
 				resultIntent.putExtra("com.lb.todosqlite.addnewtodo.todoTitle", reqTodoTitle);
@@ -123,20 +115,28 @@ public class AddNewToDo extends FragmentActivity
 				String reqTodoCategory = tagNameLastSelected;
 				resultIntent.putExtra("com.lb.todosqlite.addnewtodo.categorySelected", reqTodoCategory);
 				
-				// TODO: later change to DueDate. for now implementing "Creation Date"
-				SimpleDateFormat dateFormat = new SimpleDateFormat(
-			    		   "dd-MM-yyyy HH:mm:ss", Locale.getDefault()); 
-			       Date date = new Date();
-			    String reqCreationDate = dateFormat.format(date);
+			    TextView tv_DueDateDate = (TextView) findViewById(R.id.tv_DDDate_ant);
+			    String reqDueDateDate = tv_DueDateDate.getText().toString();
+			    TextView tv_DueDateTime = (TextView) findViewById(R.id.tv_DDTime_ant);
+			    String reqDueDateTime = tv_DueDateTime.getText().toString();
+			    String reqDueDate = reqDueDateDate.toString() + " " + reqDueDateTime.toString();
 			    
-			    TextView tv = (TextView) findViewById(R.id.tv_ddTrial);
-			    String ddTxt = tv.getText().toString();
-				resultIntent.putExtra("com.lb.todosqlite.addnewtodo.creationDate", reqCreationDate);
+				resultIntent.putExtra("com.lb.todosqlite.addnewtodo.dueDate", reqDueDate);
 				
                 setResult(RESULT_OK, resultIntent);
                 finish();
 			}
 		});
+		
+		ondate = new OnDateSetListener() 
+		{
+			  @Override
+			  public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) 
+			  {
+				  onDateSetHandler(view, year, monthOfYear, dayOfMonth);
+			  }
+		};
+
 	}
 	
 	@Override
@@ -174,6 +174,9 @@ public class AddNewToDo extends FragmentActivity
 		}					
 	}
 
+	
+	
+	
 	public void spinnerHandling()
     {
 	    	Spinner sp = (Spinner) findViewById(R.id.spinner_tag);
@@ -266,22 +269,127 @@ public class AddNewToDo extends FragmentActivity
 
 	public void launchDatePickerDialog()
 	{
-		//TODO: for edit dates check how to set a constructor which sets my dates		
-		/*int year = Calendar.YEAR;
-		int monthOfYear = Calendar.MONTH;
-		int dayOfMonth = Calendar.DAY_OF_MONTH;*/
+		//TODO: for edit dates check how to set a constructor which sets my dates
+		// dateFormat
+		DatePickerFragment df = new DatePickerFragment();		
 		
-		DialogFragment df = new DatePickerFragment();
+		if (dateFormat.equals("YYYY-MM-DD"))
+		{			
+			TextView tv_OldDate = (TextView) findViewById(R.id.tv_DDDate_ant);
+			String oldDateString = tv_OldDate.getText().toString();
+			
+			
+			int oldYear = getYearOfDateFormat(oldDateString);
+			int oldMonth = getMonthOfDateFormat(oldDateString);
+			int oldDay = getDayOfDateFormat(oldDateString);	
+			
+			// TODO: change key name to follow Android's conventions (with namespace)
+			Bundle bd = new Bundle();
+			bd.putInt("oldYear", oldYear);
+			bd.putInt("oldMonth", oldMonth);
+			bd.putInt("oldDay", oldDay);		
+			df.setArguments(bd);
+		}			
+		
+		df.setCallBack(ondate);
 		
 		df.show(getSupportFragmentManager(), "setDueDate");
+		
+		toastDebugInfo("launchDatePickerDialog() exit method after show invoked", true);
+	}
+
+	private String getDateTime() 
+	{
+	    SimpleDateFormat dateFormat = new SimpleDateFormat(
+	    		   "yyyy-MM-dd HH:mm:ss", Locale.getDefault()); 
+	    Date date = new Date();
+	    return dateFormat.format(date);
 	}
 	
-	/*public void onDateSetHandler(int year, int monthOfYear, int dayOfMonth)
+	private String getDate() 
+	{
+	    SimpleDateFormat dateFormat = new SimpleDateFormat(
+	    		   "yyyy-MM-dd", Locale.getDefault()); 
+	    Date date = new Date();
+	    return dateFormat.format(date);
+	}
+	
+	private String getTime() 
+	{
+	    SimpleDateFormat dateFormat = new SimpleDateFormat(
+	    		   "HH:mm", Locale.getDefault()); 
+	    Date date = new Date();
+	    return dateFormat.format(date);
+	}
+	
+	private int getYearOfDateFormat(String todoDueDate)
+	{
+		int year = 1900;
+		if (dateFormat.equals("YYYY-MM-DD"))
+		{	
+			int startIndex = 0;
+			int endIndex = 4;				
+			try 
+			{	year = Integer.parseInt(todoDueDate.substring(startIndex, endIndex));			} 
+			catch (NumberFormatException e) 			{
+				Log.e("AddNewTodo", "getYearOfDateFormat() caught an exception when attempted to parse date from string to int"); 
+			}
+			catch (IndexOutOfBoundsException e)			{
+				Log.e("AddNewTodo", "getYearOfDateFormat() caught an exception when attempted to trim a substring"); 
+			}			
+		}
+		
+		return year;
+	}
+	
+	private int getMonthOfDateFormat(String todoDueDate)
+	{
+		int month = 0;
+		if (dateFormat.equals("YYYY-MM-DD"))
+		{			
+			int startIndex = 5;
+			int endIndex = 7;				
+			try 
+			{	month = Integer.parseInt(todoDueDate.substring(startIndex, endIndex));			} 
+			catch (NumberFormatException e) 			{
+				Log.e("AddNewTodo", "getYearOfDateFormat() caught an exception when attempted to parse date from string to int"); 
+			}
+			catch (IndexOutOfBoundsException e)			{
+				Log.e("AddNewTodo", "getYearOfDateFormat() caught an exception when attempted to trim a substring"); 
+			}			
+		}
+		
+		return month;
+	}
+	
+	private int getDayOfDateFormat(String todoDueDate)
+	{
+		int day = 1;
+		if (dateFormat.equals("YYYY-MM-DD"))
+		{	
+			int startIndex = 8;
+			int endIndex = 10;				
+			try 
+			{	day = Integer.parseInt(todoDueDate.substring(startIndex, endIndex));			} 
+			catch (NumberFormatException e) 			{
+				Log.e("AddNewTodo", "getYearOfDateFormat() caught an exception when attempted to parse date from string to int"); 
+			}
+			catch (IndexOutOfBoundsException e)			{
+				Log.e("AddNewTodo", "getYearOfDateFormat() caught an exception when attempted to trim a substring"); 
+			}			
+		}
+		
+		return day;
+	}
+	
+	
+	
+	public void onDateSetHandler(DatePicker view, int year, int monthOfYear, int dayOfMonth)
 	{
 		
-		TextView tv = (TextView) findViewById(R.id.tv_ddTrial);
-		tv.setText(dayOfMonth + "/" + monthOfYear + "/" + year);
-	}*/
+		TextView tv = (TextView) findViewById(R.id.tv_DDDate_ant);
+		tv.setText(year + "-" + (monthOfYear+1) + "-" + dayOfMonth);
+	}
 	
 	
 	public void toastDebugInfo(String message, boolean IsLongDuration)
