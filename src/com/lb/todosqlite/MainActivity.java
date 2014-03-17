@@ -1,57 +1,43 @@
 package com.lb.todosqlite;
 
 import java.util.List;
-import java.util.concurrent.Exchanger;
 
-import com.lb.todosqlite.helper.DatabaseHelper;
-import com.lb.todosqlite.model.Tag;
-import com.lb.todosqlite.model.Todo;
-
-import android.os.Build;
-import android.os.Bundle;
-import android.R.color;
-import android.R.integer;
-import android.annotation.TargetApi;
+import android.R.drawable;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.content.res.ColorStateList;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.util.DisplayMetrics;
+import android.os.Bundle;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.ContextMenu;
-import android.view.Gravity;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.ViewPropertyAnimator;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
 import android.view.View.OnCreateContextMenuListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.View.OnLongClickListener;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TableRow.LayoutParams;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.lb.todosqlite.helper.DatabaseHelper;
+import com.lb.todosqlite.model.Tag;
+import com.lb.todosqlite.model.Todo;
 
 
 public class MainActivity extends Activity 
@@ -75,22 +61,17 @@ public class MainActivity extends Activity
 	final String defaultInternalTagName = "None";
 	// vars for debug
 	boolean isDebugMode = false;
-	int searchCount = 0;
-	
+	int searchCount = 0;	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
 	{
 		super.onCreate(savedInstanceState);
-		
-		// TODO: theme with  getApplication().setTheme(resid)?
-		
 		setContentView(R.layout.todos_table);
 		
-		// TODO: handle the screen rotation recreating activity screen - currently workaround in manifest
+		// TODO: theme with  getApplication().setTheme(resid)?		
 		
-		fillUpTableFromDB();	
-		
+		fillUpTableFromDB();		
 		
 		LinearLayout ll = (LinearLayout) findViewById(R.id.todos_table_screen_linlay);
 		ll.setBackgroundColor(Color.parseColor(colorCodeForTableBG));
@@ -101,8 +82,9 @@ public class MainActivity extends Activity
 		bt_search.setOnClickListener(new OnClickListener() {
 			
 			@Override
-			public void onClick(View v) {
-												
+			public void onClick(View v) 
+			{
+				openOptionsMenu();
 			}
 		});
 		
@@ -154,6 +136,26 @@ public class MainActivity extends Activity
 		// TODO: set value to 'isDebugMode' according to settings in preferences
 		if (!(isDebugMode))
 			bt_DebugScreen.setVisibility(View.INVISIBLE);
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		
+		MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.main, menu);
+	    
+	    MenuItem menuItem_about = menu.findItem(R.id.action_about);
+		menuItem_about.setOnMenuItemClickListener(new OnMenuItemClickListener()
+				{
+					@Override
+					public boolean onMenuItemClick(MenuItem item) 
+					{																
+						launchAboutDialog();
+						return false;
+					}
+		});
+	    
+		return true;
 	}
 	
 	@Override
@@ -414,6 +416,12 @@ public class MainActivity extends Activity
 		}
 	}
 	
+	public void clearTableData()
+	{
+		TableLayout todosTable = (TableLayout) findViewById(R.id.table_ToDos);
+		todosTable.removeViews(1, todosTable.getChildCount()-1);
+	}
+	
 	public void createToDo(String todoTitle, String categorySelected, String dueDate)
 	{
 		int defaultTodoStatus = 0;
@@ -490,9 +498,7 @@ public class MainActivity extends Activity
 		db.closeDB();
 		
 		clearTableData();
-		fillUpTableFromDB();
-		
-		//toastt("toggleTodoStatus() invoked", false);		
+		fillUpTableFromDB();		
 	}
 	
 	// Delete todo (int todoID)  include its tag if not in use elsewhere
@@ -555,10 +561,26 @@ public class MainActivity extends Activity
 		toastDebugInfo("launchEditTodo() - Will inflate a view which alows editing the todo", false);
 	}
 	
-	public void clearTableData()
+	public void launchAboutDialog()
 	{
-		TableLayout todosTable = (TableLayout) findViewById(R.id.table_ToDos);
-		todosTable.removeViews(1, todosTable.getChildCount()-1);
+		// texts, links and version number are all hardcoded into "dialogContent" in strings.xml 
+		try
+		{		
+			final TextView textView = new TextView(this);
+			textView.setText(R.string.dialogContent);
+			textView.setMovementMethod(LinkMovementMethod.getInstance()); 
+			   
+			final AlertDialog.Builder aDBuilder = new AlertDialog.Builder(this);
+			aDBuilder.setTitle("About!");
+			aDBuilder.setIcon(R.drawable.ic_logo);
+			aDBuilder.setView(textView);
+			aDBuilder.setPositiveButton("OK", null);
+			aDBuilder.create().show();							
+		}
+		catch (Exception e)
+		{
+			Log.d("DialogBox", "DialogBox throws the next exception: ", e);
+		}		
 	}
 		
 	@Override

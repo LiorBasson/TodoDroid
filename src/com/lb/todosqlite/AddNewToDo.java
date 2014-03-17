@@ -44,7 +44,7 @@ public class AddNewToDo extends FragmentActivity
 	String TagNameNewSelected = "";
 	int btnNewTodoCount = 0;
 	boolean isCancelPressed;
-	boolean isDebugMode = true; // TODO: enabled for debug. set to false again
+	boolean isDebugMode = false; 
 	OnDateSetListener onDate;
 	OnTimeSetListener onTime;
 	
