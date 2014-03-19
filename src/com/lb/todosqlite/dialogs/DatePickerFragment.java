@@ -41,7 +41,7 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
 	//@Override
 	public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) 
 	{
-		Log.w("DatePickerFragment", "private onDateSet() invoked, and does nothing. you shold set you on callback handler by setting setCallBack(OnDateSetListener onDateSet)");	
+		Log.w("DatePickerFragment", "private onDateSet() invoked, and does nothing. you should set your own callback handler by setting setCallBack(OnDateSetListener onDateSet)");	
 	}	
 	
 	public void setCallBack(OnDateSetListener onDateSet) 

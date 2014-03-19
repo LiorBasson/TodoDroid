@@ -38,7 +38,7 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
 	@Override
 	public void onTimeSet(TimePicker view, int hourOfDay, int minute) 
 	{
-		Log.w("TimePickerFragment", "private onTimeSet() invoked, and does nothing. you shold set you on callback handler by setting setCallBack(OnTimeSetListener onTimeSet)");
+		Log.w("TimePickerFragment", "private onTimeSet() invoked, and does nothing. you should set your own callback handler by setting setCallBack(OnTimeSetListener onTimeSet)");
 	}
 	
 	public void setCallBack(OnTimeSetListener onTimeSet)
