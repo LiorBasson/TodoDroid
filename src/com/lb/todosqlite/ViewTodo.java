@@ -27,7 +27,6 @@ import android.widget.TextView;
 public class ViewTodo extends Activity
 {
 	final int requestCode_ViewToDo = 214;
-	final int requestCode_EditToDo = 215;
 	final String themeColorCode_LableBG = "#FF9966"; // final and hardcoded for the meantime 
 	final String colorCodeForTableBG = "#000000";
 	final String colorCodeForText = "#CCCCCC";

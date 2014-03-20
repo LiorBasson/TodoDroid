@@ -17,7 +17,6 @@ import android.widget.TextView;
 
 public class EditTodo extends Activity 
 {
-	final int requestCode_ViewToDo = 214;
 	final int requestCode_EditToDo = 215;
 	final String themeColorCode_LableBG = "#FF9966"; // final and hardcoded for the meantime 
 	final String colorCodeForTableBG = "#000000";
@@ -35,36 +34,11 @@ public class EditTodo extends Activity
 		int reqCode = sp.getInt("userReqCode", -1);
 		m_todoID = todo_id;
 		
-		updateThemeColors();
-		fillViewesOnCreate(todo_id);		
+		updateThemeColors_OLD();
+		fillViewesOnCreate_OLD(todo_id);		
 	}
 	
-	public void updateThemeColors()
-	{
-		RelativeLayout viewLayout = (RelativeLayout) findViewById(R.id.rl_EditTodo_RootLayout);
-		viewLayout.setBackgroundColor(Color.parseColor(colorCodeForTableBG));
-		TextView catLable = (TextView) findViewById(R.id.tv_CatLable_ed);
-		catLable.setBackgroundColor(Color.parseColor(themeColorCode_LableBG));
-		TextView statusLable = (TextView) findViewById(R.id.tv_StatusLable_ed);
-		statusLable.setBackgroundColor(Color.parseColor(themeColorCode_LableBG));
-		TextView dueDateLable = (TextView) findViewById(R.id.tv_DueDateLable_ed);
-		dueDateLable.setBackgroundColor(Color.parseColor(themeColorCode_LableBG));
-		TextView todoNoteLable = (TextView) findViewById(R.id.tv_TodoNoteLable_ed);
-		todoNoteLable.setBackgroundColor(Color.parseColor(themeColorCode_LableBG));
-		
-		CheckBox status = (CheckBox) findViewById(R.id.cb_Status_ed);
-		status.setTextColor(Color.parseColor(colorCodeForText));
-		status.setBackgroundColor(Color.parseColor(themeColorCode_LableBG));
-		
-		//findViewById(R.id.et_Category_ed)
-		
-		//EditText et_DueDate_Date_ed = (EditText) findViewById(R.id.et_DueDate_Date_ed);
-		//et_DueDate_Date_ed.setTextColor(Color.parseColor(colorCodeForText));
-		EditText et_TodoNote_ed = (EditText) findViewById(R.id.et_TodoNote_ed);
-		et_TodoNote_ed.setTextColor(Color.parseColor(colorCodeForText));		
-	}
-	
-	public void fillViewesOnCreate(int todoID) 
+	public void fillViewesOnCreate_OLD(int todoID) 
 	{
 		DatabaseHelper db = new DatabaseHelper(getApplicationContext());
 		Todo todo = db.getTodo(todoID);
@@ -91,6 +65,31 @@ public class EditTodo extends Activity
 		EditText todoNote = (EditText) findViewById(R.id.et_TodoNote_ed);
 		//todoNote.setEnabled(false);
 		todoNote.setText(todo.getNote());		
+	}
+	
+	public void updateThemeColors_OLD()
+	{
+		RelativeLayout viewLayout = (RelativeLayout) findViewById(R.id.rl_EditTodo_RootLayout);
+		viewLayout.setBackgroundColor(Color.parseColor(colorCodeForTableBG));
+		TextView catLable = (TextView) findViewById(R.id.tv_CatLable_ed);
+		catLable.setBackgroundColor(Color.parseColor(themeColorCode_LableBG));
+		TextView statusLable = (TextView) findViewById(R.id.tv_StatusLable_ed);
+		statusLable.setBackgroundColor(Color.parseColor(themeColorCode_LableBG));
+		TextView dueDateLable = (TextView) findViewById(R.id.tv_DueDateLable_ed);
+		dueDateLable.setBackgroundColor(Color.parseColor(themeColorCode_LableBG));
+		TextView todoNoteLable = (TextView) findViewById(R.id.tv_TodoNoteLable_ed);
+		todoNoteLable.setBackgroundColor(Color.parseColor(themeColorCode_LableBG));
+		
+		CheckBox status = (CheckBox) findViewById(R.id.cb_Status_ed);
+		status.setTextColor(Color.parseColor(colorCodeForText));
+		status.setBackgroundColor(Color.parseColor(themeColorCode_LableBG));
+		
+		//findViewById(R.id.et_Category_ed)
+		
+		//EditText et_DueDate_Date_ed = (EditText) findViewById(R.id.et_DueDate_Date_ed);
+		//et_DueDate_Date_ed.setTextColor(Color.parseColor(colorCodeForText));
+		EditText et_TodoNote_ed = (EditText) findViewById(R.id.et_TodoNote_ed);
+		et_TodoNote_ed.setTextColor(Color.parseColor(colorCodeForText));		
 	}
 	
 	public void collectUpdatedData()
