@@ -1,7 +1,9 @@
 package com.lb.todosqlite;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import com.lb.todosqlite.R.id;
 import com.lb.todosqlite.helper.DatabaseHelper;
 import com.lb.todosqlite.model.Tag;
 import com.lb.todosqlite.model.Todo;
@@ -11,10 +13,15 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 public class ViewTodo extends Activity
@@ -30,16 +37,65 @@ public class ViewTodo extends Activity
 	protected void onCreate(Bundle savedInstanceState) 
 	{
 		super.onCreate(savedInstanceState);		
-		setContentView(R.layout.view_todo);
+		setContentView(R.layout.new_todo);
 		
 		SharedPreferences sp = getApplication().getSharedPreferences("viewTodo", 0);
 		int todo_id = sp.getInt("todoID", -1);
 				
-		updateThemeColors();
+		//updateThemeColors();
 		fillViewesOnCreate(todo_id);
 	}
 	
 	public void fillViewesOnCreate(int todoID) 
+	{
+		DatabaseHelper db = new DatabaseHelper(getApplicationContext());
+		Todo todo = db.getTodo(todoID);
+		List<Tag> tags = db.getTagsByToDo(todoID);
+		db.closeDB();		
+		
+		Spinner sp_Category = (Spinner) findViewById(R.id.spinner_tag);
+		sp_Category.setEnabled(false);		
+		List<String> spinnerCategories = new  ArrayList<String>();		
+		for (Tag tag : tags)
+		{
+			spinnerCategories.add(tag.getTagName());
+		}		
+		ArrayAdapter<String> spAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, spinnerCategories);
+    	spAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+    	sp_Category.setAdapter(spAdapter);		
+		
+		CheckBox status = (CheckBox) findViewById(R.id.cb_Status_nt);
+		status.setEnabled(false);
+		status.setChecked(todo.getStatus() == 1);
+		
+		//TODO: hardcoded positions - change once refactoring time date formats
+		String todoDueDate = todo.getDueDate();
+		int startIndex = 0;
+		int endIndex = (todoDueDate.indexOf(":") -2);
+		String date = todoDueDate.substring(startIndex, endIndex);
+		
+		startIndex = (todoDueDate.indexOf(":") -2) ;
+		endIndex = todoDueDate.length();		
+		String time =todoDueDate.substring(startIndex, endIndex);
+		
+		TextView tv_DDDate = (TextView) findViewById(R.id.tv_DDDate_ant);
+		tv_DDDate.setText(date);				
+			
+		TextView tv_DDTime = (TextView) findViewById(R.id.tv_DDTime_ant);
+		tv_DDTime.setText(time);		
+		
+		EditText todoNote = (EditText) findViewById(R.id.eText_title);
+		todoNote.setEnabled(false);
+		todoNote.setText(todo.getNote());	
+		
+		Button bt_Cancel = (Button) findViewById(R.id.bt_CancellCreateTodo);
+		bt_Cancel.setVisibility(View.INVISIBLE);
+		Button bt_Save = (Button) findViewById(R.id.bt_ApplyCreateTodo);
+		bt_Save.setVisibility(View.INVISIBLE);
+	}
+	
+	
+	public void fillViewesOnCreate_OLD(int todoID) 
 	{
 		DatabaseHelper db = new DatabaseHelper(getApplicationContext());
 		Todo todo = db.getTodo(todoID);
@@ -68,7 +124,7 @@ public class ViewTodo extends Activity
 		todoNote.setText(todo.getNote());		
 	}
 	
-	public void updateThemeColors()
+	public void updateThemeColors_OLD()
 	{
 		RelativeLayout viewLayout = (RelativeLayout) findViewById(R.id.rl_ViewTodo_RootLayout);
 		viewLayout.setBackgroundColor(Color.parseColor(colorCodeForTableBG));

@@ -19,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -35,6 +36,8 @@ public class AddNewToDo extends FragmentActivity
 {
 	
 	final int requestCode_AddNewTag = 212;
+	final int requestCode_ViewToDo = 214;
+	final int requestCode_EditToDo = 215;	
 	final String requestToCreateNewTag = "Create New Category...";
 	final String spinnerDefaultValue = "Select Todo category";
 	final String defaultInternalTagName = "None";  // categoryOnspinnerDefaultValue
@@ -54,6 +57,28 @@ public class AddNewToDo extends FragmentActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.new_todo);
 		
+		int reqCode = requestCode_AddNewTag; // TODO: will be taken from activity invoker
+		
+		switch (reqCode)
+		{
+			case requestCode_AddNewTag:
+			{
+				prepareLayoutForNewTodo();
+				break;
+			}
+//			case requestCode_EditToDo:
+//			{
+//				prepareLayoutForEditTodo();
+//				fillUpTodoDataOnViewEdit();
+//				break;
+//			}
+//			case requestCode_ViewToDo:
+//			{
+//				prepareLayoutForViewTodo();
+//				fillUpTodoDataOnViewEdit();
+//				break;
+//			}			
+		}
 		tagNameLastSelected = spinnerDefaultValue;
 		
 				
@@ -154,7 +179,6 @@ public class AddNewToDo extends FragmentActivity
 				onTimeSetHandler(view, hourOfDay, minute); 
 			}
 		};
-
 	}
 	
 	@Override
@@ -193,7 +217,13 @@ public class AddNewToDo extends FragmentActivity
 	}
 
 	
-	
+	public void prepareLayoutForNewTodo()
+	{
+		CheckBox cb_Status = (CheckBox) findViewById(R.id.cb_Status_nt);
+		cb_Status.setVisibility(View.INVISIBLE);
+		TextView tv_StatusLabel = (TextView) findViewById(R.id.tv_StatusLable_ntt);
+		tv_StatusLabel.setVisibility(View.INVISIBLE);
+	}
 	
 	public void spinnerHandling()
     {
