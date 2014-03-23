@@ -331,8 +331,7 @@ public class AddNewToDo extends FragmentActivity
 		bd.putInt("oldYear", oldYear);
 		bd.putInt("oldMonth", oldMonth);
 		bd.putInt("oldDay", oldDay);		
-		df.setArguments(bd);
-			
+		df.setArguments(bd);			
 		
 		df.setCallBack(onDate);
 		
@@ -348,7 +347,7 @@ public class AddNewToDo extends FragmentActivity
 		TextView tv_OldTime = (TextView) findViewById(R.id.tv_DDTime_ant);
 		String oldTimeString = tv_OldTime.getText().toString();				
 		int oldHour = Integer.parseInt(oldTimeString.substring(0, 2));
-		int oldMinuets = Integer.parseInt(oldTimeString.substring(3, 5));		
+		int oldMinuets = Integer.parseInt(oldTimeString.substring(3, oldTimeString.length()));		
 		Bundle bd = new Bundle();
 		bd.putInt("oldHour", oldHour);
 		bd.putInt("oldMinuets", oldMinuets);

@@ -60,7 +60,7 @@ public class MainActivity extends Activity
 	final String spinnerDefaultValue = "Select Todo category";
 	final String defaultInternalTagName = "None";
 	// vars for debug
-	boolean isDebugMode = false;
+	boolean isDebugMode = true; // TODO: Change back to false when finished debugging
 	int searchCount = 0;	
 	
 	@Override
@@ -161,7 +161,6 @@ public class MainActivity extends Activity
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) 
 	{
-		int m_resultCode = 0;
 		if (resultCode == RESULT_OK)
 			switch (requestCode)
 			{
@@ -182,8 +181,7 @@ public class MainActivity extends Activity
 						fillUpTableFromDB();
 					}
 					toastDebugInfo("returned from AddNewToDo Screen", false);
-					break;
-							
+					break;							
 				}
 				case requestCode_DeubgScr:
 				{
@@ -199,8 +197,6 @@ public class MainActivity extends Activity
 				
 			}
 		else toastDebugInfo("returned with !(Result_OK)", false);
-		
-		String Dummy = "";
 	}
 	
 	public void fillUpTableFromDB()

@@ -6,6 +6,7 @@ public class Todo
     String note;
     int status;
     String dueDate;
+    String notification = "false"; // for near future implementation.
  
     // constructors
     public Todo() 
@@ -45,6 +46,11 @@ public class Todo
     {
         this.dueDate = dueDate;
     }
+    
+    public void setNotification(String notification)
+    {
+        this.notification = notification;
+    }
  
     // getters
     public long getId() 
@@ -63,8 +69,12 @@ public class Todo
     }
     
     public String getDueDate()
-    {
-    	
+    {    	
     	return this.dueDate;
+    }
+    
+    public String getNotification()
+    {    	
+    	return this.notification;
     }
 }

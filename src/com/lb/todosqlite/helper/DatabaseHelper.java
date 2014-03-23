@@ -34,11 +34,14 @@ public class DatabaseHelper extends SQLiteOpenHelper
  
     // Common column names
     private static final String KEY_ID = "id";
-    private static final String KEY_DUE_DATE = "created_at"; // TODO: rename to DueDate. does that means require new db version #? and upgrade handling?
+    private static final String KEY_CREATION_DATE = "created_at"; 
  
-    // NOTES Table - column names
+    // TODOS Table - column names
     private static final String KEY_TODO = "todo";
     private static final String KEY_STATUS = "status";
+    private static final String KEY_DUE_DATE = "due_date";
+    private static final String KEY_NOTIFICATION = "notification";
+    
  
     // TAGS Table - column names
     private static final String KEY_TAG_NAME = "tag_name";
@@ -52,18 +55,18 @@ public class DatabaseHelper extends SQLiteOpenHelper
     private static final String CREATE_TABLE_TODO = "CREATE TABLE "
             + TABLE_TODO + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_TODO
             + " TEXT," + KEY_STATUS + " INTEGER," + KEY_DUE_DATE
-            + " DATETIME" + ")";
+            + " DATETIME," + KEY_NOTIFICATION + " TEXT," + KEY_CREATION_DATE + " DATETIME" + ")";
  
     // Tag table create statement
     private static final String CREATE_TABLE_TAG = "CREATE TABLE " + TABLE_TAG
             + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_TAG_NAME + " TEXT,"
-            + KEY_DUE_DATE + " DATETIME" + ")";
+            + KEY_CREATION_DATE + " DATETIME" + ")";
  
     // todo_tag table create statement
     private static final String CREATE_TABLE_TODO_TAG = "CREATE TABLE "
             + TABLE_TODO_TAG + "(" + KEY_ID + " INTEGER PRIMARY KEY,"
             + KEY_TODO_ID + " INTEGER," + KEY_TAG_ID + " INTEGER,"
-            + KEY_DUE_DATE + " DATETIME" + ")";
+            + KEY_CREATION_DATE + " DATETIME" + ")";
  
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -100,6 +103,8 @@ public class DatabaseHelper extends SQLiteOpenHelper
     	values.put(KEY_TODO, todo.getNote());
     	values.put(KEY_STATUS, todo.getStatus());
     	values.put(KEY_DUE_DATE, todo.getDueDate());
+    	values.put(KEY_NOTIFICATION, todo.getNotification());    	
+    	values.put(KEY_CREATION_DATE, getDateTime());
     
     	// insert row
     	long todo_id = db.insert(TABLE_TODO, null, values);
@@ -131,6 +136,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
        td.setId(c.getInt(c.getColumnIndex(KEY_ID)));
        td.setNote((c.getString(c.getColumnIndex(KEY_TODO))));
        td.setDueDate(c.getString(c.getColumnIndex(KEY_DUE_DATE)));
+       td.setNotification(c.getString(c.getColumnIndex(KEY_NOTIFICATION)));
        td.setStatus(c.getInt(c.getColumnIndex(KEY_STATUS)));
     
        return td;
@@ -155,6 +161,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
                td.setNote((c.getString(c.getColumnIndex(KEY_TODO))));
                td.setDueDate(c.getString(c.getColumnIndex(KEY_DUE_DATE)));
                td.setStatus(c.getInt((c.getColumnIndex(KEY_STATUS))));
+               td.setNotification(c.getString(c.getColumnIndex(KEY_NOTIFICATION)));               
     
                // adding to todo list
                todos.add(td);
@@ -188,6 +195,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
                td.setNote((c.getString(c.getColumnIndex(KEY_TODO))));
                td.setDueDate(c.getString(c.getColumnIndex(KEY_DUE_DATE)));
                td.setStatus(c.getInt((c.getColumnIndex(KEY_STATUS))));
+               td.setNotification(c.getString(c.getColumnIndex(KEY_NOTIFICATION)));               
     
                // adding to todo list
                todos.add(td);
@@ -280,6 +288,8 @@ public class DatabaseHelper extends SQLiteOpenHelper
        ContentValues values = new ContentValues();
        values.put(KEY_TODO, todo.getNote());
        values.put(KEY_STATUS, todo.getStatus());
+       values.put(KEY_DUE_DATE, todo.getDueDate());
+       values.put(KEY_NOTIFICATION, todo.getNotification());
     
        // updating row
        return db.update(TABLE_TODO, values, KEY_ID + " = ?",
@@ -333,7 +343,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
   
      ContentValues values = new ContentValues();
      values.put(KEY_TAG_NAME, tag.getTagName());
-     values.put(KEY_DUE_DATE, getDateTime());
+     values.put(KEY_CREATION_DATE, getDateTime());
   
      // insert row
      long tag_id = db.insert(TABLE_TAG, null, values);
@@ -408,7 +418,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
        ContentValues values = new ContentValues();
        values.put(KEY_TODO_ID, todo_id);
        values.put(KEY_TAG_ID, tag_id);
-       values.put(KEY_DUE_DATE, getDateTime());
+       values.put(KEY_CREATION_DATE, getDateTime());
 
        long id = db.insert(TABLE_TODO_TAG, null, values);
 
@@ -449,7 +459,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
         Log.e(LOG, "closeDB() was called");
     }
     
-    // get datetime
+    // get datetime  // TODO: change format?
     private String getDateTime() 
    {
        SimpleDateFormat dateFormat = new SimpleDateFormat(
