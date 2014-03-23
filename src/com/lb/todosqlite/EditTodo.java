@@ -5,9 +5,10 @@ import java.util.List;
 
 import com.lb.todosqlite.dialogs.DatePickerFragment;
 import com.lb.todosqlite.dialogs.TimePickerFragment;
-import com.lb.todosqlite.helper.DatabaseHelper;
 import com.lb.todosqlite.model.Tag;
 import com.lb.todosqlite.model.Todo;
+import com.lb.todosqlite.services.DatabaseHelper;
+import com.lb.todosqlite.services.DateTimeServices;
 
 import android.app.Activity;
 import android.app.DatePickerDialog.OnDateSetListener;
@@ -80,56 +81,19 @@ public class EditTodo extends FragmentActivity
 		CheckBox status = (CheckBox) findViewById(R.id.cb_Status_nt);
 		status.setChecked(todo.getStatus() == 1);
 		
-		//TODO: hardcoded positions - change once refactoring time date formats
-		String todoDueDate = todo.getDueDate();
-		int startIndex = 0;
-		int endIndex = (todoDueDate.indexOf(":") -2);
-		String date = todoDueDate.substring(startIndex, endIndex);
-		
-		startIndex = (todoDueDate.indexOf(":") -2) ;
-		endIndex = todoDueDate.length();		
-		String time =todoDueDate.substring(startIndex, endIndex);
-		
+		String todoDueDate = todo.getDueDate();		
+		String date = DateTimeServices.getDateOfDateTimeFormat(todoDueDate);
 		TextView tv_DDDate = (TextView) findViewById(R.id.tv_DDDate_ant);
 		tv_DDDate.setText(date);				
-			
+		
+		String time = DateTimeServices.getTimeOfDateTimeFormat(todoDueDate);	
 		TextView tv_DDTime = (TextView) findViewById(R.id.tv_DDTime_ant);
 		tv_DDTime.setText(time);		
 		
 		EditText todoNote = (EditText) findViewById(R.id.eText_title);
 		todoNote.setText(todo.getNote());	
 	}
-	
-	
-	public void fillViewesOnCreate_OLD(int todoID) 
-	{
-		DatabaseHelper db = new DatabaseHelper(getApplicationContext());
-		Todo todo = db.getTodo(todoID);
-		List<Tag> tags = db.getTagsByToDo(todoID);
-		db.closeDB();		
 		
-		EditText categories =  (EditText) findViewById(R.id.et_Category_ed);
-		categories.setEnabled(false); // TODO: replace with a global variable if planning to reuse for EditTodo	(for all view elements?)	
-		for (Tag tag : tags)
-		{
-			String catTxt = categories.getText().toString();			
-			categories.setText(catTxt + "[" + tag.getTagName() + "] ");
-		}
-		
-		CheckBox status = (CheckBox) findViewById(R.id.cb_Status_ed);
-		//status.setEnabled(false);
-		status.setChecked(todo.getStatus() == 1);
-		
-		EditText duedateDate = (EditText) findViewById(R.id.et_DueDate_Date_ed);
-		duedateDate.setEnabled(false);
-		duedateDate.setText(todo.getDueDate());
-		
-		
-		EditText todoNote = (EditText) findViewById(R.id.et_TodoNote_ed);
-		//todoNote.setEnabled(false);
-		todoNote.setText(todo.getNote());		
-	}
-	
 	public void updateThemeColors_OLD()
 	{
 		RelativeLayout viewLayout = (RelativeLayout) findViewById(R.id.rl_EditTodo_RootLayout);
@@ -198,11 +162,7 @@ public class EditTodo extends FragmentActivity
 			
 			@Override
 			public void onClick(View v) {
-				// TODO: check if can change to specific relevant previous intent returned by getIntent() instead of a "new Intent()"
-				Intent intent = getIntent();				
-				// TODO: remove since handling update locallyy?
-//				isCancelPressed = true;
-//				intent.putExtra("com.lb.todosqlite.edittodo.isCancelPressed", isCancelPressed);
+				Intent intent = getIntent();	
                 setResult(RESULT_OK, intent);
                 finish();
 			}
@@ -213,29 +173,9 @@ public class EditTodo extends FragmentActivity
 			
 			@Override
 			public void onClick(View v) {
-				// TODO: check if can change to specific relevant previous intent returned by getIntent() instead of a "new Intent()"
-				Intent resultIntent = getIntent();
-//				// TODO: remove since handling update locallyy?
-//				isCancelPressed = false;
-//				resultIntent.putExtra("com.lb.todosqlite.addnewtag.isCancelPressed", isCancelPressed);
-//				
-//				EditText et_TodoTitle = (EditText) findViewById(R.id.eText_title);
-//				String reqTodoTitle =et_TodoTitle.getText().toString();  
-//				resultIntent.putExtra("com.lb.todosqlite.addnewtodo.todoTitle", reqTodoTitle);
-//				
-//				String reqTodoCategory = tagNameLastSelected;
-//				resultIntent.putExtra("com.lb.todosqlite.addnewtodo.categorySelected", reqTodoCategory);
-//				
-//			    TextView tv_DueDateDate = (TextView) findViewById(R.id.tv_DDDate_ant);
-//			    String reqDueDateDate = tv_DueDateDate.getText().toString();
-//			    TextView tv_DueDateTime = (TextView) findViewById(R.id.tv_DDTime_ant);
-//			    String reqDueDateTime = tv_DueDateTime.getText().toString();
-//			    String reqDueDate = reqDueDateDate.toString() + " " + reqDueDateTime.toString();
-//			    
-//				resultIntent.putExtra("com.lb.todosqlite.addnewtodo.dueDate", reqDueDate);
-				
 				collectAndUpdateData();
 
+				Intent resultIntent = getIntent();
                 setResult(RESULT_OK, resultIntent);	
                 finish();
 }
@@ -249,9 +189,9 @@ public class EditTodo extends FragmentActivity
 		TextView tv_OldDate = (TextView) findViewById(R.id.tv_DDDate_ant);
 		String oldDateString = tv_OldDate.getText().toString();		
 		
-		int oldYear = getYearOfDateFormat(oldDateString);
-		int oldMonth = getMonthOfDateFormat(oldDateString);
-		int oldDay = getDayOfDateFormat(oldDateString);	
+		int oldYear = DateTimeServices.getYearOfDateFormat(oldDateString); 
+		int oldMonth = DateTimeServices.getMonthOfDateFormat(oldDateString);
+		int oldDay = DateTimeServices.getDayOfDateFormat(oldDateString);	
 		
 		// TODO: change key name to follow Android's conventions (with namespace)
 		Bundle bd = new Bundle();
@@ -271,8 +211,8 @@ public class EditTodo extends FragmentActivity
 		
 		TextView tv_OldTime = (TextView) findViewById(R.id.tv_DDTime_ant);
 		String oldTimeString = tv_OldTime.getText().toString();				
-		int oldHour = Integer.parseInt(oldTimeString.substring(0, 2)); // TODO: ?move handling into a method?
-		int oldMinuets = Integer.parseInt(oldTimeString.substring(3, oldTimeString.length()));		
+		int oldHour =  DateTimeServices.getHourOfTimeFormat(oldTimeString);
+		int oldMinuets = DateTimeServices.getMinuteOfTimeFormat(oldTimeString);		
 		Bundle bd = new Bundle();
 		bd.putInt("oldHour", oldHour);
 		bd.putInt("oldMinuets", oldMinuets);
@@ -311,16 +251,16 @@ public class EditTodo extends FragmentActivity
 	public void onDateSetHandler(DatePicker view, int year, int monthOfYear, int dayOfMonth)
 	{		
 		TextView tv = (TextView) findViewById(R.id.tv_DDDate_ant);
-		tv.setText(getFormattedDateOfYMD(year, monthOfYear, dayOfMonth));
+		tv.setText(DateTimeServices.getFormattedDateOfYMD(year, monthOfYear, dayOfMonth));
 	}
 	
 	public void onTimeSetHandler(TimePicker view, int hourOfDay, int minute) 
 	{
 		TextView tv = (TextView) findViewById(R.id.tv_DDTime_ant);
-		tv.setText(getFormattedTimeOfHM(hourOfDay, minute));
+		tv.setText(DateTimeServices.getFormattedTimeOfHM(hourOfDay, minute));
 	}
 	
-	
+	/*
 	private int getYearOfDateFormat(String todoDueDate)
 	{
 		int year = 1900;
@@ -419,5 +359,5 @@ public class EditTodo extends FragmentActivity
 		formattedTime = hour + ":" + min;
 		return formattedTime;		
 	}
-	
+	*/
 }

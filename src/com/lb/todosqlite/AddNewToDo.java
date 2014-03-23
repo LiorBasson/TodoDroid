@@ -29,8 +29,9 @@ import android.widget.Toast;
 
 import com.lb.todosqlite.dialogs.DatePickerFragment;
 import com.lb.todosqlite.dialogs.TimePickerFragment;
-import com.lb.todosqlite.helper.DatabaseHelper;
 import com.lb.todosqlite.model.Tag;
+import com.lb.todosqlite.services.DatabaseHelper;
+import com.lb.todosqlite.services.DateTimeServices;
 
 public class AddNewToDo extends FragmentActivity
 {
@@ -83,7 +84,7 @@ public class AddNewToDo extends FragmentActivity
 		
 				
 		TextView tv_DDDate = (TextView) findViewById(R.id.tv_DDDate_ant);
-		tv_DDDate.setText(getDate());		
+		tv_DDDate.setText(DateTimeServices.getDate());		
 		tv_DDDate.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -93,7 +94,7 @@ public class AddNewToDo extends FragmentActivity
 		});
 			
 		TextView tv_DDTime = (TextView) findViewById(R.id.tv_DDTime_ant);
-		tv_DDTime.setText(getTime());
+		tv_DDTime.setText(DateTimeServices.getTime());
 		tv_DDTime.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -184,6 +185,7 @@ public class AddNewToDo extends FragmentActivity
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) 
 	{
+		// TODO: refactoring, reformat this "if hell"
 		if (requestCode == requestCode_AddNewTag)
 		{
 			if (resultCode == RESULT_OK)
@@ -322,9 +324,9 @@ public class AddNewToDo extends FragmentActivity
 		TextView tv_OldDate = (TextView) findViewById(R.id.tv_DDDate_ant);
 		String oldDateString = tv_OldDate.getText().toString();		
 		
-		int oldYear = getYearOfDateFormat(oldDateString);
-		int oldMonth = getMonthOfDateFormat(oldDateString);
-		int oldDay = getDayOfDateFormat(oldDateString);	
+		int oldYear = DateTimeServices.getYearOfDateFormat(oldDateString);
+		int oldMonth = DateTimeServices.getMonthOfDateFormat(oldDateString);
+		int oldDay = DateTimeServices.getDayOfDateFormat(oldDateString);	
 		
 		// TODO: change key name to follow Android's conventions (with namespace)
 		Bundle bd = new Bundle();
@@ -346,8 +348,8 @@ public class AddNewToDo extends FragmentActivity
 		
 		TextView tv_OldTime = (TextView) findViewById(R.id.tv_DDTime_ant);
 		String oldTimeString = tv_OldTime.getText().toString();				
-		int oldHour = Integer.parseInt(oldTimeString.substring(0, 2));
-		int oldMinuets = Integer.parseInt(oldTimeString.substring(3, oldTimeString.length()));		
+		int oldHour = DateTimeServices.getHourOfTimeFormat(oldTimeString);
+		int oldMinuets = DateTimeServices.getMinuteOfTimeFormat(oldTimeString);	
 		Bundle bd = new Bundle();
 		bd.putInt("oldHour", oldHour);
 		bd.putInt("oldMinuets", oldMinuets);
@@ -360,13 +362,14 @@ public class AddNewToDo extends FragmentActivity
 		toastDebugInfo("launchTimePickerDialog() exit method after show invoked", true);
 	}
 
-	private String getDateTime() 
+	// TODO: use from DateTimeServices
+	/*private String getDateTime() 
 	{
 	    SimpleDateFormat dateFormat = new SimpleDateFormat(
 	    		   "yyyy-MM-dd HH:mm:ss", Locale.getDefault()); 
 	    Date date = new Date();
 	    return dateFormat.format(date);
-	}
+	}	
 	
 	private String getDate() 
 	{
@@ -442,21 +445,21 @@ public class AddNewToDo extends FragmentActivity
 		}
 		
 		return day;
-	}
+	}*/
 	
 	public void onDateSetHandler(DatePicker view, int year, int monthOfYear, int dayOfMonth)
 	{
 		
 		TextView tv = (TextView) findViewById(R.id.tv_DDDate_ant);
-		tv.setText(year + "-" + (monthOfYear+1) + "-" + dayOfMonth);
+		tv.setText(DateTimeServices.getFormattedDateOfYMD(year, monthOfYear, dayOfMonth));
 	}
 	
 	public void onTimeSetHandler(TimePicker view, int hourOfDay, int minute) 
 	{
 		TextView tv = (TextView) findViewById(R.id.tv_DDTime_ant);
-		tv.setText(hourOfDay + ":" + minute);
+		tv.setText(DateTimeServices.getFormattedTimeOfHM(hourOfDay, minute));
 	}
-	
+			
 	public void toastDebugInfo(String message, boolean IsLongDuration)
     {
 		if (isDebugMode) {

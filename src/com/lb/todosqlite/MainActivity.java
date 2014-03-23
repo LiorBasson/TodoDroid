@@ -35,9 +35,9 @@ import android.widget.TableRow.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.lb.todosqlite.helper.DatabaseHelper;
 import com.lb.todosqlite.model.Tag;
 import com.lb.todosqlite.model.Todo;
+import com.lb.todosqlite.services.DatabaseHelper;
 
 
 public class MainActivity extends Activity 

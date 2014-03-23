@@ -11,9 +11,9 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.lb.todosqlite.helper.DatabaseHelper;
 import com.lb.todosqlite.model.Tag;
 import com.lb.todosqlite.model.Todo;
+import com.lb.todosqlite.services.DatabaseHelper;
 
 public class DebugScreen extends Activity
 {

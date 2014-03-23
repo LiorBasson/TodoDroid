@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.lb.todosqlite.R.id;
-import com.lb.todosqlite.helper.DatabaseHelper;
 import com.lb.todosqlite.model.Tag;
 import com.lb.todosqlite.model.Todo;
+import com.lb.todosqlite.services.DatabaseHelper;
+import com.lb.todosqlite.services.DateTimeServices;
 
 import android.R.color;
 import android.app.Activity;
@@ -64,24 +65,19 @@ public class ViewTodo extends Activity
     	sp_Category.setAdapter(spAdapter);		
 		
 		CheckBox status = (CheckBox) findViewById(R.id.cb_Status_nt);
-		status.setEnabled(false);
 		status.setChecked(todo.getStatus() == 1);
+		status.setEnabled(false);
 		
-		//TODO: hardcoded positions - change once refactoring time date formats
-		String todoDueDate = todo.getDueDate();
-		int startIndex = 0;
-		int endIndex = (todoDueDate.indexOf(":") -2);
-		String date = todoDueDate.substring(startIndex, endIndex);
-		
-		startIndex = (todoDueDate.indexOf(":") -2) ;
-		endIndex = todoDueDate.length();		
-		String time =todoDueDate.substring(startIndex, endIndex);
-		
+		String todoDueDate = todo.getDueDate();		
+		String date = DateTimeServices.getDateOfDateTimeFormat(todoDueDate);
 		TextView tv_DDDate = (TextView) findViewById(R.id.tv_DDDate_ant);
-		tv_DDDate.setText(date);				
-			
+		tv_DDDate.setText(date);
+		tv_DDDate.setEnabled(false);
+		
+		String time = DateTimeServices.getTimeOfDateTimeFormat(todoDueDate);	
 		TextView tv_DDTime = (TextView) findViewById(R.id.tv_DDTime_ant);
-		tv_DDTime.setText(time);		
+		tv_DDTime.setText(time);
+		tv_DDTime.setEnabled(false);
 		
 		EditText todoNote = (EditText) findViewById(R.id.eText_title);
 		todoNote.setEnabled(false);
@@ -92,37 +88,7 @@ public class ViewTodo extends Activity
 		Button bt_Save = (Button) findViewById(R.id.bt_ApplyCreateTodo);
 		bt_Save.setVisibility(View.INVISIBLE);
 	}
-	
-	
-	public void fillViewesOnCreate_OLD(int todoID) 
-	{
-		DatabaseHelper db = new DatabaseHelper(getApplicationContext());
-		Todo todo = db.getTodo(todoID);
-		List<Tag> tags = db.getTagsByToDo(todoID);
-		db.closeDB();		
 		
-		EditText categories =  (EditText) findViewById(R.id.et_Category);
-		categories.setEnabled(false); // TODO: replace with a global variable if planning to reuse for EditTodo	(for all view elements?)	
-		for (Tag tag : tags)
-		{
-			String catTxt = categories.getText().toString();			
-			categories.setText(catTxt + "[" + tag.getTagName() + "] ");
-		}
-		
-		CheckBox status = (CheckBox) findViewById(R.id.cb_Status);
-		status.setEnabled(false);
-		status.setChecked(todo.getStatus() == 1);
-		
-		EditText duedateDate = (EditText) findViewById(R.id.et_DueDate_Date);
-		duedateDate.setEnabled(false);
-		duedateDate.setText(todo.getDueDate());
-		
-		
-		EditText todoNote = (EditText) findViewById(R.id.et_TodoNote);
-		todoNote.setEnabled(false);
-		todoNote.setText(todo.getNote());		
-	}
-	
 	public void updateThemeColors_OLD()
 	{
 		RelativeLayout viewLayout = (RelativeLayout) findViewById(R.id.rl_ViewTodo_RootLayout);
