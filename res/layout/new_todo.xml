@@ -39,7 +39,7 @@
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/tv_DDDate_ant"
             android:layout_marginTop="14dp"
-            android:text="Title" />
+            android:text="Todo Note" />
 
         <EditText
             android:id="@+id/eText_title"
@@ -48,7 +48,7 @@
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/tView_title"
             android:ems="10"
-            android:hint="fill in todo title here"
+            android:hint="fill in todo note here"
             android:paddingBottom="5dp" />
 
         <TextView
