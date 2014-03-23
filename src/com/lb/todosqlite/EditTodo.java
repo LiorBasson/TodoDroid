@@ -1,5 +1,6 @@
 package com.lb.todosqlite;
 
+import java.security.acl.LastOwnerException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +22,7 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -30,6 +32,8 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
+import android.widget.AdapterView.OnItemSelectedListener;
 
 public class EditTodo extends FragmentActivity 
 {
@@ -39,10 +43,15 @@ public class EditTodo extends FragmentActivity
 	final String colorCodeForText = "#CCCCCC";
 	int m_todoID = 0;
 	boolean isCancelPressed = true;
+	final String defaultInternalTagName = "None";
+	String tagNameLastSelected = "";
+	String TagNameNewSelected = "";
 	OnDateSetListener onDate;
 	OnTimeSetListener onTime;	
 	final String dateFormat = "YYYY-MM-DD";
 	final String timeFormat = "HH-MM-SS";
+	boolean isDebugMode = false; 
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
@@ -66,17 +75,19 @@ public class EditTodo extends FragmentActivity
 		DatabaseHelper db = new DatabaseHelper(getApplicationContext());
 		Todo todo = db.getTodo(todoID);
 		List<Tag> tags = db.getTagsByToDo(todoID);
-		db.closeDB();		
+		db.closeDB();	
 		
-		Spinner sp_Category = (Spinner) findViewById(R.id.spinner_tag);
-		List<String> spinnerCategories = new  ArrayList<String>();		
-		for (Tag tag : tags)
-		{
-			spinnerCategories.add(tag.getTagName());
-		}		
-		ArrayAdapter<String> spAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, spinnerCategories);
-    	spAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-    	sp_Category.setAdapter(spAdapter);		
+		spinnerHandling();
+		
+//		Spinner sp_Category = (Spinner) findViewById(R.id.spinner_tag);
+//		List<String> spinnerCategories = new  ArrayList<String>();		
+//		for (Tag tag : tags)
+//		{
+//			spinnerCategories.add(tag.getTagName());
+//		}		
+//		ArrayAdapter<String> spAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, spinnerCategories);
+//    	spAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//    	sp_Category.setAdapter(spAdapter);		
 		
 		CheckBox status = (CheckBox) findViewById(R.id.cb_Status_nt);
 		status.setChecked(todo.getStatus() == 1);
@@ -227,8 +238,21 @@ public class EditTodo extends FragmentActivity
 	{
 		DatabaseHelper db = new DatabaseHelper(getApplicationContext());
 		Todo updatedTodo = db.getTodo(m_todoID);
+		//List<Tag> updatedTags = db.getTagsByToDo(updatedTodo.getId()); // refers to a single tag for current implementation and support
+		//Tag tag;
+		//tag.setTagName(tag_name);
+		//db.updateTag(tag);
+		//db.updateTagForSpecificTodo(updatedTodo.getId(), updated_tag_id);	
+		List<Tag> allTags = db.getAllTags();
+		for (Tag tag : allTags)
+		{
+			// TODO: enhance and validate the condition - this implementation is not safe enough
+			if (tagNameLastSelected.equals(tag.getTagName()))
+			{
+				db.updateTagForSpecificTodo(m_todoID, tag.getId()); 
+			}
+		}
 		
-		// TODO: update and handle category
 		
 		CheckBox status = (CheckBox) findViewById(R.id.cb_Status_nt);
 		if (status.isChecked())
@@ -246,6 +270,8 @@ public class EditTodo extends FragmentActivity
 		updatedTodo.setNote(todoNote.getText().toString());		
 		
 		db.updateToDo(updatedTodo);
+				
+		db.closeDB();
 	}
 	
 	public void onDateSetHandler(DatePicker view, int year, int monthOfYear, int dayOfMonth)
@@ -259,6 +285,80 @@ public class EditTodo extends FragmentActivity
 		TextView tv = (TextView) findViewById(R.id.tv_DDTime_ant);
 		tv.setText(DateTimeServices.getFormattedTimeOfHM(hourOfDay, minute));
 	}
+	
+	
+	public void spinnerHandling()
+    {
+	    	Spinner sp = (Spinner) findViewById(R.id.spinner_tag);
+	    	
+	    	List<String> spinnerCategories = new  ArrayList<String>();
+	    	
+//	    	spinnerCategories.add(spinnerDefaultValue);  // default value which also instruct the user to choose a category
+//	    	spinnerCategories.add(requestToCreateNewTag);
+	    	
+	    	DatabaseHelper db = new DatabaseHelper(getApplicationContext());
+	    	List<Tag> tags = db.getAllTags();
+	    	List<Tag> tagsForTodo = db.getTagsByToDo(m_todoID);
+	    	for (Tag currentCategory : tagsForTodo)
+	    	{ 
+	    		spinnerCategories.add(currentCategory.getTagName());
+	    		tagNameLastSelected = currentCategory.getTagName();
+	    	}
+	    			
+	    	db.closeDB();
+	    	for (Tag tag : tags)
+	    	{
+	    		boolean isTagDoesntExistInSpinner = !(spinnerCategories.contains(tag.getTagName()));
+	    		boolean isTagIsntDefaultInternalTagName = !(defaultInternalTagName.equals(tag.getTagName()));
+	    		if (isTagDoesntExistInSpinner && isTagIsntDefaultInternalTagName)
+	    			spinnerCategories.add(tag.getTagName());
+	    	}
+	    	  	
+	    	ArrayAdapter<String> spAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, spinnerCategories);
+	    	spAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+	    	sp.setAdapter(spAdapter);
+	    		    	
+	    	sp.setOnItemSelectedListener(new OnItemSelectedListener() 
+	    	{	
+				@Override
+				public void onItemSelected(AdapterView<?> parent, View itemSelected,
+						int position, long id) 
+				{	
+					String selectedItemValue = parent.getItemAtPosition(position).toString();
+					
+//					if ( selectedItemValue.equals(requestToCreateNewTag) )
+//						{
+//							// calls AddNewTag screen and class
+//							Intent addNewTagIntent = new Intent(itemSelected.getContext(), AddNewTag.class);							
+//							startActivityForResult(addNewTagIntent, requestCode_AddNewTag);						
+//						}
+//					else 
+//					{
+						tagNameLastSelected = selectedItemValue;
+						TagNameNewSelected = selectedItemValue;
+//					}										
+					toastDebugInfo("OnItemSelected via parent: " + selectedItemValue ,false);								
+				}
+
+				@Override
+				public void onNothingSelected(AdapterView<?> arg0) {
+					toastDebugInfo("onNothingSelected() invoked" ,false);
+				}
+		});    	
+	}
+	
+	public void toastDebugInfo(String message, boolean IsLongDuration)
+    {
+		if (isDebugMode) {
+	    	int duration;
+	    	if (IsLongDuration)
+	    		duration = Toast.LENGTH_LONG;
+	    	else duration = Toast.LENGTH_SHORT;    	
+	    	
+	    	Toast t = Toast.makeText(this, message, duration);
+	    	t.show();
+		}
+    }	
 	
 	/*
 	private int getYearOfDateFormat(String todoDueDate)

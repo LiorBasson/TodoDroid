@@ -425,16 +425,16 @@ public class DatabaseHelper extends SQLiteOpenHelper
        return id;
    }
  	
- 	// Updating a todo tag
- 	public int updateNoteTag(long todo_id, long tag_id) {
+ 	// Updating a todo tag ??
+ 	public int updateTagForSpecificTodo(long specified_todo_id, long updated_tag_id) {
  	    SQLiteDatabase db = this.getWritableDatabase();
  	 
  	    ContentValues values = new ContentValues();
- 	    values.put(KEY_TAG_ID, tag_id);
+ 	    values.put(KEY_TAG_ID, updated_tag_id);
  	 
- 	    // updating row
- 	    return db.update(TABLE_TODO, values, KEY_ID + " = ?",
- 	            new String[] { String.valueOf(todo_id) });
+ 	    // updating row 
+ 	    return db.update(TABLE_TODO_TAG, values, KEY_ID + " = ?",
+ 	            new String[] { String.valueOf(specified_todo_id) });
  	}
  	
  	// Clearing whole DB

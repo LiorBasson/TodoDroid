@@ -57,32 +57,11 @@ public class AddNewToDo extends FragmentActivity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.new_todo);
-		
-		int reqCode = requestCode_AddNewTag; // TODO: will be taken from activity invoker
-		
-		switch (reqCode)
-		{
-			case requestCode_AddNewTag:
-			{
-				prepareLayoutForNewTodo();
-				break;
-			}
-//			case requestCode_EditToDo:
-//			{
-//				prepareLayoutForEditTodo();
-//				fillUpTodoDataOnViewEdit();
-//				break;
-//			}
-//			case requestCode_ViewToDo:
-//			{
-//				prepareLayoutForViewTodo();
-//				fillUpTodoDataOnViewEdit();
-//				break;
-//			}			
-		}
-		tagNameLastSelected = spinnerDefaultValue;
-		
 				
+		prepareLayoutForNewTodo();
+				
+		tagNameLastSelected = spinnerDefaultValue;
+						
 		TextView tv_DDDate = (TextView) findViewById(R.id.tv_DDDate_ant);
 		tv_DDDate.setText(DateTimeServices.getDate());		
 		tv_DDDate.setOnClickListener(new OnClickListener() {
@@ -237,6 +216,7 @@ public class AddNewToDo extends FragmentActivity
 	    	
 	    	DatabaseHelper db = new DatabaseHelper(getApplicationContext());
 	    	List<Tag> tags = db.getAllTags();
+	    	db.closeDB();
 	    	for (Tag tag : tags)
 	    	{
 	    		boolean isTagDoesntExistInSpinner = !(spinnerCategories.contains(tag.getTagName()));
