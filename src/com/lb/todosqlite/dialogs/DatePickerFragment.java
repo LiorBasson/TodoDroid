@@ -10,7 +10,6 @@ import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.widget.DatePicker;
 
-// TODO: why can't set as "static"? in http://developer.android.com/guide/topics/ui/controls/pickers.html example, the class declared as static. 
 public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener 
 {
 	OnDateSetListener ondateSet;
