@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory 
+        android:title="Theme Category?"
+        android:key="pref_key_theme_settings">
+        <CheckBoxPreference
+            android:key="pref_key_auto_delete"
+            android:summary="This is the summary section for this checkbox"
+            android:title="CheckBox_pref_title_auto_delete"
+            android:defaultValue="false" />
+        <Preference 
+            android:key="pref_key_sms_delete_limit"
+            android:dependency="pref_key_auto_delete"
+            android:summary="pref_summary_delete_limit"
+            android:title="pref_title_sms_delete" />
+        <Preference 
+            android:key="pref_key_mms_delete_limit"
+            android:dependency="pref_key_auto_delete"
+            android:summary="pref_summary_delete_limit"
+            android:title="pref_title_mms_delete" />
+    </PreferenceCategory>
+</PreferenceScreen>

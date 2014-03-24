@@ -52,6 +52,12 @@
             android:configChanges="orientation|screenSize"
             android:windowSoftInputMode="stateAlwaysHidden">            	
             </activity>
+         <activity
+            android:name="com.lb.todosqlite.preferences.SettingsActivity" 
+            android:configChanges="orientation|screenSize"
+            android:windowSoftInputMode="stateAlwaysHidden">            	
+            </activity>   
+         
         
     </application>
 

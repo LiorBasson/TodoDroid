@@ -36,6 +36,7 @@ import android.widget.Toast;
 
 import com.lb.todosqlite.model.Tag;
 import com.lb.todosqlite.model.Todo;
+import com.lb.todosqlite.preferences.SettingsActivity;
 import com.lb.todosqlite.services.DatabaseHelper;
 
 
@@ -143,8 +144,8 @@ public class MainActivity extends Activity
 		MenuInflater inflater = getMenuInflater();
 	    inflater.inflate(R.menu.main, menu);
 	    
-	    MenuItem menuItem_about = menu.findItem(R.id.action_about);
-		menuItem_about.setOnMenuItemClickListener(new OnMenuItemClickListener()
+	    MenuItem mi_about = menu.findItem(R.id.action_about);
+		mi_about.setOnMenuItemClickListener(new OnMenuItemClickListener()
 				{
 					@Override
 					public boolean onMenuItemClick(MenuItem item) 
@@ -152,6 +153,17 @@ public class MainActivity extends Activity
 						launchAboutDialog();
 						return false;
 					}
+		});
+		
+		MenuItem mi_preferences = menu.findItem(R.id.action_settings);
+		mi_preferences.setOnMenuItemClickListener(new OnMenuItemClickListener() 
+		{
+			@Override
+			public boolean onMenuItemClick(MenuItem item) 
+			{
+				launchPreferences();
+				return false;
+			}
 		});
 	    
 		return true;
@@ -192,6 +204,10 @@ public class MainActivity extends Activity
 					clearTableData();
 					fillUpTableFromDB();
 					break;
+				}
+				case 555:
+				{
+					toastDebugInfo("returned from preferences Screen. resultCode = " + resultCode, false);
 				}
 				
 			}
@@ -558,8 +574,21 @@ public class MainActivity extends Activity
 		}
 		catch (Exception e)
 		{
-			Log.d("DialogBox", "DialogBox throws the next exception: ", e);
+			Log.d("MainActivity", "launchAboutDialog() throws the next exception: ", e);
 		}		
+	}
+	
+	public void launchPreferences()
+	{
+		try 
+		{
+			Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+			startActivityForResult(intent, 555);			
+		} 
+		catch (Exception e) 
+		{
+			Log.d("MainActivity", "launchPreferences() throws the next exception: ", e);
+		}
 	}
 		
 	@Override
