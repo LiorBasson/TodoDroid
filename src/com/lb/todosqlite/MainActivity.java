@@ -202,18 +202,10 @@ public class MainActivity extends Activity
 	{
 		try {
 			TableLayout todosTable = (TableLayout) findViewById(R.id.table_ToDos);
-			int c1 = todosTable.getChildCount();
 			
 			int i = 0;
 			TableRow tr = (TableRow) todosTable.getChildAt(i);
-			int c2 = tr.getChildCount();
-			
-			int j = 0;
-			TextView tv = (TextView) tr.getChildAt(j);
-
-			//tv.setText("ToDo item");
-			
-			int k = 1;
+			int columns = tr.getChildCount();
 			
 			DatabaseHelper db = new DatabaseHelper(getApplicationContext());
 			List<Todo> todos = db.getAllToDos();
@@ -236,7 +228,7 @@ public class MainActivity extends Activity
 				TableRow ntr = new TableRow(getApplicationContext());
 				ntr.setId((int) todo.getId());
 				
-					for (int index = 0; index < c2; index++) 
+					for (int index = 0; index < columns; index++) 
 					{
 						TextView ntv = new TextView(getApplicationContext());
 						ntv.setTextColor(Color.parseColor(colorCodeForTableText));
@@ -284,14 +276,10 @@ public class MainActivity extends Activity
 				ntr.setOnLongClickListener(new OnLongClickListener() {
 					
 					@Override
-					public boolean onLongClick(View v) {
-						
-						
-						boolean isfocustaken = v.requestFocus();
-						int tagIdByRowId = v.getId();
-																		
-						toastDebugInfo("TR onLongClick() for todo: " + tagIdByRowId, true);
-						
+					public boolean onLongClick(View v) 
+					{						
+						v.requestFocus(); 																		
+						toastDebugInfo("TR onLongClick() for todo: " + v.getId(), true);						
 						return false;
 					}
 				});
@@ -441,7 +429,7 @@ public class MainActivity extends Activity
 		}		
 		Todo todo = new Todo(todoTitle, defaultTodoStatus);
 		todo.setDueDate(dueDate);  // TODO: consider adding a date format validator
-		long todoID = db.createToDo(todo, new long[] {tagID});
+		db.createToDo(todo, new long[] {tagID});
 				
 		db.closeDB();
 	}
@@ -485,11 +473,7 @@ public class MainActivity extends Activity
 			todo.setStatus(0);
 		else todo.setStatus(1);
 		
-		int dbRowsAffected = db.updateToDo(todo);
-		
-		//updateTableDataRow(todoID, ); // if todoID != dbUpdatedTodoID it should be updated also at tableRowID
-		Todo todoAfterUpdate = db.getTodo(todoID);
-		
+		db.updateToDo(todo);
 		db.closeDB();
 		
 		clearTableData();

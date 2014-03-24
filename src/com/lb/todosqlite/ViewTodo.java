@@ -3,27 +3,23 @@ package com.lb.todosqlite;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.lb.todosqlite.R.id;
-import com.lb.todosqlite.model.Tag;
-import com.lb.todosqlite.model.Todo;
-import com.lb.todosqlite.services.DatabaseHelper;
-import com.lb.todosqlite.services.DateTimeServices;
-
-import android.R.color;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import com.lb.todosqlite.model.Tag;
+import com.lb.todosqlite.model.Todo;
+import com.lb.todosqlite.services.DatabaseHelper;
+import com.lb.todosqlite.services.DateTimeServices;
 
 public class ViewTodo extends Activity
 {

@@ -44,7 +44,6 @@ public class AddNewTag extends Activity
 	
 	public void onCreatePressed()
 	{
-		// TODO: check if can change to specific relevant previous intent returned by getIntent() instead of a "new Intent()"
 		Intent intent = getIntent();
 		
 		isCancelPressed = false;
@@ -60,7 +59,6 @@ public class AddNewTag extends Activity
 	
 	public void onCancelPressed()
 	{
-		// TODO: check if can change to specific relevant previous intent returned by getIntent() instead of a "new Intent()"
 		Intent intent = getIntent();
 		
 		isCancelPressed = true;

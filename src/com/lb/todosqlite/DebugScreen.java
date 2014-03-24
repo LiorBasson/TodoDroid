@@ -17,11 +17,8 @@ import com.lb.todosqlite.services.DatabaseHelper;
 
 public class DebugScreen extends Activity
 {
-	final String requestToCreateNewTag = "Create New Category...";
-	String tagNameLastSelected = "";
-	String TagNameNewSelected = "";	
 	//final int requestCode_TableViewer = 213;
-	final int requestCode_AddNewTag = 212;
+	//final int requestCode_AddNewTag = 212;
 	boolean isDebugMode = false;
 	
 	
@@ -65,34 +62,34 @@ public class DebugScreen extends Activity
 			}
 		});
 		
-		Log.d("MainActivity", "onCreate() ended");
+		Log.d("DebugScreen", "onCreate() ended");
 	}
 		
     public void printDB()
     {
     	// prints DB (prints to LogCat)
-    	Log.d("MainActivity", "printDB() started");
+    	Log.d("DebugScreen", "printDB() started");
     	DatabaseHelper db = new DatabaseHelper(getApplicationContext());
     	
     	List<Todo> allTodosInDB = db.getAllToDos();
-    	Log.d("MainActivity", "db.getAllToDos() sais there are " + allTodosInDB.size() + "Todos in the DB");
+    	Log.d("DebugScreen", "db.getAllToDos() sais there are " + allTodosInDB.size() + "Todos in the DB");
     	
     	
     	List<Tag> allTags = db.getAllTags();
-    	Log.d("MainActivity", "getAllTags() returned " + allTags.size() + " tags.");
+    	Log.d("DebugScreen", "getAllTags() returned " + allTags.size() + " tags.");
     	int index = 0;
     	for (Tag tag : allTags)
     	{
     		List<Todo> allTodosPerTag = db.getAllToDosByTag(tag.getTagName());
-    		Log.d("MainActivity", "getAllToDosByTag() returned " + allTodosPerTag.size() + " Todos.");
+    		Log.d("DebugScreen", "getAllToDosByTag() returned " + allTodosPerTag.size() + " Todos.");
     		for (Todo tagTodo : allTodosPerTag)
     		{
     			index++;
     			String todoInfo = "*" + index + "* Tag = {" + tag.getId() + "} " + tag.getTagName()   
     					+ " ToDo = {" + tagTodo.getId() + "} " + tagTodo.getNote() + " ";
     			
-    			Log.d("MainActivity", todoInfo);
-    			// later can write info to file if needed (line by line?)
+    			Log.d("DebugScreen", todoInfo);
+    			// later can write info to file if needed
     		}
     	}
     	
@@ -100,12 +97,12 @@ public class DebugScreen extends Activity
     	
     	db.closeDB();    	
     	toastDebugInfo("printDB() was called", false);
-    	Log.d("MainActivity", "printDB() Ended");
+    	Log.d("DebugScreen", "printDB() Ended");
     }
     
     public void clearDB()
     {
-    	Log.d("MainActivity", "clearDB() started");
+    	Log.d("DebugScreen", "clearDB() started");
     	
     	DatabaseHelper db = new DatabaseHelper(getApplicationContext());
     	boolean should_delete_all_tag_todos = true;
@@ -117,7 +114,7 @@ public class DebugScreen extends Activity
     	
     	List<Todo> allTodosInDB = db.getAllToDos();
     	if (allTodosInDB.size() > 0)
-    		Log.d("MainActivity", "db.getAllToDos() sais there are still " + allTodosInDB.size() + "Todos in the DB");
+    		Log.d("DebugScreen", "db.getAllToDos() sais there are still " + allTodosInDB.size() + "Todos in the DB");
     	    	
     	// TODO: Basically should check if also TodoTags table should be cleared
     	
@@ -125,7 +122,7 @@ public class DebugScreen extends Activity
     	
     	db.closeDB();
     	toastDebugInfo("clearDB() was called (End)", false);
-    	Log.d("MainActivity", "clearDB() Ended");
+    	Log.d("DebugScreen", "clearDB() Ended");
     }
         
     public void toastDebugInfo(String message, boolean IsLongDuration)

@@ -58,7 +58,7 @@ public class EditTodo extends FragmentActivity
 		
 		SharedPreferences sp =  getApplication().getSharedPreferences("editTodo", 0);
 		int todo_id = sp.getInt("todoID", -1);
-		int reqCode = sp.getInt("userReqCode", -1);
+//		int reqCode = sp.getInt("userReqCode", -1);
 		m_todoID = todo_id;
 				
 		//updateThemeColors_OLD();
@@ -71,20 +71,9 @@ public class EditTodo extends FragmentActivity
 	{
 		DatabaseHelper db = new DatabaseHelper(getApplicationContext());
 		Todo todo = db.getTodo(todoID);
-		List<Tag> tags = db.getTagsByToDo(todoID);
 		db.closeDB();	
 		
-		spinnerHandling();
-		
-//		Spinner sp_Category = (Spinner) findViewById(R.id.spinner_tag);
-//		List<String> spinnerCategories = new  ArrayList<String>();		
-//		for (Tag tag : tags)
-//		{
-//			spinnerCategories.add(tag.getTagName());
-//		}		
-//		ArrayAdapter<String> spAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, spinnerCategories);
-//    	spAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//    	sp_Category.setAdapter(spAdapter);		
+		spinnerHandling();		
 		
 		CheckBox status = (CheckBox) findViewById(R.id.cb_Status_nt);
 		status.setChecked(todo.getStatus() == 1);
@@ -235,11 +224,7 @@ public class EditTodo extends FragmentActivity
 	{
 		DatabaseHelper db = new DatabaseHelper(getApplicationContext());
 		Todo updatedTodo = db.getTodo(m_todoID);
-		//List<Tag> updatedTags = db.getTagsByToDo(updatedTodo.getId()); // refers to a single tag for current implementation and support
-		//Tag tag;
-		//tag.setTagName(tag_name);
-		//db.updateTag(tag);
-		//db.updateTagForSpecificTodo(updatedTodo.getId(), updated_tag_id);	
+		// refers to a single tag for current implementation and support
 		List<Tag> allTags = db.getAllTags();
 		for (Tag tag : allTags)
 		{
@@ -248,8 +233,7 @@ public class EditTodo extends FragmentActivity
 			{
 				db.updateTagForSpecificTodo(m_todoID, tag.getId()); 
 			}
-		}
-		
+		}		
 		
 		CheckBox status = (CheckBox) findViewById(R.id.cb_Status_nt);
 		if (status.isChecked())
@@ -282,7 +266,6 @@ public class EditTodo extends FragmentActivity
 		TextView tv = (TextView) findViewById(R.id.tv_DDTime_ant);
 		tv.setText(DateTimeServices.getFormattedTimeOfHM(hourOfDay, minute));
 	}
-	
 	
 	public void spinnerHandling()
     {
@@ -322,18 +305,9 @@ public class EditTodo extends FragmentActivity
 						int position, long id) 
 				{	
 					String selectedItemValue = parent.getItemAtPosition(position).toString();
-					
-//					if ( selectedItemValue.equals(requestToCreateNewTag) )
-//						{
-//							// calls AddNewTag screen and class
-//							Intent addNewTagIntent = new Intent(itemSelected.getContext(), AddNewTag.class);							
-//							startActivityForResult(addNewTagIntent, requestCode_AddNewTag);						
-//						}
-//					else 
-//					{
-						tagNameLastSelected = selectedItemValue;
-						TagNameNewSelected = selectedItemValue;
-//					}										
+					tagNameLastSelected = selectedItemValue;
+					TagNameNewSelected = selectedItemValue;
+								
 					toastDebugInfo("OnItemSelected via parent: " + selectedItemValue ,false);								
 				}
 
@@ -357,104 +331,4 @@ public class EditTodo extends FragmentActivity
 		}
     }	
 	
-	/*
-	private int getYearOfDateFormat(String todoDueDate)
-	{
-		int year = 1900;
-		if (dateFormat.equals("YYYY-MM-DD"))
-		{	
-			int startIndex = 0;
-			int endIndex = 4;				
-			try 
-			{	year = Integer.parseInt(todoDueDate.substring(startIndex, endIndex));			} 
-			catch (NumberFormatException e) 			{
-				Log.e("AddNewTodo", "getYearOfDateFormat() caught an exception when attempted to parse date from string to int"); 
-			}
-			catch (IndexOutOfBoundsException e)			{
-				Log.e("AddNewTodo", "getYearOfDateFormat() caught an exception when attempted to trim a substring"); 
-			}			
-		}
-		
-		return year;
-	}
-	
-	private int getMonthOfDateFormat(String todoDueDate)
-	{
-		int month = 0;
-		if (dateFormat.equals("YYYY-MM-DD"))
-		{			
-			int startIndex = 5;
-			int endIndex = 7;				
-			try 
-			{	month = Integer.parseInt(todoDueDate.substring(startIndex, endIndex));			} 
-			catch (NumberFormatException e) 			{
-				Log.e("AddNewTodo", "getYearOfDateFormat() caught an exception when attempted to parse date from string to int"); 
-			}
-			catch (IndexOutOfBoundsException e)			{
-				Log.e("AddNewTodo", "getYearOfDateFormat() caught an exception when attempted to trim a substring"); 
-			}			
-		}
-		
-		return month;
-	}
-	
-	private int getDayOfDateFormat(String todoDueDate)
-	{
-		int day = 1;
-		if (dateFormat.equals("YYYY-MM-DD"))
-		{	
-			int startIndex = 8;
-			int endIndex = 10;				
-			try 
-			{	day = Integer.parseInt(todoDueDate.substring(startIndex, endIndex));			} 
-			catch (NumberFormatException e) 			{
-				Log.e("AddNewTodo", "getYearOfDateFormat() caught an exception when attempted to parse date from string to int"); 
-			}
-			catch (IndexOutOfBoundsException e)			{
-				Log.e("AddNewTodo", "getYearOfDateFormat() caught an exception when attempted to trim a substring"); 
-			}			
-		}
-		
-		return day;
-	}
-	
-	private String getFormattedDateOfYMD(int year, int monthOfYear, int dayOfMonth)
-	{
-		String formattedDate;
-		
-		String yearString = String.valueOf(year);
-		
-		String month="01";
-		int month_Int = monthOfYear+1;
-		if (month_Int>9)
-			month = String.valueOf(month_Int);
-		else month = "0" + String.valueOf(month_Int);
-		
-		String day = "01";
-		if (dayOfMonth>9)
-			day = String.valueOf(dayOfMonth);
-		else day = "0" + String.valueOf(dayOfMonth);
-		
-		formattedDate = yearString + "-" + month + "-" + day;
-		return formattedDate;
-	}
-	
-	private String getFormattedTimeOfHM(int hourOfDay, int minute)
-	{
-		String formattedTime;
-		
-		String hour="01";		
-		if (hourOfDay>9)
-			hour = String.valueOf(hourOfDay);
-		else hour = "0" + String.valueOf(hourOfDay);
-		
-		String min = "01";
-		if (minute>9)
-			min = String.valueOf(minute);
-		else min = "0" + String.valueOf(minute);
-		
-		formattedTime = hour + ":" + min;
-		return formattedTime;		
-	}
-	*/
 }

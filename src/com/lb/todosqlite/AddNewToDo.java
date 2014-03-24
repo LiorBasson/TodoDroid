@@ -112,7 +112,6 @@ public class AddNewToDo extends FragmentActivity
 			
 			@Override
 			public void onClick(View v) {
-				// TODO: check if can change to specific relevant previous intent returned by getIntent() instead of a "new Intent()"
 				Intent resultIntent = getIntent();
 				
 				isCancelPressed = false;
@@ -174,10 +173,8 @@ public class AddNewToDo extends FragmentActivity
 						{							
 								if (bdl.containsKey("com.lb.todosqlite.addnewtag.tagNameToCreate"))
 								{
-									String tagName = bdl.getString("com.lb.todosqlite.addnewtag.tagNameToCreate");
-									
-									// TODO: Set and Update spinner with new tag name
-									updateTagNameOnCreation(tagName); //TagNameNewSelected = tagName;
+									String tagName = bdl.getString("com.lb.todosqlite.addnewtag.tagNameToCreate"); 
+									updateTagNameOnCreation(tagName); 
 								}
 								else toastDebugInfo("Couldn't find tagNameToCreate Extra", false);								
 						}
@@ -262,6 +259,7 @@ public class AddNewToDo extends FragmentActivity
 			tagN = spinnerDefaultValue;		
 		TagNameNewSelected = tagN;		
 		Spinner sp = (Spinner) findViewById(R.id.spinner_tag);
+		@SuppressWarnings("unchecked")
 		ArrayAdapter<String> spAdapter = (ArrayAdapter<String>) sp.getAdapter();
 		
 		if (!(TagNameNewSelected.equals(spinnerDefaultValue)))
@@ -283,6 +281,7 @@ public class AddNewToDo extends FragmentActivity
 	{
 		// sets position to occurrence of tagNameLastSelected instead of selected requestToCreateNewTag value
 		Spinner sp = (Spinner) findViewById(R.id.spinner_tag);
+		@SuppressWarnings("unchecked")
 		ArrayAdapter<String> spAdapter = (ArrayAdapter<String>) sp.getAdapter();
 		int position;
 		if ( tagNameLastSelected.equals("") || tagNameLastSelected.equals(requestToCreateNewTag) || tagNameLastSelected.equals(spinnerDefaultValue) )

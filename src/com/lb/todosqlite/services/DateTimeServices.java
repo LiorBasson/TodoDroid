@@ -208,4 +208,14 @@ public class DateTimeServices
 	{
 		return dateFormat;
 	}
+	
+	public static String getSupportedTimeFormat()
+	{
+		return timeFormat;
+	}
+	
+	public static String getSupportedDateTimeFormat()
+	{
+		return dateTimeFormat;
+	}
 }
