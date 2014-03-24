@@ -1,17 +1,8 @@
 package com.lb.todosqlite;
 
-import java.security.acl.LastOwnerException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.lb.todosqlite.dialogs.DatePickerFragment;
-import com.lb.todosqlite.dialogs.TimePickerFragment;
-import com.lb.todosqlite.model.Tag;
-import com.lb.todosqlite.model.Todo;
-import com.lb.todosqlite.services.DatabaseHelper;
-import com.lb.todosqlite.services.DateTimeServices;
-
-import android.app.Activity;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.Intent;
@@ -19,10 +10,10 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -33,7 +24,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemSelectedListener;
+
+import com.lb.todosqlite.dialogs.DatePickerFragment;
+import com.lb.todosqlite.dialogs.TimePickerFragment;
+import com.lb.todosqlite.model.Tag;
+import com.lb.todosqlite.model.Todo;
+import com.lb.todosqlite.services.DatabaseHelper;
+import com.lb.todosqlite.services.DateTimeServices;
 
 public class EditTodo extends FragmentActivity 
 {
@@ -50,7 +47,7 @@ public class EditTodo extends FragmentActivity
 	OnTimeSetListener onTime;	
 	final String dateFormat = "YYYY-MM-DD";
 	final String timeFormat = "HH-MM-SS";
-	boolean isDebugMode = false; 
+	boolean isDebugMode = false; // dummy commit
 
 
 	@Override

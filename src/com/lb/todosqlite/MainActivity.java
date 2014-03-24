@@ -2,7 +2,6 @@ package com.lb.todosqlite;
 
 import java.util.List;
 
-import android.R.drawable;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
