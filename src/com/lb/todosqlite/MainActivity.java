@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -48,28 +49,27 @@ public class MainActivity extends Activity
 	final int requestCode_ViewToDo = 214;
 	final int requestCode_EditToDo = 215;		
 	// vars for later color theme use  // TODO: check if it is a graphics thumb rule that for Hex color code (#XxYyZz) where Yy is below 66 then considered dark and above 66 (>99) then considered light.  
-	final String colorCodeForTableBG = "#000000";
-	final String colorCodeForTableText = "#FFFFFF";
-	final String colorCodeForTRInFocus = "#003366";
-	final String colorCodeForHintText = "#CCCCCC";
-	final String colorCodeForButtonsBG = "#80003399"; // Temporarily not in use due to the fact that button's 3D effect is lost
-	final String colorCodeForButtonsTxt = "#FFFFFF";
-	final String colorCodeForTableHeaderBG = "#666666";
-	final String colorCodeForTableHeaderTxt = "#CCCCCC";
+	String colorCodeForTableBG = "#000000";
+	String colorCodeForTableText = "#FFFFFF";
+	String colorCodeForTRInFocus = "#003366";
+	String colorCodeForHintText = "#CCCCCC";
+	String colorCodeForButtonsBG = "#80003399"; // Temporarily not in use due to the fact that button's 3D effect is lost
+	String colorCodeForButtonsTxt = "#FFFFFF";
+	String colorCodeForTableHeaderBG = "#666666";
+	String colorCodeForTableHeaderTxt = "#CCCCCC";
 	// general vars
 	final String spinnerDefaultValue = "Select Todo category";
 	final String defaultInternalTagName = "None";
+	final String sharedPrefUserPrefFileName = "com.lb.todosqlite_preferences";
 	// vars for debug
-	boolean isDebugMode = true; // TODO: Change back to false when finished debugging
+	boolean isDebugMode = false; // TODO: Change back to false when finished debugging
 	int searchCount = 0;	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.todos_table);
-		
-		// TODO: theme with  getApplication().setTheme(resid)?		
+		setContentView(R.layout.todos_table);		
 		
 		fillUpTableFromDB();		
 		
@@ -84,7 +84,7 @@ public class MainActivity extends Activity
 			@Override
 			public void onClick(View v) 
 			{
-				openOptionsMenu();
+				updateThemeColors();
 			}
 		});
 		
@@ -129,13 +129,39 @@ public class MainActivity extends Activity
 		et_search.setTextColor(Color.parseColor(colorCodeForTableText));
 		et_search.setHintTextColor(Color.parseColor(colorCodeForHintText));
 		
-		
+		// TODO: check for duplication in manifest?
 		getWindow().setSoftInputMode(
 			      WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 		
-		// TODO: set value to 'isDebugMode' according to settings in preferences
+		// Preferences handling
+		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+		
+		SharedPreferences sp = getSharedPreferences(sharedPrefUserPrefFileName, 0);		
+		
+		isDebugMode = sp.getBoolean("pref_key_debug_mode", false);
+		
 		if (!(isDebugMode))
 			bt_DebugScreen.setVisibility(View.INVISIBLE);
+		
+		// TODO: theme impl		
+		// updateThemeColors();
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		// TODO: if relevant to this class, register to preference changes, otherwise remove this overriden method
+		//getPreferenceScreen()
+
+	}
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		// TODO Auto-generated method stub
+		// TODO: if relevant to this class, register to preference changes, otherwise remove this overriden method
+
+
 	}
 	
 	@Override
@@ -214,6 +240,21 @@ public class MainActivity extends Activity
 		else toastDebugInfo("returned with !(Result_OK)", false);
 	}
 	
+	public void updateThemeColors()
+	{
+		// get updated values from prefsett
+		colorCodeForTableBG = "#000000";
+		colorCodeForTableText = "#FFFFFF";
+		colorCodeForTRInFocus = "#003366";
+		colorCodeForHintText = "#CCCCCC";
+		colorCodeForButtonsBG = "#80003399"; // Temporarily not in use due to the fact that button's 3D effect is lost
+		colorCodeForButtonsTxt = "#FFFFFF";
+		colorCodeForTableHeaderBG = "#666666";
+		colorCodeForTableHeaderTxt = "#CCCCCC";
+		// update screen elements with current colors / theme
+		
+	}
+
 	public void fillUpTableFromDB()
 	{
 		try {

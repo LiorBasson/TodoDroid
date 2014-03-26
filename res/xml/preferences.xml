@@ -8,15 +8,44 @@
             android:summary="This is the summary section for this checkbox"
             android:title="CheckBox_pref_title_auto_delete"
             android:defaultValue="false" />
-        <Preference 
+        <EditTextPreference 
             android:key="pref_key_sms_delete_limit"
             android:dependency="pref_key_auto_delete"
             android:summary="pref_summary_delete_limit"
+            android:defaultValue="500"
             android:title="pref_title_sms_delete" />
-        <Preference 
+        <EditTextPreference 
             android:key="pref_key_mms_delete_limit"
             android:dependency="pref_key_auto_delete"
             android:summary="pref_summary_delete_limit"
             android:title="pref_title_mms_delete" />
     </PreferenceCategory>
+    <PreferenceCategory 
+        android:title="Others"
+        android:key="pref_key_others_settings">
+	    <CheckBoxPreference
+	            android:key="pref_key_debug_mode"
+	            android:summary="Show toast msgs and debug screen"
+	            android:title="Debug Mode"
+	            android:defaultValue="false" />
+	    <RingtonePreference 
+	        android:key="pref_key_notif_selector"
+	        android:ringtoneType="notification"
+	        android:summary="summery text"
+	        android:title="notif"/>
+	    <ListPreference
+	        android:key="pref_key_list"
+	        android:summary="summery text list"
+	        android:title="list" />
+	    <Preference
+	        android:key="pref_key_picked_color"
+	        android:title="textColor"
+	        android:summary="bla bla bla" 
+	        android:defaultValue="#ffffff"/>
+	     <Preference
+	        android:key="pref_key_picked_color"
+	        android:title="textColor"
+	        android:summary="bla bla bla" 
+	        android:defaultValue="#ffffff"/>
+	</PreferenceCategory>    
 </PreferenceScreen>
