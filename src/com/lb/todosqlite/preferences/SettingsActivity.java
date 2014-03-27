@@ -1,7 +1,5 @@
 package com.lb.todosqlite.preferences;
 
-import com.lb.todosqlite.R;
-
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
@@ -9,9 +7,9 @@ import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
-import yuku.ambilwarna.AmbilWarnaDialog;
-import yuku.ambilwarna.AmbilWarnaDialog.OnAmbilWarnaListener;
 import android.util.Log;
+
+import com.lb.todosqlite.R;
 
 public class SettingsActivity extends PreferenceActivity implements OnSharedPreferenceChangeListener {
 	final String LOG_TAG = "SettingsActivity";
@@ -42,11 +40,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 				//launchColorPicker();
 				return false;
 			}
-		});
-		
-		@SuppressWarnings("deprecation")
-		Preference p_color = (Preference) findPreference("colorCodeForButtonsTxt");		
-		//p_color.set
+		});		
 		
 		
 //		@SuppressWarnings("deprecation")

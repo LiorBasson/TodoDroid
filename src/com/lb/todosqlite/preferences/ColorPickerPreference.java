@@ -4,12 +4,10 @@ import yuku.ambilwarna.AmbilWarnaDialog;
 import yuku.ambilwarna.AmbilWarnaDialog.OnAmbilWarnaListener;
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.preference.Preference;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 public class ColorPickerPreference extends Preference 
@@ -70,7 +68,7 @@ public class ColorPickerPreference extends Preference
 							selectedColor = color; // the selected color
 							initialColor = color;
 							persistInt(color);
-							setSummary("text color code is " + initialColor);		
+							setSummary("color code is " + initialColor);		
 
 						}
 
@@ -103,7 +101,7 @@ public class ColorPickerPreference extends Preference
 			tv_text1.setTextColor(initialColor);
 //			tv_text1.setBackgroundColor(Color.GRAY);
 		}
-		setSummary("text color code is " + initialColor);		
+		setSummary("color code is " + initialColor);		
 				
 		super.onBindView(view);
 	}

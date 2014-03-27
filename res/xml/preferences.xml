@@ -3,6 +3,45 @@
     <PreferenceCategory 
         android:title="Theme Category?"
         android:key="pref_key_theme_settings">
+        <com.lb.todosqlite.preferences.ColorPickerPreference 
+	        android:key="colorCodeForTableBG"
+	        android:title="colorCodeForTableBG"
+	        android:summary="bla bla bla" 
+	        android:defaultValue="-16777216" />
+        <com.lb.todosqlite.preferences.ColorPickerPreference 
+	        android:key="colorCodeForTableText"
+	        android:title="colorCodeForTableText"
+	        android:summary="bla bla bla" 
+	        android:defaultValue="-1" />
+        <com.lb.todosqlite.preferences.ColorPickerPreference 
+	        android:key="colorCodeForTRInFocus"
+	        android:title="colorCodeForTRInFocus"
+	        android:summary="bla bla bla" 
+	        android:defaultValue="-13085737" />
+        <com.lb.todosqlite.preferences.ColorPickerPreference 
+	        android:key="colorCodeForHintText"
+	        android:title="colorCodeForHintText"
+	        android:summary="bla bla bla" 
+	        android:defaultValue="-1644826" />
+        <com.lb.todosqlite.preferences.ColorPickerPreference 
+	        android:key="colorCodeForButtonsTxt"
+	        android:title="colorCodeForButtonsTxt"
+	        android:summary="bla bla bla" 
+	        android:defaultValue="-1" />
+        <com.lb.todosqlite.preferences.ColorPickerPreference 
+	        android:key="colorCodeForTableHeaderBG"
+	        android:title="colorCodeForTableHeaderBG"
+	        android:summary="bla bla bla" 
+	        android:defaultValue="-6645094" />
+        <com.lb.todosqlite.preferences.ColorPickerPreference 
+	        android:key="colorCodeForTableHeaderTxt"
+	        android:title="colorCodeForTableHeaderTxt"
+	        android:summary="bla bla bla" 
+	        android:defaultValue="-1644826" />        
+    </PreferenceCategory>
+    <PreferenceCategory 
+        android:title="Others"
+        android:key="pref_key_others_settings">
         <CheckBoxPreference
             android:key="pref_key_auto_delete"
             android:summary="This is the summary section for this checkbox"
@@ -19,10 +58,6 @@
             android:dependency="pref_key_auto_delete"
             android:summary="pref_summary_delete_limit"
             android:title="pref_title_mms_delete" />
-    </PreferenceCategory>
-    <PreferenceCategory 
-        android:title="Others"
-        android:key="pref_key_others_settings">
 	    <CheckBoxPreference
 	            android:key="pref_key_debug_mode"
 	            android:summary="Show toast msgs and debug screen"
@@ -36,13 +71,6 @@
 	    <ListPreference
 	        android:key="pref_key_list"
 	        android:summary="summery text list"
-	        android:title="list" />
-	    <com.lb.todosqlite.preferences.ColorPickerPreference 
-	        android:key="colorCodeForButtonsTxt"
-	        android:title="textColor"
-	        android:summary="bla bla bla" 
-	        android:defaultValue="-16777216"
-	         />
-	     	     
+	        android:title="list" />	    
 	</PreferenceCategory>    
 </PreferenceScreen>

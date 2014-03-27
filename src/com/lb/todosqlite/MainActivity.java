@@ -47,16 +47,17 @@ public class MainActivity extends Activity
 	final int requestCode_AddNewToDo = 211; // the next ReqCode is in use in AddNewToDo.java: final int requestCode_AddNewTag = 212;
 	final int requestCode_DeubgScr = 213;
 	final int requestCode_ViewToDo = 214;
-	final int requestCode_EditToDo = 215;		
+	final int requestCode_EditToDo = 215;	
+	final int requestCode_SettingsActivity = 216;
 	// vars for later color theme use  // TODO: check if it is a graphics thumb rule that for Hex color code (#XxYyZz) where Yy is below 66 then considered dark and above 66 (>99) then considered light.  
-	String colorCodeForTableBG = "#000000";
-	String colorCodeForTableText = "#FFFFFF";
-	String colorCodeForTRInFocus = "#003366";
-	String colorCodeForHintText = "#CCCCCC";
-	//String colorCodeForButtonsBG = "#80003399"; // Temporarily not in use due to the fact that button's 3D effect is lost
+	int colorCodeForTableBG = -16777216;
+	int colorCodeForTableText = -1;
+	int colorCodeForTRInFocus = -13085737;
+	int colorCodeForHintText = -1644826;
+	//int colorCodeForButtonsBG = -11119018; // Temporarily not in use due to the fact that button's 3D effect is lost
 	int  colorCodeForButtonsTxt = -1;  
-	String colorCodeForTableHeaderBG = "#666666";
-	String colorCodeForTableHeaderTxt = "#CCCCCC";
+	int colorCodeForTableHeaderBG = -6645094;
+	int colorCodeForTableHeaderTxt = -1644826;
 	// general vars
 	final String spinnerDefaultValue = "Select Todo category";
 	final String defaultInternalTagName = "None";
@@ -73,24 +74,22 @@ public class MainActivity extends Activity
 		
 		fillUpTableFromDB();		
 		
-		LinearLayout ll = (LinearLayout) findViewById(R.id.todos_table_screen_linlay);
-		ll.setBackgroundColor(Color.parseColor(colorCodeForTableBG));
 		
 		Button bt_search = (Button) findViewById(R.id.bt_Search);
 		//bt_search.setBackgroundColor(Color.parseColor(colorCodeForButtonsBG));
-		bt_search.setTextColor(colorCodeForButtonsTxt);
+		//bt_search.setTextColor(colorCodeForButtonsTxt);
 		bt_search.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) 
 			{
-				updateThemeColors(); // here for debugging
+				updateElementsWithThemeColors(); // here for debugging
 			}
 		});
 		
 		Button bt_addToDo = (Button) findViewById(R.id.bt_AddTodo);
 		//bt_addToDo.setBackgroundColor(Color.parseColor(colorCodeForButtonsBG));
-		bt_addToDo.setTextColor(colorCodeForButtonsTxt);
+		//bt_addToDo.setTextColor(colorCodeForButtonsTxt);
 		bt_addToDo.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -105,7 +104,7 @@ public class MainActivity extends Activity
 		
 		Button bt_DebugScreen = (Button) findViewById(R.id.bt_ToDebugScr);
 		//bt_backToMain.setBackgroundColor(Color.parseColor(colorCodeForButtonsBG));
-		bt_DebugScreen.setTextColor(colorCodeForButtonsTxt);
+		//bt_DebugScreen.setTextColor(colorCodeForButtonsTxt);
 		bt_DebugScreen.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -125,15 +124,13 @@ public class MainActivity extends Activity
 			}
 		});
 		
-		EditText et_search = (EditText) findViewById(R.id.et_Search);
-		et_search.setTextColor(Color.parseColor(colorCodeForTableText));
-		et_search.setHintTextColor(Color.parseColor(colorCodeForHintText));
+		
 		
 		// TODO: check for duplication in manifest?
 		getWindow().setSoftInputMode(
 			      WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 		
-		// Preferences handling
+		// Preferences handling TODO: Check if can uncomment - seems that exception was for other reasons
 		//PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 		
 		SharedPreferences sp = getSharedPreferences(sharedPrefUserPrefFileName, 0);		
@@ -144,7 +141,8 @@ public class MainActivity extends Activity
 			bt_DebugScreen.setVisibility(View.INVISIBLE);
 		
 		// TODO: theme impl		
-		updateThemeColors();
+		getThemeColorsFromPreferences(); 
+		updateElementsWithThemeColors();
 	}
 	
 	@Override
@@ -154,8 +152,8 @@ public class MainActivity extends Activity
 		
 		if (true) // TODO: add a mechanism combined with OnPreferenceChanged event to update condition boolean
 		{
-			getUpdatedThemeColors(); 
-			updateThemeColors();
+			getThemeColorsFromPreferences(); 
+			updateElementsWithThemeColors();
 		}
 		
 		toastDebugInfo("MainActivity.onResume() invoked", true);
@@ -280,7 +278,7 @@ public class MainActivity extends Activity
 					for (int index = 0; index < columns; index++) 
 					{
 						TextView ntv = new TextView(getApplicationContext());
-						ntv.setTextColor(Color.parseColor(colorCodeForTableText));
+						// TODO: replace in setThemeColors() ntv.setTextColor(colorCodeForTableText);
 						ntv.setText("Text" + index);
 						
 						switch (index)
@@ -320,7 +318,7 @@ public class MainActivity extends Activity
 						ntr.addView(ntv);						
 					}
 				ntr.setFocusableInTouchMode(true);
-				ntr.setBackgroundColor(Color.parseColor(colorCodeForTableBG));
+				// TODO: replace in setThemeColors() ntr.setBackgroundColor(colorCodeForTableBG);
 				
 				ntr.setOnLongClickListener(new OnLongClickListener() {
 					
@@ -338,8 +336,8 @@ public class MainActivity extends Activity
 					@Override
 					public void onFocusChange(View v, boolean hasFocus) {
 						if (hasFocus)
-							v.setBackgroundColor(Color.parseColor(colorCodeForTRInFocus));
-						else v.setBackgroundColor(Color.parseColor(colorCodeForTableBG));						
+							v.setBackgroundColor(colorCodeForTRInFocus);
+						else v.setBackgroundColor(colorCodeForTableBG);						
 					}
 				});
 				
@@ -446,6 +444,7 @@ public class MainActivity extends Activity
 			Log.d("MainActivity", "fillUpTableOnCreation() caught an exception: ", e);
 			toastDebugInfo("fillUpTableOnCreation() caught an exception", false);
 		}
+		updateElementsWithThemeColors_Table();
 	}
 	
 	public void clearTableData()
@@ -502,15 +501,15 @@ public class MainActivity extends Activity
 		return tag;
 	}
 	
-	// TODO: Update Todo and its tags (Todo updatedTodo, ?Tag updatedTag?)
-	public void updateTodoAndTags (Todo updatedTodo, List<Tag> updatedTags)
-	{
-		//launch edit todo view
-		
-		//update table row (apparently with clearTableRows() and fillTableOCreation()
-		
-		toastDebugInfo("Will updateTodoAndTags", false);
-	}
+//	// TODO: Update Todo and its tags (Todo updatedTodo, ?Tag updatedTag?) - remove?
+//	public void updateTodoAndTags (Todo updatedTodo, List<Tag> updatedTags)
+//	{
+//		//launch edit todo view
+//		
+//		//update table row (apparently with clearTableRows() and fillTableOCreation()
+//		
+//		toastDebugInfo("Will updateTodoAndTags", false);
+//	}
 	
 	// Un/Check Todo as completed (int todoID)
 	public void toggleTodoStatus(int todoID)
@@ -616,8 +615,7 @@ public class MainActivity extends Activity
 		try 
 		{
 			Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
-			// TODO: put reqCoide into a final var
-			startActivityForResult(intent, 555);			
+			startActivityForResult(intent, requestCode_SettingsActivity);			
 		} 
 		catch (Exception e) 
 		{
@@ -625,22 +623,21 @@ public class MainActivity extends Activity
 		}
 	}
 	
-	private void getUpdatedThemeColors()
+	private void getThemeColorsFromPreferences()
 	{
 		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());		
 		
-//		colorCodeForTableBG = "#000000";
-//		colorCodeForTableText = "#FFFFFF";
-//		colorCodeForTRInFocus = "#003366";
-//		colorCodeForHintText = "#CCCCCC";
+		colorCodeForTableBG = sp.getInt("colorCodeForTableBG", colorCodeForTableBG); 
+		colorCodeForTableText = sp.getInt("colorCodeForTableText", colorCodeForTableText);
+		colorCodeForTRInFocus = sp.getInt("colorCodeForTRInFocus", colorCodeForTRInFocus); 
+		colorCodeForHintText = sp.getInt("colorCodeForHintText", colorCodeForHintText);
 //		//colorCodeForButtonsBG = "#80003399"; // Temporarily not in use due to the fact that button's 3D effect is lost
-		colorCodeForButtonsTxt = sp.getInt("colorCodeForButtonsTxt", -1); 
-//		colorCodeForTableHeaderBG = "#666666";
-//		colorCodeForTableHeaderTxt = "#CCCCCC";
-//		// update screen elements with current colors / theme
+		colorCodeForButtonsTxt = sp.getInt("colorCodeForButtonsTxt", colorCodeForButtonsTxt); 
+		colorCodeForTableHeaderBG = sp.getInt("colorCodeForTableHeaderBG", colorCodeForTableHeaderBG);
+		colorCodeForTableHeaderTxt = sp.getInt("colorCodeForTableHeaderTxt", colorCodeForTableHeaderTxt);
 	}
 	
-	public void updateThemeColors()
+	public void updateElementsWithThemeColors()
 	{
 		// Buttons
 		Button bt_search = (Button) findViewById(R.id.bt_Search);
@@ -653,45 +650,77 @@ public class MainActivity extends Activity
 		
 		Button bt_DebugScreen = (Button) findViewById(R.id.bt_ToDebugScr);
 		//bt_backToMain.setBackgroundColor(Color.parseColor(colorCodeForButtonsBG));
-		bt_DebugScreen.setTextColor(colorCodeForButtonsTxt); 		
-	}
+		bt_DebugScreen.setTextColor(colorCodeForButtonsTxt); 
 		
-	@Override
-	public void onBackPressed() 
+		// Table - in a separate method since need to be called by fillUpTableFromDB()
+		updateElementsWithThemeColors_Table();
+		
+		// backgrounds
+		LinearLayout screenLayout = (LinearLayout) findViewById(R.id.todos_table_screen_linlay);
+		screenLayout.setBackgroundColor(colorCodeForTableBG);
+		
+		// others
+		EditText et_search = (EditText) findViewById(R.id.et_Search);
+		et_search.setTextColor(colorCodeForTableText);
+		et_search.setHintTextColor(colorCodeForHintText);		
+	}
+	
+	public void updateElementsWithThemeColors_Table() 
 	{
+		TableLayout todosTable = (TableLayout) findViewById(R.id.table_ToDos);
+		todosTable.setBackgroundColor(colorCodeForTableBG); // basically table takes layout BG and also children handled below,
+															// but should I invoke just in case?
+
+		for (int row = 0; row < todosTable.getChildCount(); row++) 
+		{
+			TableRow tr = (TableRow) todosTable.getChildAt(row);
+			for (int column = 0; column < tr.getChildCount(); column++) 
+			{
+				TextView tv = (TextView) tr.getChildAt(column);
+				if (!(row == 0)) 
+				{
+					tv.setTextColor(colorCodeForTableText);
+					tr.setBackgroundColor(colorCodeForTableBG);
+				} else {
+					tv.setBackgroundColor(colorCodeForTableHeaderBG);
+					tv.setTextColor(colorCodeForTableHeaderTxt);
+				}
+			}
+		}
+	}
+
+	@Override
+	public void onBackPressed() {
 		userVerificationToExit();
 	}
-		
-	private void userVerificationToExit()
-	{
+
+	private void userVerificationToExit() {
 		final AlertDialog.Builder aDBuilder = new AlertDialog.Builder(this);
-		try
-		{	
+		try {
 			aDBuilder.setMessage("Are you sure you want to exit?");
 			aDBuilder.setTitle("Exit!");
-			
-			aDBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-				
-				@Override
-				public void onClick(DialogInterface dialog, int which) 
-				{
-					// temporary solution or legit? (to call finish() from this handler)
-					finish();					
-				}
-			});	
+
+			aDBuilder.setPositiveButton("Yes",
+					new DialogInterface.OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							// temporary solution or legit? (to call finish()
+							// from this handler)
+							finish();
+						}
+					});
 			aDBuilder.setNeutralButton("Cancel", null);
-			
-			aDBuilder.create().show();							
+
+			aDBuilder.create().show();
+		} catch (Exception e) {
+			Log.d("DialogBox_ExitApp", "DialogBox throws the next exception: ",
+					e);
 		}
-		catch (Exception e)
-		{
-			Log.d("DialogBox_ExitApp", "DialogBox throws the next exception: ", e);
-		}		
 	}
-		
-	public void toastDebugInfo(String message, boolean IsLongDuration)
-    {    	
-    	if (isDebugMode) {
+
+	public void toastDebugInfo(String message, boolean IsLongDuration) {
+		if (isDebugMode) {
 			int duration;
 			if (IsLongDuration)
 				duration = Toast.LENGTH_LONG;
@@ -700,6 +729,6 @@ public class MainActivity extends Activity
 			Toast t = Toast.makeText(this, message, duration);
 			t.show();
 		}
-    }
-	
+	}
+
 }
