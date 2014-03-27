@@ -21,24 +21,17 @@ public class ColorPickerPreference extends Preference
 	{
 		super(context, attrs);
 		Log.d(LOG_TAG, "ColorPickerPreference(Context context, AttributeSet attrs) constructor was called");
-
-		// TODO: set values 
-		//initialColor = get from pref by key? how generalize key, with parameter?
 	}
 	
 	public ColorPickerPreference(Context context, AttributeSet attrs,
 			int defStyle) {
 		super(context, attrs, defStyle);
 		Log.d(LOG_TAG, "ColorPickerPreferenceContext context, AttributeSet attrs, int defStyle) constructor was called");
-
-		// TODO Auto-generated constructor stub
 	}
 
 	public ColorPickerPreference(Context context) {
 		super(context);
 		Log.d(LOG_TAG, "ColorPickerPreference(Context context) constructor was called");
-
-		// TODO Auto-generated constructor stub
 	}
 	
 	@Override
@@ -68,8 +61,7 @@ public class ColorPickerPreference extends Preference
 							selectedColor = color; // the selected color
 							initialColor = color;
 							persistInt(color);
-							setSummary("color code is " + initialColor);		
-
+							setSummary("color code is " + initialColor);	
 						}
 
 						@Override

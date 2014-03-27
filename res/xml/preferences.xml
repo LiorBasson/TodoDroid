@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory 
-        android:title="Theme Category?"
+        android:title="Theme Category"
         android:key="pref_key_theme_settings">
         <com.lb.todosqlite.preferences.ColorPickerPreference 
 	        android:key="colorCodeForTableBG"
@@ -42,35 +42,21 @@
     <PreferenceCategory 
         android:title="Others"
         android:key="pref_key_others_settings">
-        <CheckBoxPreference
-            android:key="pref_key_auto_delete"
-            android:summary="This is the summary section for this checkbox"
-            android:title="CheckBox_pref_title_auto_delete"
-            android:defaultValue="false" />
-        <EditTextPreference 
-            android:key="pref_key_sms_delete_limit"
-            android:dependency="pref_key_auto_delete"
-            android:summary="pref_summary_delete_limit"
-            android:defaultValue="500"
-            android:title="pref_title_sms_delete" />
-        <EditTextPreference 
-            android:key="pref_key_mms_delete_limit"
-            android:dependency="pref_key_auto_delete"
-            android:summary="pref_summary_delete_limit"
-            android:title="pref_title_mms_delete" />
-	    <CheckBoxPreference
+         <CheckBoxPreference
 	            android:key="pref_key_debug_mode"
-	            android:summary="Show toast msgs and debug screen"
+	            android:summary="Show toast msgs and debug screen. Advanced users only!"
 	            android:title="Debug Mode"
 	            android:defaultValue="false" />
-	    <RingtonePreference 
+        <CheckBoxPreference
+            android:key="pref_key_notification"
+            android:summary="Comming soon!"
+            android:title="Notifications"
+            android:defaultValue="false" />
+        <RingtonePreference 
 	        android:key="pref_key_notif_selector"
+	        android:dependency="pref_key_notification"
 	        android:ringtoneType="notification"
-	        android:summary="summery text"
-	        android:title="notif"/>
-	    <ListPreference
-	        android:key="pref_key_list"
-	        android:summary="summery text list"
-	        android:title="list" />	    
+	        android:summary="Comming soon!"
+	        android:title="notification tone"/>	        
 	</PreferenceCategory>    
 </PreferenceScreen>

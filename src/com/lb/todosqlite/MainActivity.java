@@ -8,9 +8,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.test.PerformanceTestCase;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -49,7 +49,7 @@ public class MainActivity extends Activity
 	final int requestCode_ViewToDo = 214;
 	final int requestCode_EditToDo = 215;	
 	final int requestCode_SettingsActivity = 216;
-	// vars for later color theme use  // TODO: check if it is a graphics thumb rule that for Hex color code (#XxYyZz) where Yy is below 66 then considered dark and above 66 (>99) then considered light.  
+	// vars for color theme use   
 	int colorCodeForTableBG = -16777216;
 	int colorCodeForTableText = -1;
 	int colorCodeForTRInFocus = -13085737;
@@ -63,7 +63,7 @@ public class MainActivity extends Activity
 	final String defaultInternalTagName = "None";
 	final String sharedPrefUserPrefFileName = "com.lb.todosqlite_preferences";
 	// vars for debug
-	boolean isDebugMode = false; // TODO: Change back to false when finished debugging
+	boolean isDebugMode = false;
 	int searchCount = 0;	
 	
 	@Override
@@ -123,24 +123,10 @@ public class MainActivity extends Activity
 				//startActivityForResult(debugScreen, requestCode_DeubgScr);		
 			}
 		});
-		
-		
-		
-		// TODO: check for duplication in manifest?
-		getWindow().setSoftInputMode(
-			      WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-		
+				
 		// Preferences handling TODO: Check if can uncomment - seems that exception was for other reasons
-		//PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-		
-		SharedPreferences sp = getSharedPreferences(sharedPrefUserPrefFileName, 0);		
-		
-		isDebugMode = sp.getBoolean("pref_key_debug_mode", false);
-		
-		if (!(isDebugMode))
-			bt_DebugScreen.setVisibility(View.INVISIBLE);
-		
-		// TODO: theme impl		
+		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);			
+				
 		getThemeColorsFromPreferences(); 
 		updateElementsWithThemeColors();
 	}
@@ -150,23 +136,30 @@ public class MainActivity extends Activity
 		super.onResume();
 		// TODO: if relevant to this class, register to OnPreferenceChanged event
 		
-		if (true) // TODO: add a mechanism combined with OnPreferenceChanged event to update condition boolean
+		// TODO: add a mechanism combined with OnPreferenceChanged event to update condition boolean (relevant to isDebugMode too)
+		if (true) 
 		{
 			getThemeColorsFromPreferences(); 
 			updateElementsWithThemeColors();
 		}
 		
-		toastDebugInfo("MainActivity.onResume() invoked", true);
+		if (true)
+		{
+			SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());	
+			isDebugMode = sp.getBoolean("pref_key_debug_mode", false);
+			Button bt_DebugScreen = (Button) findViewById(R.id.bt_ToDebugScr);
+			if (!(isDebugMode))
+				bt_DebugScreen.setVisibility(View.INVISIBLE);
+			else bt_DebugScreen.setVisibility(View.VISIBLE);
+		}			
 		
+		toastDebugInfo("MainActivity.onResume() invoked", true);		
 	}
 	
 	@Override
 	protected void onPause() {
 		super.onPause();
-		// TODO Auto-generated method stub
 		// TODO: if relevant to this class, register to preference changes, otherwise remove this overriden method
-
-
 	}
 	
 	@Override
@@ -277,10 +270,7 @@ public class MainActivity extends Activity
 				
 					for (int index = 0; index < columns; index++) 
 					{
-						TextView ntv = new TextView(getApplicationContext());
-						// TODO: replace in setThemeColors() ntv.setTextColor(colorCodeForTableText);
-						ntv.setText("Text" + index);
-						
+						TextView ntv = new TextView(getApplicationContext());						
 						switch (index)
 						{
 							case 0:
@@ -314,11 +304,14 @@ public class MainActivity extends Activity
 								else ntv.setText("[   ]");								
 								break;
 							}
+							default:
+							{
+								ntv.setText("Text" + index);
+							}
 						}			
 						ntr.addView(ntv);						
 					}
 				ntr.setFocusableInTouchMode(true);
-				// TODO: replace in setThemeColors() ntr.setBackgroundColor(colorCodeForTableBG);
 				
 				ntr.setOnLongClickListener(new OnLongClickListener() {
 					
@@ -460,7 +453,6 @@ public class MainActivity extends Activity
 		DatabaseHelper db = new DatabaseHelper(getApplicationContext());
 				
 		long tagID = 0;		
-		// TODO: ?exclude cases of default Spinner items {spinnerDefaultValue and requestToCreateNewTag} handle categoryOnspinnerDefaultValue? - apparently handling correctly now 
 		if (!(db.getAllTags().contains(categorySelected)))
 		{
 			Tag tag = new Tag(categorySelected);
@@ -476,7 +468,7 @@ public class MainActivity extends Activity
 			}				 
 		}		
 		Todo todo = new Todo(todoTitle, defaultTodoStatus);
-		todo.setDueDate(dueDate);  // TODO: consider adding a date format validator
+		todo.setDueDate(dueDate); 
 		db.createToDo(todo, new long[] {tagID});
 				
 		db.closeDB();
@@ -674,18 +666,19 @@ public class MainActivity extends Activity
 		for (int row = 0; row < todosTable.getChildCount(); row++) 
 		{
 			TableRow tr = (TableRow) todosTable.getChildAt(row);
-			for (int column = 0; column < tr.getChildCount(); column++) 
-			{
-				TextView tv = (TextView) tr.getChildAt(column);
-				if (!(row == 0)) 
+			if (!(tr.getChildCount()==1))	// 	tr.getChildCount()==1 when there are no tasks and displaying an welcome image		
+				for (int column = 0; column < tr.getChildCount(); column++) 
 				{
-					tv.setTextColor(colorCodeForTableText);
-					tr.setBackgroundColor(colorCodeForTableBG);
-				} else {
-					tv.setBackgroundColor(colorCodeForTableHeaderBG);
-					tv.setTextColor(colorCodeForTableHeaderTxt);
+					TextView tv = (TextView) tr.getChildAt(column);
+					if (!(row == 0)) 
+					{
+						tv.setTextColor(colorCodeForTableText);
+						tr.setBackgroundColor(colorCodeForTableBG);
+					} else {
+						tv.setBackgroundColor(colorCodeForTableHeaderBG);
+						tv.setTextColor(colorCodeForTableHeaderTxt);
+					}
 				}
-			}
 		}
 	}
 

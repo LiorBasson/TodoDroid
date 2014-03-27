@@ -12,16 +12,13 @@ import android.util.Log;
 import com.lb.todosqlite.R;
 
 public class SettingsActivity extends PreferenceActivity implements OnSharedPreferenceChangeListener {
-	final String LOG_TAG = "SettingsActivity";
-	// ColorPicker vars
-	int initialColor = 0;
-	int selectedColor = 0;
+	final String LOG_TAG = "SettingsActivity";	
 
 	@SuppressWarnings("deprecation")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
 	{
-		Log.d(LOG_TAG, "onCreate() was called");
+		Log.d(LOG_TAG, "onCreate() was invoked");
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.preferences);
 		
@@ -30,81 +27,25 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 	
 	private void elementsSpecialHandling()
 	{
-		@SuppressWarnings("deprecation")
-		EditTextPreference etp = (EditTextPreference) findPreference("pref_key_sms_delete_limit");
-		etp.getText();
-		etp.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-			
-			@Override
-			public boolean onPreferenceClick(Preference preference) {
-				//launchColorPicker();
-				return false;
-			}
-		});		
-		
-		
 //		@SuppressWarnings("deprecation")
-//		Preference p_color = (Preference) findPreference("pref_key_picked_color");		
-//		p_color.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+//		EditTextPreference etp = (EditTextPreference) findPreference("pref_key_sms_delete_limit");
+//		etp.getText();
+//		etp.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 //			
 //			@Override
 //			public boolean onPreferenceClick(Preference preference) {
-//				// TODO: refer to its previous color code and store current selected color
-//				//preference.gettext
-//				
-//				launchColorPicker();
-//				
+//				// TODO: Remove when finish debugging
 //				return false;
 //			}
-//		});
-		
-		
+//		});				
 	}
-
-//	private void launchColorPicker() 
-//	{
-//		Log.d(LOG_TAG, "launchColorPicker() was called");
-//		try {
-//			// initialColor is the initially-selected color to be shown in the
-//			// rectangle on the left of the arrow.
-//			// for example, 0xff000000 is black, 0xff0000ff is blue. Please be
-//			// aware of the initial 0xff which is the alpha.
-//
-//			AmbilWarnaDialog am = new AmbilWarnaDialog(this,
-//					initialColor, new OnAmbilWarnaListener() {
-//
-//						@Override
-//						public void onOk(AmbilWarnaDialog arg0, int color) {
-//							Log.d(LOG_TAG, "onOk() was invoked");
-//							selectedColor = color; // the selected color
-//							initialColor = color;
-////							TextView vColorCode = (TextView) findViewById(R.id.sandbox_colorcode);
-////							vColorCode.setText(String.valueOf(selectedColor));
-////							TextView vColorex = (TextView) findViewById(R.id.editText_SelColor);
-////							vColorex.setBackgroundColor(selectedColor);
-//						}
-//
-//						@Override
-//						public void onCancel(AmbilWarnaDialog arg0) {
-//							Log.d(LOG_TAG, "onCancel() was invoked");
-//						}
-//					});
-//
-//			am.show();
-//		} catch (Exception e) {
-//			Log.d(LOG_TAG, "launchColorPicker() thrown an exception:  ", e);
-//		}
-//		Log.d(LOG_TAG, "launchColorPicker() is about to exit method");
-//	}
 	
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 			String key) 
 	{
 		// TODO update summary and etc upon specific pref changed
-		Log.d(LOG_TAG, "launchColorPicker() was called");
-
-		
+		Log.d(LOG_TAG, "onSharedPreferenceChanged() was invoked");		
 	}
 
 	@SuppressWarnings("deprecation")
