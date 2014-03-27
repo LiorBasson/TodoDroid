@@ -6,98 +6,20 @@
 	<LinearLayout 
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent"
-	    android:orientation="vertical"   >   
-	    
-<!-- 		    	<TextView -->
-<!-- 			        android:id="@+id/tView_tag" -->
-<!-- 			        android:layout_width="match_parent" -->
-<!-- 			        android:layout_height="match_parent" -->
-<!-- 			        android:text="Category" /> -->
-			
-<!-- 			    <Spinner -->
-<!-- 			        android:id="@+id/spinner_tag" -->
-<!-- 			        android:layout_width="match_parent" -->
-<!-- 			        android:layout_height="match_parent" />		         -->
-		        
-		    		   
-<!-- 		    	<TextView -->
-<!-- 				        android:id="@+id/tv_StatusLable_ntt" -->
-<!-- 				        android:layout_width="wrap_content" -->
-<!-- 				        android:layout_height="wrap_content" -->
-<!-- 				        android:text="status:" -->
-<!-- 				        android:textAppearance="?android:attr/textAppearanceSmall" /> -->
-				        
-<!-- 					<CheckBox -->
-<!-- 				        android:id="@+id/cb_Status_nt" -->
-<!-- 				        android:layout_width="wrap_content" -->
-<!-- 				        android:layout_height="wrap_content" -->
-<!-- 				        android:text="Done" />      -->
-		        
-		  
-	           
-<!-- 	    <TextView -->
-<!-- 	        android:id="@+id/tv_DueDateLabel_ant" -->
-<!-- 	        android:layout_width="wrap_content" -->
-<!-- 	        android:layout_height="wrap_content" -->
-<!-- 	        android:text="Due Date" /> -->
-<!-- 	    <LinearLayout -->
-<!-- 		    android:layout_width="wrap_content" -->
-<!-- 	    	android:layout_height="wrap_content" -->
-<!-- 		    android:orientation="horizontal" > -->
+	    android:orientation="vertical"   >
+	    <TextView 
+	         android:id="@+id/tv_dummy2"
+		     android:layout_width="wrap_content"
+		     android:layout_height="wrap_content"
+		     android:textAppearance="?android:attr/textAppearanceMedium"
+	         android:text="Text Color"/>
 	
-<!-- 		    <TextView -->
-<!-- 		        android:id="@+id/tv_DDDate_ant" -->
-<!-- 		        android:layout_width="wrap_content" -->
-<!-- 		        android:layout_height="wrap_content"   -->
-<!-- 		        android:layout_marginLeft="10dp"   -->
-<!-- 		        android:layout_marginRight="5dp"  -->
-<!-- 		        android:layout_marginTop="10dp"  -->
-<!-- 		        android:layout_marginBottom="10dp"      -->
-<!-- 		        android:textScaleX="1.5"         -->
-<!-- 		        android:text="2014-03-14" /> -->
-		     
-<!-- 		    <TextView -->
-<!-- 		        android:id="@+id/tv_DDTime_ant" -->
-<!-- 		        android:layout_width="wrap_content" -->
-<!-- 		        android:layout_height="wrap_content"      -->
-<!-- 		        android:layout_marginLeft="5dp"   -->
-<!-- 		        android:layout_marginRight="5dp"  -->
-<!-- 		        android:layout_marginTop="10dp"  -->
-<!-- 		        android:layout_marginBottom="10dp"        -->
-<!-- 		        android:textScaleX="1.5"         -->
-<!-- 		        android:text="13:58" />	    -->
-	
-<!-- 	    </LinearLayout>  -->
-        
-<!-- 	        <TextView -->
-<!-- 		        android:id="@+id/tView_title" -->
-<!-- 		        android:layout_width="wrap_content" -->
-<!-- 		        android:layout_height="wrap_content" -->
-<!-- 		        android:text="Title" /> -->
-	
-<!-- 	    	<EditText -->
-<!-- 		        android:id="@+id/eText_title" -->
-<!-- 		        android:layout_width="wrap_content" -->
-<!-- 		        android:layout_height="wrap_content" -->
-<!-- 		        android:hint="fill in todo title here" />    -->
-	        
-<!-- 	    <LinearLayout -->
-<!-- 	        android:layout_width="wrap_content" -->
-<!-- 	        android:layout_height="wrap_content" -->
-<!-- 	        android:orientation="horizontal" > -->
-	
-<!-- 	        <Button -->
-<!-- 	            android:id="@+id/bt_CancellCreateTodo" -->
-<!-- 	            android:layout_width="wrap_content" -->
-<!-- 	            android:layout_height="wrap_content" -->
-<!-- 	            android:text="Cancel" /> -->
-	
-<!-- 	        <Button -->
-<!-- 	            android:id="@+id/bt_ApplyCreateTodo" -->
-<!-- 	            android:layout_width="wrap_content" -->
-<!-- 	            android:layout_height="wrap_content" -->
-<!-- 	            android:text="Save" /> -->
-	        
-<!-- 	    </LinearLayout>          -->
+    	<TextView
+	        android:id="@+id/tv_dummy2"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="text inside table"
+	        android:textAppearance="?android:attr/textAppearanceSmall"/>   
+
 	</LinearLayout>
 </ScrollView>

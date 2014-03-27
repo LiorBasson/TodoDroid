@@ -134,7 +134,7 @@ public class MainActivity extends Activity
 			      WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 		
 		// Preferences handling
-		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+		//PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 		
 		SharedPreferences sp = getSharedPreferences(sharedPrefUserPrefFileName, 0);		
 		

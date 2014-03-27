@@ -3,6 +3,7 @@ package com.lb.todosqlite.preferences;
 import yuku.ambilwarna.AmbilWarnaDialog;
 import yuku.ambilwarna.AmbilWarnaDialog.OnAmbilWarnaListener;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.preference.Preference;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -10,12 +11,31 @@ import android.util.Log;
 public class ColorPickerPreference extends Preference 
 {
 	final String LOG_TAG = "ColorPickerPreference";
+	final int DEFAULT_VALUE = -13907694;
 	int initialColor = 0;
 	int selectedColor = 0;
 
 	public ColorPickerPreference(Context context, AttributeSet attrs) 
 	{
 		super(context, attrs);
+		Log.d(LOG_TAG, "ColorPickerPreference(Context context, AttributeSet attrs) constructor was called");
+
+		// TODO: set values 
+		//initialColor = get from pref by key? how generalize key, with parameter?
+	}
+	
+	public ColorPickerPreference(Context context, AttributeSet attrs,
+			int defStyle) {
+		super(context, attrs, defStyle);
+		Log.d(LOG_TAG, "ColorPickerPreferenceContext context, AttributeSet attrs, int defStyle) constructor was called");
+
+		// TODO Auto-generated constructor stub
+	}
+
+	public ColorPickerPreference(Context context) {
+		super(context);
+		Log.d(LOG_TAG, "ColorPickerPreference(Context context) constructor was called");
+
 		// TODO Auto-generated constructor stub
 	}
 	
@@ -40,14 +60,13 @@ public class ColorPickerPreference extends Preference
 					initialColor, new OnAmbilWarnaListener() {
 
 						@Override
-						public void onOk(AmbilWarnaDialog arg0, int color) {
+						public void onOk(AmbilWarnaDialog arg0, int color) 
+						{
 							Log.d(LOG_TAG, "onOk() was invoked");
 							selectedColor = color; // the selected color
 							initialColor = color;
-//							TextView vColorCode = (TextView) findViewById(R.id.sandbox_colorcode);
-//							vColorCode.setText(String.valueOf(selectedColor));
-//							TextView vColorex = (TextView) findViewById(R.id.editText_SelColor);
-//							vColorex.setBackgroundColor(selectedColor);
+							persistInt(color);
+							setSummary("text color code is " + color + " bla");
 						}
 
 						@Override
@@ -57,11 +76,34 @@ public class ColorPickerPreference extends Preference
 					});
 
 			am.show();
-		} catch (Exception e) {
+		} 
+		catch (Exception e) 
+		{
 			Log.d(LOG_TAG, "launchColorPicker() thrown an exception:  ", e);
 		}
 		Log.d(LOG_TAG, "launchColorPicker() is about to exit method");
 	}
 	
+	@Override
+	protected void onSetInitialValue(boolean restorePersistedValue, Object defaultValue) 
+	{
+	    if (restorePersistedValue) 
+	    {
+	        // Restore existing state
+	    	initialColor = this.getPersistedInt(DEFAULT_VALUE);
+	    } 
+	    else 
+	    {
+	        // Set default state from the XML attribute
+	    	initialColor = (Integer) defaultValue;
+	        persistInt(initialColor);
+	    }
+	}
+	
+	@Override
+	protected Object onGetDefaultValue(TypedArray a, int index) 
+	{
+	    return a.getInteger(index, DEFAULT_VALUE);
+	}
 
 }
