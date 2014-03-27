@@ -27,6 +27,7 @@ public class ViewTodo extends Activity
 	final String themeColorCode_LableBG = "#FF9966"; // final and hardcoded for the meantime 
 	final String colorCodeForTableBG = "#000000";
 	final String colorCodeForText = "#CCCCCC";
+	
 
 	
 	@Override

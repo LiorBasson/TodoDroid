@@ -493,16 +493,6 @@ public class MainActivity extends Activity
 		return tag;
 	}
 	
-//	// TODO: Update Todo and its tags (Todo updatedTodo, ?Tag updatedTag?) - remove?
-//	public void updateTodoAndTags (Todo updatedTodo, List<Tag> updatedTags)
-//	{
-//		//launch edit todo view
-//		
-//		//update table row (apparently with clearTableRows() and fillTableOCreation()
-//		
-//		toastDebugInfo("Will updateTodoAndTags", false);
-//	}
-	
 	// Un/Check Todo as completed (int todoID)
 	public void toggleTodoStatus(int todoID)
 	{

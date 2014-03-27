@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -35,9 +36,18 @@ import com.lb.todosqlite.services.DateTimeServices;
 public class EditTodo extends FragmentActivity 
 {
 	final int requestCode_EditToDo = 215;
-	final String themeColorCode_LableBG = "#FF9966"; // final and hardcoded for the meantime 
-	final String colorCodeForTableBG = "#000000";
-	final String colorCodeForText = "#CCCCCC";
+//	final String themeColorCode_LableBG = "#FF9966"; // final and hardcoded for the meantime 
+//	final String colorCodeForTableBG = "#000000";
+//	final String colorCodeForText = "#CCCCCC";
+	// vars for color theme use   
+	int colorCodeForTableBG = -16777216;
+	int colorCodeForTableText = -1;
+	int colorCodeForHintText = -1644826;
+	//int colorCodeForButtonsBG = -11119018; // Temporarily not in use due to the fact that button's 3D effect is lost
+	int  colorCodeForButtonsTxt = -1;  
+	int colorCodeForTableHeaderBG = -6645094;
+	int colorCodeForTableHeaderTxt = -1644826;
+	
 	int m_todoID = 0;
 	boolean isCancelPressed = true;
 	final String defaultInternalTagName = "None";
@@ -61,9 +71,10 @@ public class EditTodo extends FragmentActivity
 //		int reqCode = sp.getInt("userReqCode", -1);
 		m_todoID = todo_id;
 				
-		//updateThemeColors_OLD();
 		fillViewesOnCreate(todo_id);
 		setViewsHandlers();
+		getThemeColorsFromPreferences();
+		updateElementsWithThemeColors();
 		
 	}
 	
@@ -91,29 +102,63 @@ public class EditTodo extends FragmentActivity
 		todoNote.setText(todo.getNote());	
 	}
 		
-	public void updateThemeColors_OLD()
+	private void getThemeColorsFromPreferences()
 	{
-		RelativeLayout viewLayout = (RelativeLayout) findViewById(R.id.rl_EditTodo_RootLayout);
-		viewLayout.setBackgroundColor(Color.parseColor(colorCodeForTableBG));
-		TextView catLable = (TextView) findViewById(R.id.tv_CatLable_ed);
-		catLable.setBackgroundColor(Color.parseColor(themeColorCode_LableBG));
-		TextView statusLable = (TextView) findViewById(R.id.tv_StatusLable_ed);
-		statusLable.setBackgroundColor(Color.parseColor(themeColorCode_LableBG));
-		TextView dueDateLable = (TextView) findViewById(R.id.tv_DueDateLable_ed);
-		dueDateLable.setBackgroundColor(Color.parseColor(themeColorCode_LableBG));
-		TextView todoNoteLable = (TextView) findViewById(R.id.tv_TodoNoteLable_ed);
-		todoNoteLable.setBackgroundColor(Color.parseColor(themeColorCode_LableBG));
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());		
 		
-		CheckBox status = (CheckBox) findViewById(R.id.cb_Status_ed);
-		status.setTextColor(Color.parseColor(colorCodeForText));
-		status.setBackgroundColor(Color.parseColor(themeColorCode_LableBG));
+		colorCodeForTableBG = sp.getInt("colorCodeForTableBG", colorCodeForTableBG); 
+		colorCodeForTableText = sp.getInt("colorCodeForTableText", colorCodeForTableText);
+		//colorCodeForTRInFocus = sp.getInt("colorCodeForTRInFocus", colorCodeForTRInFocus); 
+		colorCodeForHintText = sp.getInt("colorCodeForHintText", colorCodeForHintText);
+//		//colorCodeForButtonsBG = "#80003399"; // Temporarily not in use due to the fact that button's 3D effect is lost
+		colorCodeForButtonsTxt = sp.getInt("colorCodeForButtonsTxt", colorCodeForButtonsTxt); 
+		colorCodeForTableHeaderBG = sp.getInt("colorCodeForTableHeaderBG", colorCodeForTableHeaderBG);
+		colorCodeForTableHeaderTxt = sp.getInt("colorCodeForTableHeaderTxt", colorCodeForTableHeaderTxt);
+	}
+	
+	public void updateElementsWithThemeColors()
+	{
+		// background
+		RelativeLayout viewLayout = (RelativeLayout) findViewById(R.id.rl_newTodo_RootLayout);
+		viewLayout.setBackgroundColor(colorCodeForTableBG);
 		
-		//findViewById(R.id.et_Category_ed)
+		// labels
+		TextView catLable = (TextView) findViewById(R.id.tView_tag);
+		catLable.setBackgroundColor(colorCodeForTableHeaderBG);
+		catLable.setTextColor(colorCodeForTableHeaderTxt);
+		TextView statusLable = (TextView) findViewById(R.id.tv_StatusLable_ntt);
+		statusLable.setBackgroundColor(colorCodeForTableHeaderBG);
+		statusLable.setTextColor(colorCodeForTableHeaderTxt);
+		TextView dueDateLable = (TextView) findViewById(R.id.tv_DueDateLabel_ant);
+		dueDateLable.setBackgroundColor(colorCodeForTableHeaderBG);
+		dueDateLable.setTextColor(colorCodeForTableHeaderTxt);		
+		TextView todoNoteLable = (TextView) findViewById(R.id.tView_title);
+		todoNoteLable.setBackgroundColor(colorCodeForTableHeaderBG);
+		todoNoteLable.setTextColor(colorCodeForTableHeaderTxt);
 		
-		//EditText et_DueDate_Date_ed = (EditText) findViewById(R.id.et_DueDate_Date_ed);
-		//et_DueDate_Date_ed.setTextColor(Color.parseColor(colorCodeForText));
-		EditText et_TodoNote_ed = (EditText) findViewById(R.id.et_TodoNote_ed);
-		et_TodoNote_ed.setTextColor(Color.parseColor(colorCodeForText));		
+		// Checkbox - ignore for now - image issues
+		CheckBox status = (CheckBox) findViewById(R.id.cb_Status_nt);
+		status.setTextColor(colorCodeForTableHeaderTxt);
+		status.setBackgroundColor(colorCodeForTableHeaderBG);
+		
+		// Spinner?
+//		Spinner sp_category = (Spinner) findViewById(R.id.spinner_tag);
+//		sp_category.
+		
+		// DueDate and TodoNote texts
+		TextView dueDateDate = (TextView) findViewById(R.id.tv_DDDate_ant);
+		dueDateDate.setTextColor(colorCodeForTableText);	
+		TextView dueDateTime = (TextView) findViewById(R.id.tv_DDTime_ant);
+		dueDateTime.setTextColor(colorCodeForTableText);
+		EditText et_TodoNote_ed = (EditText) findViewById(R.id.eText_title);
+		et_TodoNote_ed.setTextColor(colorCodeForTableText);	
+		et_TodoNote_ed.setHintTextColor(colorCodeForHintText);
+		
+		//Buttons in Create and Edit modes
+		Button btCancel = (Button) findViewById(R.id.bt_CancellCreateTodo);
+		btCancel.setTextColor(colorCodeForButtonsTxt);		
+		Button btCreate = (Button) findViewById(R.id.bt_ApplyCreateTodo);
+		btCreate.setTextColor(colorCodeForButtonsTxt);	
 	}
 	
 	public void setViewsHandlers()
