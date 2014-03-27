@@ -4,9 +4,13 @@ import yuku.ambilwarna.AmbilWarnaDialog;
 import yuku.ambilwarna.AmbilWarnaDialog.OnAmbilWarnaListener;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.preference.Preference;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 public class ColorPickerPreference extends Preference 
 {
@@ -82,6 +86,33 @@ public class ColorPickerPreference extends Preference
 			Log.d(LOG_TAG, "launchColorPicker() thrown an exception:  ", e);
 		}
 		Log.d(LOG_TAG, "launchColorPicker() is about to exit method");
+	}
+	
+	@Override
+	protected View onCreateView(ViewGroup parent) {
+		Log.d(LOG_TAG, "onCreateView() was invoked");
+		
+		return super.onCreateView(parent);
+	}
+	
+	@Override
+	protected void onBindView(View view) {
+		Log.d(LOG_TAG, "onBindView() was invoked");
+		
+		//View myView = view;
+		TextView tv_title = (TextView) view.findViewById(android.R.id.title);
+		if (!(tv_title==null))
+			tv_title.setTextColor(Color.GREEN);
+		
+		TextView tv_text1 = (TextView) view.findViewById(android.R.id.summary);
+		if (!(tv_text1==null))
+		{
+			tv_text1.setTextColor(Color.RED);
+			tv_text1.setBackgroundColor(Color.GRAY);
+		}
+		
+				
+		super.onBindView(view);
 	}
 	
 	@Override
