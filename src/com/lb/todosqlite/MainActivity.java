@@ -53,8 +53,8 @@ public class MainActivity extends Activity
 	String colorCodeForTableText = "#FFFFFF";
 	String colorCodeForTRInFocus = "#003366";
 	String colorCodeForHintText = "#CCCCCC";
-	String colorCodeForButtonsBG = "#80003399"; // Temporarily not in use due to the fact that button's 3D effect is lost
-	String colorCodeForButtonsTxt = "#FFFFFF";
+	//String colorCodeForButtonsBG = "#80003399"; // Temporarily not in use due to the fact that button's 3D effect is lost
+	int  colorCodeForButtonsTxt = -1;  
 	String colorCodeForTableHeaderBG = "#666666";
 	String colorCodeForTableHeaderTxt = "#CCCCCC";
 	// general vars
@@ -78,19 +78,19 @@ public class MainActivity extends Activity
 		
 		Button bt_search = (Button) findViewById(R.id.bt_Search);
 		//bt_search.setBackgroundColor(Color.parseColor(colorCodeForButtonsBG));
-		bt_search.setTextColor(Color.parseColor(colorCodeForButtonsTxt));
+		bt_search.setTextColor(colorCodeForButtonsTxt);
 		bt_search.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) 
 			{
-				updateThemeColors();
+				updateThemeColors(); // here for debugging
 			}
 		});
 		
 		Button bt_addToDo = (Button) findViewById(R.id.bt_AddTodo);
 		//bt_addToDo.setBackgroundColor(Color.parseColor(colorCodeForButtonsBG));
-		bt_addToDo.setTextColor(Color.parseColor(colorCodeForButtonsTxt));
+		bt_addToDo.setTextColor(colorCodeForButtonsTxt);
 		bt_addToDo.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -105,7 +105,7 @@ public class MainActivity extends Activity
 		
 		Button bt_DebugScreen = (Button) findViewById(R.id.bt_ToDebugScr);
 		//bt_backToMain.setBackgroundColor(Color.parseColor(colorCodeForButtonsBG));
-		bt_DebugScreen.setTextColor(Color.parseColor(colorCodeForButtonsTxt));
+		bt_DebugScreen.setTextColor(colorCodeForButtonsTxt);
 		bt_DebugScreen.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -144,15 +144,22 @@ public class MainActivity extends Activity
 			bt_DebugScreen.setVisibility(View.INVISIBLE);
 		
 		// TODO: theme impl		
-		// updateThemeColors();
+		updateThemeColors();
 	}
 	
 	@Override
 	protected void onResume() {
 		super.onResume();
-		// TODO: if relevant to this class, register to preference changes, otherwise remove this overriden method
-		//getPreferenceScreen()
-
+		// TODO: if relevant to this class, register to OnPreferenceChanged event
+		
+		if (true) // TODO: add a mechanism combined with OnPreferenceChanged event to update condition boolean
+		{
+			getUpdatedThemeColors(); 
+			updateThemeColors();
+		}
+		
+		toastDebugInfo("MainActivity.onResume() invoked", true);
+		
 	}
 	
 	@Override
@@ -240,21 +247,6 @@ public class MainActivity extends Activity
 		else toastDebugInfo("returned with !(Result_OK)", false);
 	}
 	
-	public void updateThemeColors()
-	{
-		// get updated values from prefsett
-		colorCodeForTableBG = "#000000";
-		colorCodeForTableText = "#FFFFFF";
-		colorCodeForTRInFocus = "#003366";
-		colorCodeForHintText = "#CCCCCC";
-		colorCodeForButtonsBG = "#80003399"; // Temporarily not in use due to the fact that button's 3D effect is lost
-		colorCodeForButtonsTxt = "#FFFFFF";
-		colorCodeForTableHeaderBG = "#666666";
-		colorCodeForTableHeaderTxt = "#CCCCCC";
-		// update screen elements with current colors / theme
-		
-	}
-
 	public void fillUpTableFromDB()
 	{
 		try {
@@ -624,12 +616,44 @@ public class MainActivity extends Activity
 		try 
 		{
 			Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+			// TODO: put reqCoide into a final var
 			startActivityForResult(intent, 555);			
 		} 
 		catch (Exception e) 
 		{
 			Log.d("MainActivity", "launchPreferences() throws the next exception: ", e);
 		}
+	}
+	
+	private void getUpdatedThemeColors()
+	{
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());		
+		
+//		colorCodeForTableBG = "#000000";
+//		colorCodeForTableText = "#FFFFFF";
+//		colorCodeForTRInFocus = "#003366";
+//		colorCodeForHintText = "#CCCCCC";
+//		//colorCodeForButtonsBG = "#80003399"; // Temporarily not in use due to the fact that button's 3D effect is lost
+		colorCodeForButtonsTxt = sp.getInt("colorCodeForButtonsTxt", -1); 
+//		colorCodeForTableHeaderBG = "#666666";
+//		colorCodeForTableHeaderTxt = "#CCCCCC";
+//		// update screen elements with current colors / theme
+	}
+	
+	public void updateThemeColors()
+	{
+		// Buttons
+		Button bt_search = (Button) findViewById(R.id.bt_Search);
+		//bt_search.setBackgroundColor(Color.parseColor(colorCodeForButtonsBG));
+		bt_search.setTextColor(colorCodeForButtonsTxt);
+				
+		Button bt_addToDo = (Button) findViewById(R.id.bt_AddTodo);
+		//bt_addToDo.setBackgroundColor(Color.parseColor(colorCodeForButtonsBG));
+		bt_addToDo.setTextColor(colorCodeForButtonsTxt);		
+		
+		Button bt_DebugScreen = (Button) findViewById(R.id.bt_ToDebugScr);
+		//bt_backToMain.setBackgroundColor(Color.parseColor(colorCodeForButtonsBG));
+		bt_DebugScreen.setTextColor(colorCodeForButtonsTxt); 		
 	}
 		
 	@Override

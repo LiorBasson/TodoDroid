@@ -45,7 +45,7 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 		});
 		
 		@SuppressWarnings("deprecation")
-		Preference p_color = (Preference) findPreference("pref_key_picked_color");		
+		Preference p_color = (Preference) findPreference("colorCodeForButtonsTxt");		
 		//p_color.set
 		
 		

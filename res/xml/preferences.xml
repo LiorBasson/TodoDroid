@@ -38,7 +38,7 @@
 	        android:summary="summery text list"
 	        android:title="list" />
 	    <com.lb.todosqlite.preferences.ColorPickerPreference 
-	        android:key="pref_key_picked_color"
+	        android:key="colorCodeForButtonsTxt"
 	        android:title="textColor"
 	        android:summary="bla bla bla" 
 	        android:defaultValue="-16777216"
