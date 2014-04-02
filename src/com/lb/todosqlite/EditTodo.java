@@ -3,6 +3,7 @@ package com.lb.todosqlite;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.Intent;
@@ -20,13 +21,17 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.lb.todosqlite.dialogs.DatePickerFragment;
+import com.lb.todosqlite.dialogs.MyArrayAdapter;
 import com.lb.todosqlite.dialogs.TimePickerFragment;
 import com.lb.todosqlite.model.Tag;
 import com.lb.todosqlite.model.Todo;
@@ -119,7 +124,9 @@ public class EditTodo extends FragmentActivity
 	public void updateElementsWithThemeColors()
 	{
 		// background
-		RelativeLayout viewLayout = (RelativeLayout) findViewById(R.id.rl_newTodo_RootLayout);
+//		RelativeLayout viewLayout = (RelativeLayout) findViewById(R.id.rl_newTodo_RootLayout);
+//		viewLayout.setBackgroundColor(colorCodeForTableBG);
+		ScrollView viewLayout = (ScrollView) findViewById(R.id.rl_newTodo_RootLayout);
 		viewLayout.setBackgroundColor(colorCodeForTableBG);
 		
 		// labels
@@ -141,9 +148,11 @@ public class EditTodo extends FragmentActivity
 		status.setTextColor(colorCodeForTableHeaderTxt);
 		status.setBackgroundColor(colorCodeForTableHeaderBG);
 		
-		// Spinner?
-//		Spinner sp_category = (Spinner) findViewById(R.id.spinner_tag);
-//		sp_category.
+		// Spinner? TODO:Spinner theme color update
+		Spinner sp_category = (Spinner) findViewById(R.id.spinner_tag);
+		MyArrayAdapter sp_adapter = (MyArrayAdapter) sp_category.getAdapter();
+		sp_adapter.setTextColor_mine(colorCodeForTableText);
+		sp_adapter.setBackgroundColor_mine(colorCodeForTableBG);		
 		
 		// DueDate and TodoNote texts
 		TextView dueDateDate = (TextView) findViewById(R.id.tv_DDDate_ant);
@@ -339,10 +348,19 @@ public class EditTodo extends FragmentActivity
 	    			spinnerCategories.add(tag.getTagName());
 	    	}
 	    	  	
-	    	ArrayAdapter<String> spAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, spinnerCategories);
-	    	spAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+	    	// ArrayAdapter<String> spAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, spinnerCategories);
+	    	//spAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+	    	
+	    	MyArrayAdapter spAdapter = new MyArrayAdapter(this, R.layout.spinner_adapter_text_view_item, spinnerCategories);
+	    	spAdapter.setDropDownViewResource(R.layout.spinner_adapter_text_view_item);
 	    	sp.setAdapter(spAdapter);
-	    		    	
+	    	
+	    	// #StartCustomSpinnerHandling
+	    	
+//	    	ArrayAdapter<CharSequence> typeAdapter = ArrayAdapter.createFromResource(this, R.array.my_spinner_array, R.layout.custom_xml_spinner_layout); //change the last argument here to your xml above.
+//	    	typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+    		
+	    	// #EndCustomSpinnerHandling
 	    	sp.setOnItemSelectedListener(new OnItemSelectedListener() 
 	    	{	
 				@Override

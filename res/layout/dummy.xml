@@ -1,25 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-    
-	<LinearLayout 
-	    android:layout_width="match_parent"
-	    android:layout_height="match_parent"
-	    android:orientation="vertical"   >
-	    <TextView 
-	         android:id="@+id/tv_dummy2"
-		     android:layout_width="wrap_content"
-		     android:layout_height="wrap_content"
-		     android:textAppearance="?android:attr/textAppearanceMedium"
-	         android:text="Text Color"/>
-	
-    	<TextView
-	        android:id="@+id/tv_dummy2"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:text="text inside table"
-	        android:textAppearance="?android:attr/textAppearanceSmall"/>   
+    android:id="@+id/rl_newTodo_RootLayout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
 
-	</LinearLayout>
+    <RelativeLayout       
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <TextView
+            android:id="@+id/tView_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Category" />
+
+        <TextView
+            android:id="@+id/tv_DueDateLabel_ant"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/spinner_tag"
+            android:text="Due Date" />
+
+        <TextView
+            android:id="@+id/tv_DDDate_ant"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/tv_DueDateLabel_ant"
+            android:layout_marginTop="16dp"
+            android:paddingLeft="10dp"
+            android:text="2014-03-14"
+            android:textScaleX="1.5" />
+
+        <TextView
+            android:id="@+id/tView_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/tv_DDDate_ant"
+            android:layout_marginTop="14dp"
+            android:text="Todo Note" />
+
+        <EditText
+            android:id="@+id/eText_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/tView_title"
+            android:ems="10"
+            android:hint="fill in todo note here"
+            android:paddingBottom="5dp" />
+
+        <TextView
+            android:id="@+id/tv_DDTime_ant"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/tv_DDDate_ant"
+            android:layout_alignBottom="@+id/tv_DDDate_ant"
+            android:layout_centerHorizontal="true"
+            android:text="13:58"
+            android:textScaleX="1.5" />
+
+        <TextView
+            android:id="@+id/tv_StatusLable_ntt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/tView_tag"
+            android:layout_toRightOf="@+id/spinner_tag"
+            android:text="status" />
+
+        <Button
+            android:id="@+id/bt_CancellCreateTodo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/eText_title"
+            android:text="Cancel" />
+
+        <Button
+            android:id="@+id/bt_ApplyCreateTodo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/eText_title"
+            android:layout_toRightOf="@+id/bt_CancellCreateTodo"
+            android:text="Save" />
+
+        <Spinner
+            android:id="@+id/spinner_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/tView_tag"
+            android:layout_toLeftOf="@+id/cb_Status_nt" />
+
+        <CheckBox
+            android:id="@+id/cb_Status_nt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/spinner_tag"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="14dp"
+            android:paddingRight="10dp"
+            android:text="Done" />
+    </RelativeLayout>
+
 </ScrollView>
