@@ -66,7 +66,9 @@
                 <TextView
 		            android:text="Todo"
 		            android:gravity="left"
-		            android:layout_weight="0.4"		
+		            android:layout_width="0dp"
+                	android:layout_height="match_parent"
+		            android:layout_weight="0.40"		
 		            android:singleLine="true"
 		            android:background="#666666"
 		            android:textColor="#CCCCCC"
@@ -74,6 +76,8 @@
 		        <TextView
 		            android:text="Category"
 		            android:gravity="left"
+		            android:layout_width="0dp"
+                	android:layout_height="match_parent"
 		            android:layout_weight="0.15"
 		            android:singleLine="true"
 		            android:background="#666666"
@@ -82,7 +86,9 @@
 		        <TextView
 		            android:text="Due Date"
 		            android:gravity="left"
-		            android:layout_weight="0.4"
+		            android:layout_width="0dp"
+                	android:layout_height="match_parent"
+		            android:layout_weight="0.35"
 		            android:singleLine="true"
 		            android:background="#666666"
 		            android:textColor="#CCCCCC"
@@ -90,7 +96,9 @@
 		        <TextView
 		            android:text="Done"
 		            android:gravity="left"
-		            android:layout_weight="0.05"
+		            android:layout_width="0dp"
+                	android:layout_height="match_parent"
+		            android:layout_weight="0.10"
 		            android:singleLine="true"
 		            android:background="#666666"
 		            android:textColor="#CCCCCC"

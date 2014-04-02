@@ -11,6 +11,7 @@ import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.test.PerformanceTestCase;
+import android.text.TextUtils.TruncateAt;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -270,12 +271,16 @@ public class MainActivity extends Activity
 				
 					for (int index = 0; index < columns; index++) 
 					{
-						TextView ntv = new TextView(getApplicationContext());						
+						TextView ntv = new TextView(getApplicationContext());
+						ntv.setSingleLine(true);
+						ntv.setEllipsize(TruncateAt.END);
+						ntv.setPadding(2, 10, 2, 10);
+						
 						switch (index)
 						{
 							case 0:
 							{
-								ntv.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 0.3f));
+								ntv.setLayoutParams(new TableRow.LayoutParams(0, LayoutParams.MATCH_PARENT, 0.40f));
 								ntv.setText(todo.getNote());	
 								break;
 							}
@@ -284,21 +289,23 @@ public class MainActivity extends Activity
 								List<Tag> categories = db.getTagsByToDo(todo.getId());
 								String category = "";
 								for (Tag ctg : categories)
-									{category = category + "[" + ctg.getTagName() + "] ";}
+									{
+										category = ctg.getTagName(); // category + "[" + ctg.getTagName() + "] ";
+									}
 									
-								ntv.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 0.15f));
+								ntv.setLayoutParams(new TableRow.LayoutParams(0, LayoutParams.MATCH_PARENT, 0.15f));
 								ntv.setText(category);								
 								break;
 							}
 							case 2:
 							{
-								ntv.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 0.4f));
+								ntv.setLayoutParams(new TableRow.LayoutParams(0, LayoutParams.MATCH_PARENT, 0.35f));
 								ntv.setText(todo.getDueDate());		
 								break;
 							}
 							case 3:
 							{
-								ntv.setLayoutParams(new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 0.15f));
+								ntv.setLayoutParams(new TableRow.LayoutParams(0, LayoutParams.MATCH_PARENT, 0.10f));
 								if (todo.getStatus()== 1)
 									ntv.setText("[X]");
 								else ntv.setText("[   ]");								
