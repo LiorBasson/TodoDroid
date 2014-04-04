@@ -49,6 +49,7 @@
 	            android:defaultValue="false" />
         <CheckBoxPreference
             android:key="pref_key_notification"
+            android:dependency="pref_key_debug_mode"
             android:summary="Comming soon!"
             android:title="Notifications"
             android:defaultValue="false" />
