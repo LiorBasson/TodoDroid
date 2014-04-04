@@ -10,7 +10,6 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.test.PerformanceTestCase;
 import android.text.TextUtils.TruncateAt;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
@@ -25,7 +24,6 @@ import android.view.View.OnClickListener;
 import android.view.View.OnCreateContextMenuListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.View.OnLongClickListener;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -239,7 +237,7 @@ public class MainActivity extends Activity
 		else toastDebugInfo("returned with !(Result_OK)", false);
 	}
 	
-	public void fillUpTableFromDB()
+	private void fillUpTableFromDB()
 	{
 		try {
 			TableLayout todosTable = (TableLayout) findViewById(R.id.table_ToDos);
@@ -447,13 +445,13 @@ public class MainActivity extends Activity
 		updateElementsWithThemeColors_Table();
 	}
 	
-	public void clearTableData()
+	private void clearTableData()
 	{
 		TableLayout todosTable = (TableLayout) findViewById(R.id.table_ToDos);
 		todosTable.removeViews(1, todosTable.getChildCount()-1);
 	}
 	
-	public void createToDo(String todoTitle, String categorySelected, String dueDate)
+	private void createToDo(String todoTitle, String categorySelected, String dueDate)
 	{
 		int defaultTodoStatus = 0;
 		// updates DB with new Todo
@@ -482,7 +480,7 @@ public class MainActivity extends Activity
 	}
 				
 	// Get Todo  (int todoID)
-	public Todo getTodoByID(int todoID)
+	private Todo getTodoByID(int todoID)
 	{
 		Todo todo = null;
 		DatabaseHelper db = new DatabaseHelper(getApplicationContext());
@@ -491,17 +489,8 @@ public class MainActivity extends Activity
 		return todo;		
 	}
 	
-	public List<Tag> getTagByTodoID(int todoID)
-	{
-		List<Tag> tag = null;
-		DatabaseHelper db = new DatabaseHelper(getApplicationContext());
-		tag = db.getTagsByToDo(todoID);
-		db.closeDB();		
-		return tag;
-	}
-	
 	// Un/Check Todo as completed (int todoID)
-	public void toggleTodoStatus(int todoID)
+	private void toggleTodoStatus(int todoID)
 	{
 		// '1' represents Completed while '0' represents NotCompleted
 		DatabaseHelper db = new DatabaseHelper(getApplicationContext());
@@ -518,7 +507,7 @@ public class MainActivity extends Activity
 	}
 	
 	// Delete todo (int todoID)  include its tag if not in use elsewhere
-	public void deleteTodo(int todoID)
+	private void deleteTodo(int todoID)
 	{
 		DatabaseHelper db = new DatabaseHelper(getApplicationContext());
 		db.deleteToDo(todoID, true); 
@@ -547,7 +536,7 @@ public class MainActivity extends Activity
 		toastDebugInfo("Will delete the todo", false);		
 	}
 	
-	public void launchViewTodo(int todoID)
+	private void launchViewTodo(int todoID)
 	{
 		SharedPreferences sp =  getApplication().getSharedPreferences("viewTodo", 0);
 	    Editor ed =  sp.edit();
@@ -563,7 +552,7 @@ public class MainActivity extends Activity
 		toastDebugInfo("launchViewTodo() - Will inflate a view which will only display the todo", false);
 	}
 	
-	public void launchEditTodo(int todoID)
+	private void launchEditTodo(int todoID)
 	{
 		SharedPreferences sp =  getApplication().getSharedPreferences("editTodo", 0);
 	    Editor ed =  sp.edit();
@@ -577,7 +566,7 @@ public class MainActivity extends Activity
 		toastDebugInfo("launchEditTodo() - Will inflate a view which alows editing the todo", false);
 	}
 	
-	public void launchAboutDialog()
+	private void launchAboutDialog()
 	{
 		// texts, links and version number are all hardcoded into "dialogContent" in strings.xml 
 		try
@@ -599,7 +588,7 @@ public class MainActivity extends Activity
 		}		
 	}
 	
-	public void launchPreferences()
+	private void launchPreferences()
 	{
 		try 
 		{
@@ -626,7 +615,7 @@ public class MainActivity extends Activity
 		colorCodeForTableHeaderTxt = sp.getInt("colorCodeForTableHeaderTxt", colorCodeForTableHeaderTxt);
 	}
 	
-	public void updateElementsWithThemeColors()
+	private void updateElementsWithThemeColors()
 	{
 		// Buttons
 		Button bt_search = (Button) findViewById(R.id.bt_Search);
@@ -654,7 +643,7 @@ public class MainActivity extends Activity
 		et_search.setHintTextColor(colorCodeForHintText);		
 	}
 	
-	public void updateElementsWithThemeColors_Table() 
+	private void updateElementsWithThemeColors_Table() 
 	{
 		TableLayout todosTable = (TableLayout) findViewById(R.id.table_ToDos);
 		todosTable.setBackgroundColor(colorCodeForTableBG); // basically table takes layout BG and also children handled below,
@@ -709,7 +698,7 @@ public class MainActivity extends Activity
 		}
 	}
 
-	public void toastDebugInfo(String message, boolean IsLongDuration) {
+	private void toastDebugInfo(String message, boolean IsLongDuration) {
 		if (isDebugMode) {
 			int duration;
 			if (IsLongDuration)

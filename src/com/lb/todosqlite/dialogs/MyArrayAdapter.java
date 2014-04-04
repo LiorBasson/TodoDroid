@@ -12,7 +12,7 @@ import android.widget.TextView;
 public class MyArrayAdapter extends ArrayAdapter<String>
 {
 	private int colorCodeForTableBG = -1; // white
-	private int colorCodeForTableText = -16777216; // blackish
+	private int colorCodeForTableText = -16777216; // black
 	int dbgCounter = 0;
 
 	public MyArrayAdapter(Context context, int textViewResourceId,

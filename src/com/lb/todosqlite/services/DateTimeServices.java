@@ -11,9 +11,9 @@ import android.util.Log;
 public class DateTimeServices 
 {	
 	private static final String logTag = "DateTimeServices";
-	private static final String dateFormat = "YYYY-MM-DD";
+	private static final String dateFormat = "DD-MM-YYYY";		//private static final String dateFormat = "YYYY-MM-DD";	
 	private static final String timeFormat = "HH:mm";
-	private static final String dateTimeFormat = "YYYY-MM-DD HH:mm";	
+	private static final String dateTimeFormat = "DD-MM-YYYY HH:mm";	//private static final String dateTimeFormat = "YYYY-MM-DD HH:mm";	
 	private static boolean isDebugNewImp = false; // var which enables debug of new implementation with SimpleDateFormat and Calendar
 	
 	// the next 3 methods (getYearOfDateFormat, getMonthOfDateFormat, getDayOfDateFormat) 
@@ -21,10 +21,10 @@ public class DateTimeServices
 	public static int getYearOfDateFormat(String todoDueDate)
 	{
 		int year = 1900;
-		if (dateFormat.equals("YYYY-MM-DD"))
+		if (dateFormat.equals("DD-MM-YYYY"))
 		{	
-			int startIndex = 0;
-			int endIndex = 4;				
+			int startIndex = 6;
+			int endIndex = 10;				
 			try 
 			{	year = Integer.parseInt(todoDueDate.substring(startIndex, endIndex));			} 
 			catch (NumberFormatException e) 			{
@@ -41,10 +41,10 @@ public class DateTimeServices
 	public static int getMonthOfDateFormat(String todoDueDate)
 	{
 		int month = 0;
-		if (dateFormat.equals("YYYY-MM-DD"))
+		if (dateFormat.equals("DD-MM-YYYY"))
 		{			
-			int startIndex = 5;
-			int endIndex = 7;				
+			int startIndex = 3;
+			int endIndex = 5;				
 			try 
 			{	month = Integer.parseInt(todoDueDate.substring(startIndex, endIndex));			} 
 			catch (NumberFormatException e) 			{
@@ -61,10 +61,10 @@ public class DateTimeServices
 	public static int getDayOfDateFormat(String todoDueDate)
 	{
 		int day = 1;
-		if (dateFormat.equals("YYYY-MM-DD"))
+		if (dateFormat.equals("DD-MM-YYYY"))
 		{	
-			int startIndex = 8;
-			int endIndex = 10;				
+			int startIndex = 0;
+			int endIndex = 2;				
 			try 
 			{	day = Integer.parseInt(todoDueDate.substring(startIndex, endIndex));			} 
 			catch (NumberFormatException e) 			{
@@ -158,7 +158,7 @@ public class DateTimeServices
 			day = String.valueOf(dayOfMonth);
 		else day = "0" + String.valueOf(dayOfMonth);
 		
-		formattedDate = yearString + "-" + month + "-" + day;
+		formattedDate = day + "-" + month + "-" + yearString;
 		return formattedDate;
 	}
 	
@@ -183,7 +183,7 @@ public class DateTimeServices
 	public static String getDate() 
 	{
 	    SimpleDateFormat dateFormat = new SimpleDateFormat(
-	    		   "yyyy-MM-dd", Locale.getDefault()); 
+	    		   "dd-MM-yyyy", Locale.getDefault()); 
 	    Date date = new Date();
 	    return dateFormat.format(date);
 	}
@@ -199,7 +199,7 @@ public class DateTimeServices
 	public static String getDateTime() 
 	{
 	    SimpleDateFormat dateFormat = new SimpleDateFormat(
-	    		   "yyyy-MM-dd HH:mm:ss", Locale.getDefault()); 
+	    		   "dd-MM-yyyy HH:mm:ss", Locale.getDefault()); 
 	    Date date = new Date();
 	    return dateFormat.format(date);
 	}
