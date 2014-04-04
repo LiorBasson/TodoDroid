@@ -123,7 +123,7 @@ public class MainActivity extends Activity
 			}
 		});
 				
-		// Preferences handling TODO: Check if can uncomment - seems that exception was for other reasons
+		// Preferences handling 
 		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);			
 				
 		getThemeColorsFromPreferences(); 
