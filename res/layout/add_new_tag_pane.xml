@@ -30,6 +30,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/et_NewTagName"
         android:layout_toRightOf="@+id/bt_CancelTagCreation"
-        android:text="Create (select)" />
+        android:text="Create" />
 
 </RelativeLayout>

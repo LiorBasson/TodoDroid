@@ -12,7 +12,7 @@
 	        android:key="colorCodeForTableText"
 	        android:title="Text"
 	        android:summary="bla bla bla" 
-	        android:defaultValue="-1" />
+	        android:defaultValue="-15157233" />
         <com.lb.todosqlite.preferences.ColorPickerPreference 
 	        android:key="colorCodeForTRInFocus"
 	        android:title="Table Row In Focus"
@@ -20,24 +20,24 @@
 	        android:defaultValue="-13085737" />
         <com.lb.todosqlite.preferences.ColorPickerPreference 
 	        android:key="colorCodeForHintText"
-	        android:title="Hint And Disabled Text"
+	        android:title="Hint Text"
 	        android:summary="bla bla bla" 
-	        android:defaultValue="-1644826" />
+	        android:defaultValue="-16351975" />
         <com.lb.todosqlite.preferences.ColorPickerPreference 
 	        android:key="colorCodeForButtonsTxt"
 	        android:title="Button Text"
 	        android:summary="bla bla bla" 
-	        android:defaultValue="-1" />
+	        android:defaultValue="-15157233" />
         <com.lb.todosqlite.preferences.ColorPickerPreference 
 	        android:key="colorCodeForTableHeaderBG"
 	        android:title="Header Background"
 	        android:summary="bla bla bla" 
-	        android:defaultValue="-6645094" />
+	        android:defaultValue="-10066330" />
         <com.lb.todosqlite.preferences.ColorPickerPreference 
 	        android:key="colorCodeForTableHeaderTxt"
 	        android:title="Header Text"
 	        android:summary="bla bla bla" 
-	        android:defaultValue="-1644826" />        
+	        android:defaultValue="-15932114" />        
     </PreferenceCategory>
     <PreferenceCategory 
         android:title="Others"
