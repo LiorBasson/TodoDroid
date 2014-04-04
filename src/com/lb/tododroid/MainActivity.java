@@ -1,4 +1,4 @@
-package com.lb.todosqlite;
+package com.lb.tododroid;
 
 import java.util.List;
 
@@ -34,10 +34,11 @@ import android.widget.TableRow.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.lb.todosqlite.model.Tag;
-import com.lb.todosqlite.model.Todo;
-import com.lb.todosqlite.preferences.SettingsActivity;
-import com.lb.todosqlite.services.DatabaseHelper;
+import com.lb.tododroid.model.Tag;
+import com.lb.tododroid.model.Todo;
+import com.lb.tododroid.preferences.SettingsActivity;
+import com.lb.tododroid.services.DatabaseHelper;
+import com.lb.tododroid.R;
 
 
 public class MainActivity extends Activity 

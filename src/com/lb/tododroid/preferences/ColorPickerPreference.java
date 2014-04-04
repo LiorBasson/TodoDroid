@@ -1,4 +1,4 @@
-package com.lb.todosqlite.preferences;
+package com.lb.tododroid.preferences;
 
 import yuku.ambilwarna.AmbilWarnaDialog;
 import yuku.ambilwarna.AmbilWarnaDialog.OnAmbilWarnaListener;

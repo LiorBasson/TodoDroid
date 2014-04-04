@@ -1,4 +1,4 @@
-package com.lb.todosqlite.model;
+package com.lb.tododroid.model;
 
 public class Todo 
 {

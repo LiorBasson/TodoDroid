@@ -1,4 +1,4 @@
-package com.lb.todosqlite.dialogs;
+package com.lb.tododroid.dialogs;
 
 import java.util.Calendar;
 

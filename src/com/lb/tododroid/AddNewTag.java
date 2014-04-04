@@ -1,4 +1,6 @@
-package com.lb.todosqlite;
+package com.lb.tododroid;
+
+import com.lb.tododroid.R;
 
 import android.app.Activity;
 import android.content.Intent;

@@ -1,4 +1,4 @@
-package com.lb.todosqlite.preferences;
+package com.lb.tododroid.preferences;
 
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.util.Log;
 
-import com.lb.todosqlite.R;
+import com.lb.tododroid.R;
 
 public class SettingsActivity extends PreferenceActivity implements OnSharedPreferenceChangeListener {
 	final String LOG_TAG = "SettingsActivity";	

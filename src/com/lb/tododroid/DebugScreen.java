@@ -1,4 +1,4 @@
-package com.lb.todosqlite;
+package com.lb.tododroid;
 
 import java.util.List;
 
@@ -11,9 +11,10 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.lb.todosqlite.model.Tag;
-import com.lb.todosqlite.model.Todo;
-import com.lb.todosqlite.services.DatabaseHelper;
+import com.lb.tododroid.model.Tag;
+import com.lb.tododroid.model.Todo;
+import com.lb.tododroid.services.DatabaseHelper;
+import com.lb.tododroid.R;
 
 public class DebugScreen extends Activity
 {

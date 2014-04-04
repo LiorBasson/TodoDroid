@@ -1,6 +1,6 @@
-package com.lb.todosqlite.dialogs;
+package com.lb.tododroid.dialogs;
 
-import com.lb.todosqlite.R;
+import com.lb.tododroid.R;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

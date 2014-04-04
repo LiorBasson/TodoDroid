@@ -1,4 +1,4 @@
-package com.lb.todosqlite;
+package com.lb.tododroid;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,11 +15,12 @@ import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.lb.todosqlite.dialogs.MyArrayAdapter;
-import com.lb.todosqlite.model.Tag;
-import com.lb.todosqlite.model.Todo;
-import com.lb.todosqlite.services.DatabaseHelper;
-import com.lb.todosqlite.services.DateTimeServices;
+import com.lb.tododroid.dialogs.MyArrayAdapter;
+import com.lb.tododroid.model.Tag;
+import com.lb.tododroid.model.Todo;
+import com.lb.tododroid.services.DatabaseHelper;
+import com.lb.tododroid.services.DateTimeServices;
+import com.lb.tododroid.R;
 
 public class ViewTodo extends Activity
 {

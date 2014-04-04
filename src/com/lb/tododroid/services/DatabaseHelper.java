@@ -1,4 +1,4 @@
-package com.lb.todosqlite.services;
+package com.lb.tododroid.services;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -11,8 +11,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-import com.lb.todosqlite.model.Tag;
-import com.lb.todosqlite.model.Todo;
+
+import com.lb.tododroid.model.Tag;
+import com.lb.tododroid.model.Todo;
 
 public class DatabaseHelper extends SQLiteOpenHelper 
 {
