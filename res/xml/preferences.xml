@@ -1,41 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory 
-        android:title="Theme Category"
+        android:title="Theme Colors"
         android:key="pref_key_theme_settings">
         <com.lb.todosqlite.preferences.ColorPickerPreference 
 	        android:key="colorCodeForTableBG"
-	        android:title="colorCodeForTableBG"
+	        android:title="Background"
 	        android:summary="bla bla bla" 
 	        android:defaultValue="-16777216" />
         <com.lb.todosqlite.preferences.ColorPickerPreference 
 	        android:key="colorCodeForTableText"
-	        android:title="colorCodeForTableText"
+	        android:title="Text"
 	        android:summary="bla bla bla" 
 	        android:defaultValue="-1" />
         <com.lb.todosqlite.preferences.ColorPickerPreference 
 	        android:key="colorCodeForTRInFocus"
-	        android:title="colorCodeForTRInFocus"
+	        android:title="Table Row In Focus"
 	        android:summary="bla bla bla" 
 	        android:defaultValue="-13085737" />
         <com.lb.todosqlite.preferences.ColorPickerPreference 
 	        android:key="colorCodeForHintText"
-	        android:title="colorCodeForHintText"
+	        android:title="Hint And Disabled Text"
 	        android:summary="bla bla bla" 
 	        android:defaultValue="-1644826" />
         <com.lb.todosqlite.preferences.ColorPickerPreference 
 	        android:key="colorCodeForButtonsTxt"
-	        android:title="colorCodeForButtonsTxt"
+	        android:title="Button Text"
 	        android:summary="bla bla bla" 
 	        android:defaultValue="-1" />
         <com.lb.todosqlite.preferences.ColorPickerPreference 
 	        android:key="colorCodeForTableHeaderBG"
-	        android:title="colorCodeForTableHeaderBG"
+	        android:title="Header Background"
 	        android:summary="bla bla bla" 
 	        android:defaultValue="-6645094" />
         <com.lb.todosqlite.preferences.ColorPickerPreference 
 	        android:key="colorCodeForTableHeaderTxt"
-	        android:title="colorCodeForTableHeaderTxt"
+	        android:title="Header Text"
 	        android:summary="bla bla bla" 
 	        android:defaultValue="-1644826" />        
     </PreferenceCategory>
