@@ -6,7 +6,9 @@ import java.util.List;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
@@ -18,12 +20,14 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.lb.todosqlite.dialogs.DatePickerFragment;
+import com.lb.todosqlite.dialogs.MyArrayAdapter;
 import com.lb.todosqlite.dialogs.TimePickerFragment;
 import com.lb.todosqlite.model.Tag;
 import com.lb.todosqlite.services.DatabaseHelper;
@@ -35,6 +39,13 @@ public class AddNewToDo extends FragmentActivity
 	final int requestCode_AddNewTag = 212;
 	final int requestCode_ViewToDo = 214;
 	final int requestCode_EditToDo = 215;	
+	// vars for color theme use   
+	int colorCodeForTableBG = -16777216;
+	int colorCodeForTableText = -1;
+	int colorCodeForHintText = -1644826;
+	int colorCodeForButtonsTxt = -1;  
+	int colorCodeForTableHeaderBG = -6645094;
+	int colorCodeForTableHeaderTxt = -1644826;
 	final String requestToCreateNewTag = "Create New Category...";
 	final String spinnerDefaultValue = "Select Todo category";
 	final String defaultInternalTagName = "None";  // categoryOnspinnerDefaultValue
@@ -154,6 +165,9 @@ public class AddNewToDo extends FragmentActivity
 				onTimeSetHandler(view, hourOfDay, minute); 
 			}
 		};
+		
+		getThemeColorsFromPreferences();
+		updateElementsWithThemeColors();
 	}
 	
 	@Override
@@ -199,9 +213,72 @@ public class AddNewToDo extends FragmentActivity
 		tv_StatusLabel.setVisibility(View.INVISIBLE);
 	}
 	
-	public void spinnerHandling()
+	private void getThemeColorsFromPreferences()
+	{
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());		
+		
+		colorCodeForTableBG = sp.getInt("colorCodeForTableBG", colorCodeForTableBG); 
+		colorCodeForTableText = sp.getInt("colorCodeForTableText", colorCodeForTableText);
+		//colorCodeForTRInFocus = sp.getInt("colorCodeForTRInFocus", colorCodeForTRInFocus); 
+		colorCodeForHintText = sp.getInt("colorCodeForHintText", colorCodeForHintText);
+//		//colorCodeForButtonsBG = "#80003399"; // Temporarily not in use due to the fact that button's 3D effect is lost
+		colorCodeForButtonsTxt = sp.getInt("colorCodeForButtonsTxt", colorCodeForButtonsTxt); 
+		colorCodeForTableHeaderBG = sp.getInt("colorCodeForTableHeaderBG", colorCodeForTableHeaderBG);
+		colorCodeForTableHeaderTxt = sp.getInt("colorCodeForTableHeaderTxt", colorCodeForTableHeaderTxt);
+	}
+	
+	private void updateElementsWithThemeColors()
+	{
+		// background
+//		RelativeLayout viewLayout = (RelativeLayout) findViewById(R.id.rl_newTodo_RootLayout);
+//		viewLayout.setBackgroundColor(colorCodeForTableBG);
+		ScrollView viewLayout = (ScrollView) findViewById(R.id.rl_newTodo_RootLayout);
+		viewLayout.setBackgroundColor(colorCodeForTableBG);
+		
+		// labels
+		TextView catLable = (TextView) findViewById(R.id.tView_tag);
+		catLable.setBackgroundColor(colorCodeForTableHeaderBG);
+		catLable.setTextColor(colorCodeForTableHeaderTxt);
+		TextView statusLable = (TextView) findViewById(R.id.tv_StatusLable_ntt);
+		statusLable.setBackgroundColor(colorCodeForTableHeaderBG);
+		statusLable.setTextColor(colorCodeForTableHeaderTxt);
+		TextView dueDateLable = (TextView) findViewById(R.id.tv_DueDateLabel_ant);
+		dueDateLable.setBackgroundColor(colorCodeForTableHeaderBG);
+		dueDateLable.setTextColor(colorCodeForTableHeaderTxt);		
+		TextView todoNoteLable = (TextView) findViewById(R.id.tView_title);
+		todoNoteLable.setBackgroundColor(colorCodeForTableHeaderBG);
+		todoNoteLable.setTextColor(colorCodeForTableHeaderTxt);
+		
+		// Checkbox - ignore for now - image issues
+		CheckBox status = (CheckBox) findViewById(R.id.cb_Status_nt);
+		status.setTextColor(colorCodeForTableHeaderTxt);
+		status.setBackgroundColor(colorCodeForTableHeaderBG);
+		
+		// Spinner? TODO:Spinner theme color update
+		Spinner sp_category = (Spinner) findViewById(R.id.spinner_tag);
+		MyArrayAdapter sp_adapter = (MyArrayAdapter) sp_category.getAdapter();
+		sp_adapter.setTextColor_mine(colorCodeForTableText);
+		sp_adapter.setBackgroundColor_mine(colorCodeForTableBG);		
+		
+		// DueDate and TodoNote texts
+		TextView dueDateDate = (TextView) findViewById(R.id.tv_DDDate_ant);
+		dueDateDate.setTextColor(colorCodeForTableText);	
+		TextView dueDateTime = (TextView) findViewById(R.id.tv_DDTime_ant);
+		dueDateTime.setTextColor(colorCodeForTableText);
+		EditText et_TodoNote_ed = (EditText) findViewById(R.id.eText_title);
+		et_TodoNote_ed.setTextColor(colorCodeForTableText);	
+		et_TodoNote_ed.setHintTextColor(colorCodeForHintText);
+		
+		//Buttons in Create and Edit modes
+		Button btCancel = (Button) findViewById(R.id.bt_CancellCreateTodo);
+		btCancel.setTextColor(colorCodeForButtonsTxt);		
+		Button btCreate = (Button) findViewById(R.id.bt_ApplyCreateTodo);
+		btCreate.setTextColor(colorCodeForButtonsTxt);	
+	}
+	
+	private void spinnerHandling()
     {
-	    	Spinner sp = (Spinner) findViewById(R.id.spinner_tag);
+	    	Spinner sp_Category = (Spinner) findViewById(R.id.spinner_tag);
 	    	
 	    	List<String> spinnerCategories = new  ArrayList<String>();
 	    	spinnerCategories.add(spinnerDefaultValue);  // default value which also instruct the user to choose a category
@@ -218,11 +295,11 @@ public class AddNewToDo extends FragmentActivity
 	    			spinnerCategories.add(tag.getTagName());
 	    	}
 	    	  	
-	    	ArrayAdapter<String> spAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, spinnerCategories);
-	    	spAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-	    	sp.setAdapter(spAdapter);
+	    	MyArrayAdapter spAdapter = new MyArrayAdapter(this, R.layout.spinner_adapter_text_view_item, spinnerCategories);
+	    	spAdapter.setDropDownViewResource(R.layout.spinner_adapter_text_view_item);
+	    	sp_Category.setAdapter(spAdapter);
 	    		    	
-	    	sp.setOnItemSelectedListener(new OnItemSelectedListener() 
+	    	sp_Category.setOnItemSelectedListener(new OnItemSelectedListener() 
 	    	{	
 				@Override
 				public void onItemSelected(AdapterView<?> parent, View itemSelected,
@@ -251,7 +328,7 @@ public class AddNewToDo extends FragmentActivity
 		});    	
 	}
 	
-	public void updateTagNameOnCreation(String tagName)
+	private void updateTagNameOnCreation(String tagName)
 	{
 		String tagN = tagName;
 		
@@ -277,7 +354,7 @@ public class AddNewToDo extends FragmentActivity
 		toastDebugInfo("the new category = " + tagN, false);
 	}
 	
-	public void restoreTagNameOnCreateCancelled()
+	private void restoreTagNameOnCreateCancelled()
 	{
 		// sets position to occurrence of tagNameLastSelected instead of selected requestToCreateNewTag value
 		Spinner sp = (Spinner) findViewById(R.id.spinner_tag);
@@ -292,7 +369,7 @@ public class AddNewToDo extends FragmentActivity
 		toastDebugInfo("restoring to " + tagNameLastSelected, false);
 	}
 
-	public void launchDatePickerDialog()
+	private void launchDatePickerDialog()
 	{
 		DatePickerFragment df = new DatePickerFragment();		
 		
@@ -317,7 +394,7 @@ public class AddNewToDo extends FragmentActivity
 		toastDebugInfo("launchDatePickerDialog() exit method after show invoked", true);
 	}
 	
-	public void launchTimePickerDialog()
+	private void launchTimePickerDialog()
 	{
 		TimePickerFragment tf = new TimePickerFragment();		
 		
@@ -337,105 +414,20 @@ public class AddNewToDo extends FragmentActivity
 		toastDebugInfo("launchTimePickerDialog() exit method after show invoked", true);
 	}
 
-	// TODO: use from DateTimeServices
-	/*private String getDateTime() 
-	{
-	    SimpleDateFormat dateFormat = new SimpleDateFormat(
-	    		   "yyyy-MM-dd HH:mm:ss", Locale.getDefault()); 
-	    Date date = new Date();
-	    return dateFormat.format(date);
-	}	
-	
-	private String getDate() 
-	{
-	    SimpleDateFormat dateFormat = new SimpleDateFormat(
-	    		   "yyyy-MM-dd", Locale.getDefault()); 
-	    Date date = new Date();
-	    return dateFormat.format(date);
-	}
-	
-	private String getTime() 
-	{
-	    SimpleDateFormat dateFormat = new SimpleDateFormat(
-	    		   "HH:mm", Locale.getDefault()); 
-	    Date date = new Date();
-	    return dateFormat.format(date);
-	}
-	
-	private int getYearOfDateFormat(String todoDueDate)
-	{
-		int year = 1900;
-		if (dateFormat.equals("YYYY-MM-DD"))
-		{	
-			int startIndex = 0;
-			int endIndex = 4;				
-			try 
-			{	year = Integer.parseInt(todoDueDate.substring(startIndex, endIndex));			} 
-			catch (NumberFormatException e) 			{
-				Log.e("AddNewTodo", "getYearOfDateFormat() caught an exception when attempted to parse date from string to int"); 
-			}
-			catch (IndexOutOfBoundsException e)			{
-				Log.e("AddNewTodo", "getYearOfDateFormat() caught an exception when attempted to trim a substring"); 
-			}			
-		}
-		
-		return year;
-	}
-	
-	private int getMonthOfDateFormat(String todoDueDate)
-	{
-		int month = 0;
-		if (dateFormat.equals("YYYY-MM-DD"))
-		{			
-			int startIndex = 5;
-			int endIndex = 7;				
-			try 
-			{	month = Integer.parseInt(todoDueDate.substring(startIndex, endIndex));			} 
-			catch (NumberFormatException e) 			{
-				Log.e("AddNewTodo", "getYearOfDateFormat() caught an exception when attempted to parse date from string to int"); 
-			}
-			catch (IndexOutOfBoundsException e)			{
-				Log.e("AddNewTodo", "getYearOfDateFormat() caught an exception when attempted to trim a substring"); 
-			}			
-		}
-		
-		return month;
-	}
-	
-	private int getDayOfDateFormat(String todoDueDate)
-	{
-		int day = 1;
-		if (dateFormat.equals("YYYY-MM-DD"))
-		{	
-			int startIndex = 8;
-			int endIndex = 10;				
-			try 
-			{	day = Integer.parseInt(todoDueDate.substring(startIndex, endIndex));			} 
-			catch (NumberFormatException e) 			{
-				Log.e("AddNewTodo", "getYearOfDateFormat() caught an exception when attempted to parse date from string to int"); 
-			}
-			catch (IndexOutOfBoundsException e)			{
-				Log.e("AddNewTodo", "getYearOfDateFormat() caught an exception when attempted to trim a substring"); 
-			}			
-		}
-		
-		return day;
-	}*/
-	
-	public void onDateSetHandler(DatePicker view, int year, int monthOfYear, int dayOfMonth)
+	private void onDateSetHandler(DatePicker view, int year, int monthOfYear, int dayOfMonth)
 	{
 		
 		TextView tv = (TextView) findViewById(R.id.tv_DDDate_ant);
 		tv.setText(DateTimeServices.getFormattedDateOfYMD(year, monthOfYear, dayOfMonth));
 	}
 	
-	public void onTimeSetHandler(TimePicker view, int hourOfDay, int minute) 
+	private void onTimeSetHandler(TimePicker view, int hourOfDay, int minute) 
 	{
 		TextView tv = (TextView) findViewById(R.id.tv_DDTime_ant);
 		tv.setText(DateTimeServices.getFormattedTimeOfHM(hourOfDay, minute));
 	}
 			
-	public void toastDebugInfo(String message, boolean IsLongDuration)
+	private void toastDebugInfo(String message, boolean IsLongDuration)
     {
 		if (isDebugMode) {
 	    	int duration;

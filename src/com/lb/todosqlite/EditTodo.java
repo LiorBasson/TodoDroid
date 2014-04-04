@@ -3,12 +3,10 @@ package com.lb.todosqlite;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.annotation.SuppressLint;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
@@ -16,16 +14,12 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -41,15 +35,11 @@ import com.lb.todosqlite.services.DateTimeServices;
 public class EditTodo extends FragmentActivity 
 {
 	final int requestCode_EditToDo = 215;
-//	final String themeColorCode_LableBG = "#FF9966"; // final and hardcoded for the meantime 
-//	final String colorCodeForTableBG = "#000000";
-//	final String colorCodeForText = "#CCCCCC";
 	// vars for color theme use   
 	int colorCodeForTableBG = -16777216;
 	int colorCodeForTableText = -1;
 	int colorCodeForHintText = -1644826;
-	//int colorCodeForButtonsBG = -11119018; // Temporarily not in use due to the fact that button's 3D effect is lost
-	int  colorCodeForButtonsTxt = -1;  
+	int colorCodeForButtonsTxt = -1;  
 	int colorCodeForTableHeaderBG = -6645094;
 	int colorCodeForTableHeaderTxt = -1644826;
 	
@@ -79,11 +69,10 @@ public class EditTodo extends FragmentActivity
 		fillViewesOnCreate(todo_id);
 		setViewsHandlers();
 		getThemeColorsFromPreferences();
-		updateElementsWithThemeColors();
-		
+		updateElementsWithThemeColors();		
 	}
 	
-	public void fillViewesOnCreate(int todoID) 
+	private void fillViewesOnCreate(int todoID) 
 	{
 		DatabaseHelper db = new DatabaseHelper(getApplicationContext());
 		Todo todo = db.getTodo(todoID);
@@ -121,7 +110,7 @@ public class EditTodo extends FragmentActivity
 		colorCodeForTableHeaderTxt = sp.getInt("colorCodeForTableHeaderTxt", colorCodeForTableHeaderTxt);
 	}
 	
-	public void updateElementsWithThemeColors()
+	private void updateElementsWithThemeColors()
 	{
 		// background
 //		RelativeLayout viewLayout = (RelativeLayout) findViewById(R.id.rl_newTodo_RootLayout);
@@ -148,7 +137,7 @@ public class EditTodo extends FragmentActivity
 		status.setTextColor(colorCodeForTableHeaderTxt);
 		status.setBackgroundColor(colorCodeForTableHeaderBG);
 		
-		// Spinner? TODO:Spinner theme color update
+		// Spinner? 
 		Spinner sp_category = (Spinner) findViewById(R.id.spinner_tag);
 		MyArrayAdapter sp_adapter = (MyArrayAdapter) sp_category.getAdapter();
 		sp_adapter.setTextColor_mine(colorCodeForTableText);
@@ -170,7 +159,7 @@ public class EditTodo extends FragmentActivity
 		btCreate.setTextColor(colorCodeForButtonsTxt);	
 	}
 	
-	public void setViewsHandlers()
+	private void setViewsHandlers()
 	{
 		TextView tv_DDDate = (TextView) findViewById(R.id.tv_DDDate_ant);
 		tv_DDDate.setOnClickListener(new OnClickListener() {
@@ -233,7 +222,7 @@ public class EditTodo extends FragmentActivity
 		});
 	}
 	
-	public void launchDatePickerDialog()
+	private void launchDatePickerDialog()
 	{
 		DatePickerFragment df = new DatePickerFragment();		
 		
@@ -256,7 +245,7 @@ public class EditTodo extends FragmentActivity
 		df.show(getSupportFragmentManager(), "setDueDate");		
 	}
 	
-	public void launchTimePickerDialog()
+	private void launchTimePickerDialog()
 	{
 		TimePickerFragment tf = new TimePickerFragment();		
 		
@@ -274,7 +263,7 @@ public class EditTodo extends FragmentActivity
 		tf.show(getSupportFragmentManager(), "setDueDateTime");		
 	}
 	
-	public void collectAndUpdateData()
+	private void collectAndUpdateData()
 	{
 		DatabaseHelper db = new DatabaseHelper(getApplicationContext());
 		Todo updatedTodo = db.getTodo(m_todoID);
@@ -309,21 +298,21 @@ public class EditTodo extends FragmentActivity
 		db.closeDB();
 	}
 	
-	public void onDateSetHandler(DatePicker view, int year, int monthOfYear, int dayOfMonth)
+	private void onDateSetHandler(DatePicker view, int year, int monthOfYear, int dayOfMonth)
 	{		
 		TextView tv = (TextView) findViewById(R.id.tv_DDDate_ant);
 		tv.setText(DateTimeServices.getFormattedDateOfYMD(year, monthOfYear, dayOfMonth));
 	}
 	
-	public void onTimeSetHandler(TimePicker view, int hourOfDay, int minute) 
+	private void onTimeSetHandler(TimePicker view, int hourOfDay, int minute) 
 	{
 		TextView tv = (TextView) findViewById(R.id.tv_DDTime_ant);
 		tv.setText(DateTimeServices.getFormattedTimeOfHM(hourOfDay, minute));
 	}
 	
-	public void spinnerHandling()
+	private void spinnerHandling()
     {
-	    	Spinner sp = (Spinner) findViewById(R.id.spinner_tag);
+	    	Spinner sp_Category = (Spinner) findViewById(R.id.spinner_tag);
 	    	
 	    	List<String> spinnerCategories = new  ArrayList<String>();
 	    	
@@ -353,7 +342,7 @@ public class EditTodo extends FragmentActivity
 	    	
 	    	MyArrayAdapter spAdapter = new MyArrayAdapter(this, R.layout.spinner_adapter_text_view_item, spinnerCategories);
 	    	spAdapter.setDropDownViewResource(R.layout.spinner_adapter_text_view_item);
-	    	sp.setAdapter(spAdapter);
+	    	sp_Category.setAdapter(spAdapter);
 	    	
 	    	// #StartCustomSpinnerHandling
 	    	
@@ -361,7 +350,7 @@ public class EditTodo extends FragmentActivity
 //	    	typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     		
 	    	// #EndCustomSpinnerHandling
-	    	sp.setOnItemSelectedListener(new OnItemSelectedListener() 
+	    	sp_Category.setOnItemSelectedListener(new OnItemSelectedListener() 
 	    	{	
 				@Override
 				public void onItemSelected(AdapterView<?> parent, View itemSelected,
@@ -381,7 +370,7 @@ public class EditTodo extends FragmentActivity
 		});    	
 	}
 	
-	public void toastDebugInfo(String message, boolean IsLongDuration)
+	private void toastDebugInfo(String message, boolean IsLongDuration)
     {
 		if (isDebugMode) {
 	    	int duration;
