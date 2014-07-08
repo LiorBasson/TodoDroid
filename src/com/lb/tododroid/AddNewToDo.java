@@ -71,10 +71,6 @@ public class AddNewToDo extends FragmentActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.new_todo);
 		
-		String s = getIntent().getExtras().getString("sentData");
-		int id =  getIntent().getExtras().getInt("iddd");
-		
-				
 		prepareLayoutForNewTodo();
 				
 		tagNameLastSelected = spinnerDefaultValue;
@@ -109,15 +105,14 @@ public class AddNewToDo extends FragmentActivity
 			Log.d("MainActivity", "Failed to handle Spinner. see exception: ", e);
 		}
 		
-		isCancelPressed = true;
+		isCancelPressed = true;  // or also BackPressed?
 		
 		Button btCancel = (Button) findViewById(R.id.bt_CancellCreateTodo);
 		btCancel.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				// TODO: check if can change to specific relevant previous intent returned by getIntent() instead of a "new Intent()"
-				Intent intent = getIntent();
+				Intent intent = new Intent();  //  getIntent();
 				
 				isCancelPressed = true;
 				intent.putExtra("com.lb.todosqlite.addnewtag.isCancelPressed", isCancelPressed);
@@ -132,44 +127,14 @@ public class AddNewToDo extends FragmentActivity
 		btCreate.setOnClickListener(new OnClickListener() {
 			
 			@Override
-			public void onClick(View v) {
+			public void onClick(View v) 
+			{
+				collectDataAndCreateTodo();
 				
-				
-				Intent resultIntent = getIntent();
-				
-				// TODO: redesign to handle all in AddNewTodo class - remove from here once done and tested
-				
-				foo();
-				
+				Intent resultIntent =  new Intent();  //  getIntent();
 				isCancelPressed = false;
 				resultIntent.putExtra("com.lb.todosqlite.addnewtag.isCancelPressed", isCancelPressed);
-				/*
-				EditText et_TodoTitle = (EditText) findViewById(R.id.eText_title);
-				String reqTodoTitle =et_TodoTitle.getText().toString();  
-				resultIntent.putExtra("com.lb.todosqlite.addnewtodo.todoTitle", reqTodoTitle);
-				
-				String reqTodoCategory = tagNameLastSelected;
-				resultIntent.putExtra("com.lb.todosqlite.addnewtodo.categorySelected", reqTodoCategory);
-				
-			    TextView tv_DueDateDate = (TextView) findViewById(R.id.tv_DDDate_ant);
-			    String reqDueDateDate = tv_DueDateDate.getText().toString();
-			    TextView tv_DueDateTime = (TextView) findViewById(R.id.tv_DDTime_ant);
-			    String reqDueDateTime = tv_DueDateTime.getText().toString();
-			    String reqDueDate = reqDueDateDate.toString() + " " + reqDueDateTime.toString();
-			    
-				resultIntent.putExtra("com.lb.todosqlite.addnewtodo.dueDate", reqDueDate);*/
-				
-				
-				// TODO: This block was brought from MainActivity - chronologically this comes now
-				/*String todoTitle = bd.getString("com.lb.todosqlite.addnewtodo.todoTitle");	
-				String categorySelected = bd.getString("com.lb.todosqlite.addnewtodo.categorySelected");  
-				String dueDate = bd.getString("com.lb.todosqlite.addnewtodo.dueDate");  
-				
-				if (categorySelected.equals(spinnerDefaultValue))
-					categorySelected = defaultInternalTagName;
-				
-				createToDo(todoTitle, categorySelected, dueDate);*/
-				
+								
                 setResult(RESULT_OK, resultIntent);
                 finish();
 			}
@@ -417,7 +382,6 @@ public class AddNewToDo extends FragmentActivity
 		toastDebugInfo("restoring to " + tagNameLastSelected, false);
 	}
 
-		
 	/*private void createToDo(String todoTitle, String categorySelected, String dueDate)
 	{
 		int defaultTodoStatus = 0;
@@ -446,59 +410,8 @@ public class AddNewToDo extends FragmentActivity
 		db.closeDB();
 	}*/
 
-	/*private void collectAndUpdateData()
+	private void collectDataAndCreateTodo()
 	{
-		DatabaseHelper db = new DatabaseHelper(getApplicationContext());
-		Todo newTodo = db.getTodo(m_todoID);
-		// refers to a single tag for current implementation and support
-		List<Tag> allTags = db.getAllTags();
-		for (Tag tag : allTags)
-		{
-			// TODO: enhance and validate the condition - this implementation is not safe enough
-			if (tagNameLastSelected.equals(tag.getTagName()))
-			{
-				db.updateTagForSpecificTodo(m_todoID, tag.getId()); 
-			}
-		}		
-		
-				
-		TextView tv_DueDateDate = (TextView) findViewById(R.id.tv_DDDate_ant);
-	    String reqDueDateDate = tv_DueDateDate.getText().toString();
-	    TextView tv_DueDateTime = (TextView) findViewById(R.id.tv_DDTime_ant);
-	    String reqDueDateTime = tv_DueDateTime.getText().toString();
-	    String reqDueDate = reqDueDateDate.toString() + " " + reqDueDateTime.toString();		
-	    newTodo.setDueDate(reqDueDate); 
-	    // TODO:  NotifNewImp to copy
-	    CheckBox reminder = (CheckBox) findViewById(R.id.cb_notif_nt);
-		if (reminder.isChecked())
-			newTodo.setNotification(Todo.NOTIFICATION_STATUS_ENABLED);
-		else newTodo.setNotification(Todo.NOTIFICATION_STATUS_DISABLED);	
-		
-		EditText todoNote = (EditText) findViewById(R.id.eText_title);
-		newTodo.setNote(todoNote.getText().toString());		
-		
-		db.updateToDo(newTodo);
-				
-		db.closeDB();
-		
-		if (reminder.isChecked())
-				{
-					int year = DateTimeServices.getYearOfDateFormat(reqDueDateDate)
-							, month = (DateTimeServices.getMonthOfDateFormat(reqDueDateDate))-1 // 0 based 
-							, day = DateTimeServices.getDayOfDateFormat(reqDueDateDate) 
-							, hourOfDay = DateTimeServices.getHourOfTimeFormat(reqDueDateTime)
-							, minute = DateTimeServices.getMinuteOfTimeFormat(reqDueDateTime);
-						Calendar c = Calendar.getInstance();
-					    c.set(year, month, day, hourOfDay, minute);
-						scheduleClient.setAlarmForNotification(c, (int) newTodo.getId());  //setReminder(TodoID, date);
-				}
-				else toastDebugInfo("reminder.isDirty()=true and reminder.isChecked()=false", false); //cancelReminder(TodoID);
-				
-	}*/
-	
-	private void foo()
-	{
-		// ***********************************************************************************
 		int defaultTodoStatus = 0;
 		
 		String categorySelected = tagNameLastSelected;  
@@ -522,9 +435,7 @@ public class AddNewToDo extends FragmentActivity
 				if ( categorySelected.equals(tag.getTagName()) )
 					tagID  = tag.getId();					
 			}				 
-		}		
-		
-		
+		}			
 		
 		EditText todoNote = (EditText) findViewById(R.id.eText_title);
 		Todo newTodo = new Todo(todoNote.getText().toString(), defaultTodoStatus);
@@ -535,15 +446,11 @@ public class AddNewToDo extends FragmentActivity
 	    String reqDueDateTime = tv_DueDateTime.getText().toString();
 	    String reqDueDate = reqDueDateDate.toString() + " " + reqDueDateTime.toString();		
 	    newTodo.setDueDate(reqDueDate); 
-	    // TODO:  NotifNewImp to copy
 	    CheckBox reminder = (CheckBox) findViewById(R.id.cb_notif_nt);
 		if (reminder.isChecked())
 			newTodo.setNotification(Todo.NOTIFICATION_STATUS_ENABLED);
 		else newTodo.setNotification(Todo.NOTIFICATION_STATUS_DISABLED);
-		
-		
-		
-		
+				
 		long newTodoID = db.createToDo(newTodo, new long[] {tagID});
 		
 		db.closeDB();
@@ -557,9 +464,8 @@ public class AddNewToDo extends FragmentActivity
 					, minute = DateTimeServices.getMinuteOfTimeFormat(reqDueDateTime);
 				Calendar c = Calendar.getInstance();
 			    c.set(year, month, day, hourOfDay, minute);
-				scheduleClient.setAlarmForNotification(c, (int) newTodoID);  //setReminder(TodoID, date);
-		}
-		
+				scheduleClient.setAlarmForNotification(c, (int) newTodoID);  
+		}		
 	}
 	
 	

@@ -243,22 +243,9 @@ public class MainActivity extends Activity
 			{
 				case requestCode_AddNewToDo:
 				{
-					Bundle bd = data.getExtras();
-					if ((bd.containsKey("com.lb.todosqlite.addnewtag.isCancelPressed")) && !(bd.getBoolean("com.lb.todosqlite.addnewtag.isCancelPressed")))
-					{
-						// TODO: redesign to handle all in AddNewTodo class - remove from here once done and tested
-						/*String todoTitle = bd.getString("com.lb.todosqlite.addnewtodo.todoTitle");	
-						String categorySelected = bd.getString("com.lb.todosqlite.addnewtodo.categorySelected");  
-						String dueDate = bd.getString("com.lb.todosqlite.addnewtodo.dueDate");  
-						
-						if (categorySelected.equals(spinnerDefaultValue))
-							categorySelected = defaultInternalTagName;
-						
-						createToDo(todoTitle, categorySelected, dueDate);*/
-						clearTableData();
-						fillUpTableFromDB();
-					}
-					toastDebugInfo("returned from AddNewToDo Screen", false);
+					clearTableData();
+					fillUpTableFromDB();
+					toastDebugInfo("returned from AddNewToDo Screen. resultCode = " + resultCode, false);
 					break;							
 				}
 				case requestCode_DeubgScr:
@@ -270,6 +257,7 @@ public class MainActivity extends Activity
 				{
 					clearTableData();
 					fillUpTableFromDB();
+					toastDebugInfo("returned from EditToDo Screen. resultCode = " + resultCode, false);
 					break;
 				}
 				case 555:
@@ -297,8 +285,7 @@ public class MainActivity extends Activity
 	        
 		isNotify= false;
 	}
-	
-	
+		
 	
 	private void fillUpTableFromDB()
 	{
@@ -515,7 +502,7 @@ public class MainActivity extends Activity
 	}
 	
 	// TODO: redesign to handle all in AddNewTodo class - remove from here once done and tested
-	private void createToDo(String todoTitle, String categorySelected, String dueDate)
+	/*private void createToDo(String todoTitle, String categorySelected, String dueDate)
 	{
 		int defaultTodoStatus = 0;
 		// updates DB with new Todo
@@ -541,7 +528,7 @@ public class MainActivity extends Activity
 		db.createToDo(todo, new long[] {tagID});
 				
 		db.closeDB();
-	}
+	}*/
 				
 	// Get Todo  (int todoID)
 	private Todo getTodoByID(int todoID)

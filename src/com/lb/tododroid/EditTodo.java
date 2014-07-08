@@ -56,7 +56,7 @@ public class EditTodo extends FragmentActivity
 	OnTimeSetListener onTime;	
 	final String dateFormat = "YYYY-MM-DD";
 	final String timeFormat = "HH-MM-SS";
-	boolean isDebugMode = false; // dummy commit
+	boolean isDebugMode = false; 
 	
 	private ScheduleClient scheduleClient;
 
@@ -66,16 +66,13 @@ public class EditTodo extends FragmentActivity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.new_todo);
-		//  TODO: NewImp for intent invoking support
-		//SharedPreferences sp =  getApplication().getSharedPreferences("editTodo", 0);
-		//int todo_id_x = sp.getInt("todoID", -1);
-//		int reqCode = sp.getInt("userReqCode", -1);
+		
 		int todo_id = getIntent().getIntExtra("com.lb.tododroid.edittodo.todoID", -1);
-		String sender = getIntent().getStringExtra("com.lb.tododroid.edittodo.sender");  //  ("com.lb.tododroid.edittodo.sender", "ContextMenu");
+		String sender = getIntent().getStringExtra("com.lb.tododroid.edittodo.sender");  
 
 		m_todoID = todo_id;
 		
-		if (sender.equals("NotifyService")) //== "NotifyService") 
+		if (sender.equals("NotifyService"))  
 			clearTodoReminder();
 		fillViewesOnCreate(todo_id);
 		setViewsHandlers();
@@ -83,7 +80,6 @@ public class EditTodo extends FragmentActivity
 		updateElementsWithThemeColors();		
 	}
 	
-	// TODO:  NotifNewImp to copy
 	@Override
 	protected void onResume() 
 	{
@@ -94,13 +90,13 @@ public class EditTodo extends FragmentActivity
 	};
 
 	@Override
-	protected void onPause() {
+	protected void onPause() 
+	{
 		super.onPause();
 		
 		if(scheduleClient != null)
             scheduleClient.doUnbindService();
-	}
-	
+	}	
 	
 	private void fillViewesOnCreate(int todoID) 
 	{
@@ -121,7 +117,6 @@ public class EditTodo extends FragmentActivity
 		String time = DateTimeServices.getTimeOfDateTimeFormat(todoDueDate);	
 		TextView tv_DDTime = (TextView) findViewById(R.id.tv_DDTime_ant);
 		tv_DDTime.setText(time);		
-		// TODO: NotifNewImp to copy
 		CheckBox reminder = (CheckBox) findViewById(R.id.cb_notif_nt);
 		reminder.setChecked(todo.getNotification().equals(Todo.NOTIFICATION_STATUS_ENABLED));
 		
@@ -184,7 +179,6 @@ public class EditTodo extends FragmentActivity
 		EditText et_TodoNote_ed = (EditText) findViewById(R.id.eText_title);
 		et_TodoNote_ed.setTextColor(colorCodeForTableText);	
 		et_TodoNote_ed.setHintTextColor(colorCodeForHintText);
-		// TODO: NotifNewImp to copy
 		// Reminder Checkbox - ignore for now - image issues
 		CheckBox reminder = (CheckBox) findViewById(R.id.cb_notif_nt);
 		reminder.setTextColor(colorCodeForTableHeaderTxt);
@@ -337,7 +331,6 @@ public class EditTodo extends FragmentActivity
 	    String reqDueDateTime = tv_DueDateTime.getText().toString();
 	    String reqDueDate = reqDueDateDate.toString() + " " + reqDueDateTime.toString();		
 	    updatedTodo.setDueDate(reqDueDate); 
-	    // TODO:  NotifNewImp to copy
 	    CheckBox reminder = (CheckBox) findViewById(R.id.cb_notif_nt);
 		if (reminder.isChecked())
 			updatedTodo.setNotification(Todo.NOTIFICATION_STATUS_ENABLED);
@@ -350,8 +343,7 @@ public class EditTodo extends FragmentActivity
 				
 		db.closeDB();
 		
-		// TODO: try to update SchedulerClient here
-		// TODO:  NotifNewImp to copy
+		// TODO: take care of BL to determine if to call setAlarm or to update (by cancel and set)
 		if (true)// reminder.isDirty()) // commented for the meantime due to API Level issues
 			{
 				if (reminder.isChecked())
