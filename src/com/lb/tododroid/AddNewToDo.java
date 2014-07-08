@@ -274,6 +274,10 @@ public class AddNewToDo extends FragmentActivity
 		EditText et_TodoNote_ed = (EditText) findViewById(R.id.eText_title);
 		et_TodoNote_ed.setTextColor(colorCodeForTableText);	
 		et_TodoNote_ed.setHintTextColor(colorCodeForHintText);
+		// Reminder Checkbox 
+		CheckBox reminder = (CheckBox) findViewById(R.id.cb_notif_nt);
+		reminder.setTextColor(colorCodeForTableHeaderTxt);
+		reminder.setBackgroundColor(colorCodeForTableHeaderBG);
 		
 		//Buttons in Create and Edit modes
 		Button btCancel = (Button) findViewById(R.id.bt_CancellCreateTodo);

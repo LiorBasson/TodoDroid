@@ -80,6 +80,9 @@ public class ViewTodo extends Activity
 		TextView tv_DDTime = (TextView) findViewById(R.id.tv_DDTime_ant);
 		tv_DDTime.setText(time);
 		tv_DDTime.setEnabled(false);
+		CheckBox reminder = (CheckBox) findViewById(R.id.cb_notif_nt);
+		reminder.setChecked(todo.getNotification().equals(Todo.NOTIFICATION_STATUS_ENABLED));
+		reminder.setEnabled(false);
 		
 		EditText todoNote = (EditText) findViewById(R.id.eText_title);
 		todoNote.setEnabled(false);
@@ -143,7 +146,11 @@ public class ViewTodo extends Activity
 		dueDateTime.setTextColor(colorCodeForTableText);
 		EditText et_TodoNote_ed = (EditText) findViewById(R.id.eText_title);
 		et_TodoNote_ed.setTextColor(colorCodeForTableText);	
-		et_TodoNote_ed.setHintTextColor(colorCodeForHintText);			
+		et_TodoNote_ed.setHintTextColor(colorCodeForHintText);	
+		// Reminder Checkbox 
+		CheckBox reminder = (CheckBox) findViewById(R.id.cb_notif_nt);
+		reminder.setTextColor(colorCodeForTableHeaderTxt);
+		reminder.setBackgroundColor(colorCodeForTableHeaderBG);
 	}
 		
 }
