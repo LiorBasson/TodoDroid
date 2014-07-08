@@ -1,5 +1,6 @@
 package com.lb.tododroid;
 
+import java.util.Calendar;
 import java.util.List;
 
 import android.app.Activity;
@@ -37,6 +38,7 @@ import android.widget.Toast;
 import com.lb.tododroid.model.Tag;
 import com.lb.tododroid.model.Todo;
 import com.lb.tododroid.preferences.SettingsActivity;
+import com.lb.tododroid.serviceapp.ScheduleClient;
 import com.lb.tododroid.services.DatabaseHelper;
 import com.lb.tododroid.R;
 
@@ -65,6 +67,8 @@ public class MainActivity extends Activity
 	// vars for debug
 	boolean isDebugMode = false;
 	int searchCount = 0;	
+	private ScheduleClient scheduleClient;
+	boolean isNotify = false;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
@@ -83,7 +87,7 @@ public class MainActivity extends Activity
 			@Override
 			public void onClick(View v) 
 			{
-				updateElementsWithThemeColors(); // here for debugging
+				 notificationHandling(); // TODO: here for debugging, reposition once works properly
 			}
 		});
 		
@@ -94,8 +98,10 @@ public class MainActivity extends Activity
 			
 			@Override
 			public void onClick(View v) {
-				
+				// TODO: cleanup and refactor name 
 				Intent todoTableViewer = new Intent(getApplicationContext(), AddNewToDo.class);
+				
+				todoTableViewer.putExtra("sentData", "blabla");
 				startActivityForResult(todoTableViewer, requestCode_AddNewToDo);	
 				
 			}
@@ -129,7 +135,21 @@ public class MainActivity extends Activity
 				
 		getThemeColorsFromPreferences(); 
 		updateElementsWithThemeColors();
+		
+		
 	}
+	
+	
+	@Override
+	protected void onStart() 
+	{
+		
+		
+        toastDebugInfo("MainActivity.onStart() invoked", true);
+
+		super.onStart();
+	}
+	
 	
 	@Override
 	protected void onResume() {
@@ -153,6 +173,12 @@ public class MainActivity extends Activity
 			else bt_DebugScreen.setVisibility(View.VISIBLE);
 		}			
 		
+		// TODO: check and Create a new service client and bind our activity to this service
+        scheduleClient = new ScheduleClient(getApplicationContext());
+        scheduleClient.doBindService();   
+        
+    
+		
 		toastDebugInfo("MainActivity.onResume() invoked", true);		
 	}
 	
@@ -160,7 +186,23 @@ public class MainActivity extends Activity
 	protected void onPause() {
 		super.onPause();
 		// TODO: if relevant to this class, register to preference changes, otherwise remove this overriden method
+		
+		// TODO:  When our activity is stopped ensure we also stop the connection to the service
+        // this stops us leaking our activity into the system *bad*
+        if(scheduleClient != null)
+            scheduleClient.doUnbindService();
 	}
+	
+	
+	
+	@Override
+    protected void onStop() {
+        
+        super.onStop();
+    }
+	
+	
+	
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -237,6 +279,25 @@ public class MainActivity extends Activity
 			}
 		else toastDebugInfo("returned with !(Result_OK)", false);
 	}
+	
+	
+	private void notificationHandling()
+	{
+		// commented for debug and design
+		/*int year = 2014
+				, month = 4 // 0 based 
+				, day = 12
+				, hourOfDay = 11
+				, minute = 45;
+			Calendar c = Calendar.getInstance();
+		    c.set(year, month, day, hourOfDay, minute);
+			// Ask our service to set an alarm for that date, this activity talks to the client that talks to the service
+	        scheduleClient.setAlarmForNotification(c);*/
+	        
+		isNotify= false;
+	}
+	
+	
 	
 	private void fillUpTableFromDB()
 	{
@@ -562,7 +623,8 @@ public class MainActivity extends Activity
 	    ed.commit();
 	   
 	    Intent viewTodoIntent = new Intent(getApplicationContext(), EditTodo.class);	        
-	    viewTodoIntent.putExtra("todoID", todoID);
+	    viewTodoIntent.putExtra("com.lb.tododroid.edittodo.todoID", todoID);
+	    viewTodoIntent.putExtra("com.lb.tododroid.edittodo.sender", "ContextMenu");
 	    startActivityForResult(viewTodoIntent, requestCode_EditToDo);
 		toastDebugInfo("launchEditTodo() - Will inflate a view which alows editing the todo", false);
 	}

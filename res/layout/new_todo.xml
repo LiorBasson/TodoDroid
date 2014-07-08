@@ -102,6 +102,15 @@
             android:layout_marginBottom="14dp"
             android:paddingRight="10dp"
             android:text="Done" />
+        
+        <CheckBox
+            android:id="@+id/cb_notif_nt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/tv_DDTime_ant"
+            android:layout_alignParentRight="true"
+            android:paddingRight="10dp"
+            android:text="Reminder" />
     </RelativeLayout>
 
 </ScrollView>

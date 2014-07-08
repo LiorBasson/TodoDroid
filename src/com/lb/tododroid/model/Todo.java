@@ -2,6 +2,8 @@ package com.lb.tododroid.model;
 
 public class Todo 
 {
+	public static String NOTIFICATION_STATUS_DISABLED = "false";
+	public static String NOTIFICATION_STATUS_ENABLED = "true";
 	int id; // TODO: change to long. follow refactoring for all usages
     String note;
     int status;

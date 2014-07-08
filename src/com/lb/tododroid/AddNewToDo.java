@@ -66,6 +66,10 @@ public class AddNewToDo extends FragmentActivity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.new_todo);
+		
+		String s = getIntent().getExtras().getString("sentData");
+		int id =  getIntent().getExtras().getInt("iddd");
+		
 				
 		prepareLayoutForNewTodo();
 				

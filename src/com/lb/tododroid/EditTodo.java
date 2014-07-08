@@ -1,6 +1,7 @@
 package com.lb.tododroid;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import android.app.DatePickerDialog.OnDateSetListener;
@@ -29,6 +30,8 @@ import com.lb.tododroid.dialogs.MyArrayAdapter;
 import com.lb.tododroid.dialogs.TimePickerFragment;
 import com.lb.tododroid.model.Tag;
 import com.lb.tododroid.model.Todo;
+import com.lb.tododroid.serviceapp.NotifyService;
+import com.lb.tododroid.serviceapp.ScheduleClient;
 import com.lb.tododroid.services.DatabaseHelper;
 import com.lb.tododroid.services.DateTimeServices;
 import com.lb.tododroid.R;
@@ -54,6 +57,8 @@ public class EditTodo extends FragmentActivity
 	final String dateFormat = "YYYY-MM-DD";
 	final String timeFormat = "HH-MM-SS";
 	boolean isDebugMode = false; // dummy commit
+	
+	private ScheduleClient scheduleClient;
 
 
 	@Override
@@ -61,17 +66,41 @@ public class EditTodo extends FragmentActivity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.new_todo);
-		
-		SharedPreferences sp =  getApplication().getSharedPreferences("editTodo", 0);
-		int todo_id = sp.getInt("todoID", -1);
+		//  TODO: NewImp for intent invoking support
+		//SharedPreferences sp =  getApplication().getSharedPreferences("editTodo", 0);
+		//int todo_id_x = sp.getInt("todoID", -1);
 //		int reqCode = sp.getInt("userReqCode", -1);
+		int todo_id = getIntent().getIntExtra("com.lb.tododroid.edittodo.todoID", -1);
+		String sender = getIntent().getStringExtra("com.lb.tododroid.edittodo.sender");  //  ("com.lb.tododroid.edittodo.sender", "ContextMenu");
+
 		m_todoID = todo_id;
-				
+		
+		if (sender.equals("NotifyService")) //== "NotifyService") 
+			clearTodoReminder();
 		fillViewesOnCreate(todo_id);
 		setViewsHandlers();
 		getThemeColorsFromPreferences();
 		updateElementsWithThemeColors();		
 	}
+	
+	// TODO:  NotifNewImp to copy
+	@Override
+	protected void onResume() 
+	{
+		super.onResume();
+
+		scheduleClient = new ScheduleClient(getApplicationContext());
+        scheduleClient.doBindService();
+	};
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		
+		if(scheduleClient != null)
+            scheduleClient.doUnbindService();
+	}
+	
 	
 	private void fillViewesOnCreate(int todoID) 
 	{
@@ -92,6 +121,9 @@ public class EditTodo extends FragmentActivity
 		String time = DateTimeServices.getTimeOfDateTimeFormat(todoDueDate);	
 		TextView tv_DDTime = (TextView) findViewById(R.id.tv_DDTime_ant);
 		tv_DDTime.setText(time);		
+		// TODO: NotifNewImp to copy
+		CheckBox reminder = (CheckBox) findViewById(R.id.cb_notif_nt);
+		reminder.setChecked(todo.getNotification().equals(Todo.NOTIFICATION_STATUS_ENABLED));
 		
 		EditText todoNote = (EditText) findViewById(R.id.eText_title);
 		todoNote.setText(todo.getNote());	
@@ -133,7 +165,7 @@ public class EditTodo extends FragmentActivity
 		todoNoteLable.setBackgroundColor(colorCodeForTableHeaderBG);
 		todoNoteLable.setTextColor(colorCodeForTableHeaderTxt);
 		
-		// Checkbox - ignore for now - image issues
+		// Status Checkbox - ignore for now - image issues
 		CheckBox status = (CheckBox) findViewById(R.id.cb_Status_nt);
 		status.setTextColor(colorCodeForTableHeaderTxt);
 		status.setBackgroundColor(colorCodeForTableHeaderBG);
@@ -152,6 +184,11 @@ public class EditTodo extends FragmentActivity
 		EditText et_TodoNote_ed = (EditText) findViewById(R.id.eText_title);
 		et_TodoNote_ed.setTextColor(colorCodeForTableText);	
 		et_TodoNote_ed.setHintTextColor(colorCodeForHintText);
+		// TODO: NotifNewImp to copy
+		// Reminder Checkbox - ignore for now - image issues
+		CheckBox reminder = (CheckBox) findViewById(R.id.cb_notif_nt);
+		reminder.setTextColor(colorCodeForTableHeaderTxt);
+		reminder.setBackgroundColor(colorCodeForTableHeaderBG);
 		
 		//Buttons in Create and Edit modes
 		Button btCancel = (Button) findViewById(R.id.bt_CancellCreateTodo);
@@ -223,6 +260,16 @@ public class EditTodo extends FragmentActivity
 		});
 	}
 	
+	private void clearTodoReminder()
+	{
+		// clears the reminder flag for todo in its DB record 
+		DatabaseHelper db = new DatabaseHelper(getApplicationContext());
+		Todo todo = db.getTodo(m_todoID);
+		todo.setNotification(Todo.NOTIFICATION_STATUS_DISABLED);
+		db.updateToDo(todo);
+		db.closeDB();	
+	}
+	
 	private void launchDatePickerDialog()
 	{
 		DatePickerFragment df = new DatePickerFragment();		
@@ -290,6 +337,11 @@ public class EditTodo extends FragmentActivity
 	    String reqDueDateTime = tv_DueDateTime.getText().toString();
 	    String reqDueDate = reqDueDateDate.toString() + " " + reqDueDateTime.toString();		
 	    updatedTodo.setDueDate(reqDueDate); 
+	    // TODO:  NotifNewImp to copy
+	    CheckBox reminder = (CheckBox) findViewById(R.id.cb_notif_nt);
+		if (reminder.isChecked())
+			updatedTodo.setNotification(Todo.NOTIFICATION_STATUS_ENABLED);
+		else updatedTodo.setNotification(Todo.NOTIFICATION_STATUS_DISABLED);	
 		
 		EditText todoNote = (EditText) findViewById(R.id.eText_title);
 		updatedTodo.setNote(todoNote.getText().toString());		
@@ -297,6 +349,24 @@ public class EditTodo extends FragmentActivity
 		db.updateToDo(updatedTodo);
 				
 		db.closeDB();
+		
+		// TODO: try to update SchedulerClient here
+		// TODO:  NotifNewImp to copy
+		if (true)// reminder.isDirty()) // commented for the meantime due to API Level issues
+			{
+				if (reminder.isChecked())
+				{
+					int year = DateTimeServices.getYearOfDateFormat(reqDueDateDate)
+							, month = (DateTimeServices.getMonthOfDateFormat(reqDueDateDate))-1 // 0 based 
+							, day = DateTimeServices.getDayOfDateFormat(reqDueDateDate) 
+							, hourOfDay = DateTimeServices.getHourOfTimeFormat(reqDueDateTime)
+							, minute = DateTimeServices.getMinuteOfTimeFormat(reqDueDateTime);
+						Calendar c = Calendar.getInstance();
+					    c.set(year, month, day, hourOfDay, minute);
+						scheduleClient.setAlarmForNotification(c, (int) updatedTodo.getId());  //setReminder(TodoID, date);
+				}
+				else toastDebugInfo("reminder.isDirty()=true and reminder.isChecked()=false", false); //cancelReminder(TodoID);
+			}	
 	}
 	
 	private void onDateSetHandler(DatePicker view, int year, int monthOfYear, int dayOfMonth)
