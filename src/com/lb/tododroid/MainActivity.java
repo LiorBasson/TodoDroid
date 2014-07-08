@@ -246,14 +246,15 @@ public class MainActivity extends Activity
 					Bundle bd = data.getExtras();
 					if ((bd.containsKey("com.lb.todosqlite.addnewtag.isCancelPressed")) && !(bd.getBoolean("com.lb.todosqlite.addnewtag.isCancelPressed")))
 					{
-						String todoTitle = bd.getString("com.lb.todosqlite.addnewtodo.todoTitle");	
+						// TODO: redesign to handle all in AddNewTodo class - remove from here once done and tested
+						/*String todoTitle = bd.getString("com.lb.todosqlite.addnewtodo.todoTitle");	
 						String categorySelected = bd.getString("com.lb.todosqlite.addnewtodo.categorySelected");  
 						String dueDate = bd.getString("com.lb.todosqlite.addnewtodo.dueDate");  
 						
 						if (categorySelected.equals(spinnerDefaultValue))
 							categorySelected = defaultInternalTagName;
 						
-						createToDo(todoTitle, categorySelected, dueDate);
+						createToDo(todoTitle, categorySelected, dueDate);*/
 						clearTableData();
 						fillUpTableFromDB();
 					}
@@ -513,6 +514,7 @@ public class MainActivity extends Activity
 		todosTable.removeViews(1, todosTable.getChildCount()-1);
 	}
 	
+	// TODO: redesign to handle all in AddNewTodo class - remove from here once done and tested
 	private void createToDo(String todoTitle, String categorySelected, String dueDate)
 	{
 		int defaultTodoStatus = 0;

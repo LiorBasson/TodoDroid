@@ -1,6 +1,7 @@
 package com.lb.tododroid;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import android.app.DatePickerDialog.OnDateSetListener;
@@ -30,6 +31,8 @@ import com.lb.tododroid.dialogs.DatePickerFragment;
 import com.lb.tododroid.dialogs.MyArrayAdapter;
 import com.lb.tododroid.dialogs.TimePickerFragment;
 import com.lb.tododroid.model.Tag;
+import com.lb.tododroid.model.Todo;
+import com.lb.tododroid.serviceapp.ScheduleClient;
 import com.lb.tododroid.services.DatabaseHelper;
 import com.lb.tododroid.services.DateTimeServices;
 import com.lb.tododroid.R;
@@ -60,6 +63,7 @@ public class AddNewToDo extends FragmentActivity
 	boolean isDebugMode = false; 
 	OnDateSetListener onDate;
 	OnTimeSetListener onTime;
+	private ScheduleClient scheduleClient;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
@@ -129,11 +133,17 @@ public class AddNewToDo extends FragmentActivity
 			
 			@Override
 			public void onClick(View v) {
+				
+				
 				Intent resultIntent = getIntent();
+				
+				// TODO: redesign to handle all in AddNewTodo class - remove from here once done and tested
+				
+				foo();
 				
 				isCancelPressed = false;
 				resultIntent.putExtra("com.lb.todosqlite.addnewtag.isCancelPressed", isCancelPressed);
-				
+				/*
 				EditText et_TodoTitle = (EditText) findViewById(R.id.eText_title);
 				String reqTodoTitle =et_TodoTitle.getText().toString();  
 				resultIntent.putExtra("com.lb.todosqlite.addnewtodo.todoTitle", reqTodoTitle);
@@ -147,7 +157,18 @@ public class AddNewToDo extends FragmentActivity
 			    String reqDueDateTime = tv_DueDateTime.getText().toString();
 			    String reqDueDate = reqDueDateDate.toString() + " " + reqDueDateTime.toString();
 			    
-				resultIntent.putExtra("com.lb.todosqlite.addnewtodo.dueDate", reqDueDate);
+				resultIntent.putExtra("com.lb.todosqlite.addnewtodo.dueDate", reqDueDate);*/
+				
+				
+				// TODO: This block was brought from MainActivity - chronologically this comes now
+				/*String todoTitle = bd.getString("com.lb.todosqlite.addnewtodo.todoTitle");	
+				String categorySelected = bd.getString("com.lb.todosqlite.addnewtodo.categorySelected");  
+				String dueDate = bd.getString("com.lb.todosqlite.addnewtodo.dueDate");  
+				
+				if (categorySelected.equals(spinnerDefaultValue))
+					categorySelected = defaultInternalTagName;
+				
+				createToDo(todoTitle, categorySelected, dueDate);*/
 				
                 setResult(RESULT_OK, resultIntent);
                 finish();
@@ -174,6 +195,23 @@ public class AddNewToDo extends FragmentActivity
 		
 		getThemeColorsFromPreferences();
 		updateElementsWithThemeColors();
+	}
+	
+	@Override
+	protected void onResume() 
+	{
+		super.onResume();
+
+		scheduleClient = new ScheduleClient(getApplicationContext());
+        scheduleClient.doBindService();
+	};
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		
+		if(scheduleClient != null)
+            scheduleClient.doUnbindService();
 	}
 	
 	@Override
@@ -379,6 +417,152 @@ public class AddNewToDo extends FragmentActivity
 		toastDebugInfo("restoring to " + tagNameLastSelected, false);
 	}
 
+		
+	/*private void createToDo(String todoTitle, String categorySelected, String dueDate)
+	{
+		int defaultTodoStatus = 0;
+		// updates DB with new Todo
+		DatabaseHelper db = new DatabaseHelper(getApplicationContext());
+				
+		long tagID = 0;		
+		if (!(db.getAllTags().contains(categorySelected)))
+		{
+			Tag tag = new Tag(categorySelected);
+			tagID = db.createTag(tag);
+		}
+		else 
+		{
+			List<Tag> tags = db.getAllTags();
+			for (Tag tag : tags)
+			{
+				if ( categorySelected.equals(tag.getTagName()) )
+					tagID  = tag.getId();					
+			}				 
+		}		
+		Todo todo = new Todo(todoTitle, defaultTodoStatus);
+		todo.setDueDate(dueDate); 
+		db.createToDo(todo, new long[] {tagID});
+				
+		db.closeDB();
+	}*/
+
+	/*private void collectAndUpdateData()
+	{
+		DatabaseHelper db = new DatabaseHelper(getApplicationContext());
+		Todo newTodo = db.getTodo(m_todoID);
+		// refers to a single tag for current implementation and support
+		List<Tag> allTags = db.getAllTags();
+		for (Tag tag : allTags)
+		{
+			// TODO: enhance and validate the condition - this implementation is not safe enough
+			if (tagNameLastSelected.equals(tag.getTagName()))
+			{
+				db.updateTagForSpecificTodo(m_todoID, tag.getId()); 
+			}
+		}		
+		
+				
+		TextView tv_DueDateDate = (TextView) findViewById(R.id.tv_DDDate_ant);
+	    String reqDueDateDate = tv_DueDateDate.getText().toString();
+	    TextView tv_DueDateTime = (TextView) findViewById(R.id.tv_DDTime_ant);
+	    String reqDueDateTime = tv_DueDateTime.getText().toString();
+	    String reqDueDate = reqDueDateDate.toString() + " " + reqDueDateTime.toString();		
+	    newTodo.setDueDate(reqDueDate); 
+	    // TODO:  NotifNewImp to copy
+	    CheckBox reminder = (CheckBox) findViewById(R.id.cb_notif_nt);
+		if (reminder.isChecked())
+			newTodo.setNotification(Todo.NOTIFICATION_STATUS_ENABLED);
+		else newTodo.setNotification(Todo.NOTIFICATION_STATUS_DISABLED);	
+		
+		EditText todoNote = (EditText) findViewById(R.id.eText_title);
+		newTodo.setNote(todoNote.getText().toString());		
+		
+		db.updateToDo(newTodo);
+				
+		db.closeDB();
+		
+		if (reminder.isChecked())
+				{
+					int year = DateTimeServices.getYearOfDateFormat(reqDueDateDate)
+							, month = (DateTimeServices.getMonthOfDateFormat(reqDueDateDate))-1 // 0 based 
+							, day = DateTimeServices.getDayOfDateFormat(reqDueDateDate) 
+							, hourOfDay = DateTimeServices.getHourOfTimeFormat(reqDueDateTime)
+							, minute = DateTimeServices.getMinuteOfTimeFormat(reqDueDateTime);
+						Calendar c = Calendar.getInstance();
+					    c.set(year, month, day, hourOfDay, minute);
+						scheduleClient.setAlarmForNotification(c, (int) newTodo.getId());  //setReminder(TodoID, date);
+				}
+				else toastDebugInfo("reminder.isDirty()=true and reminder.isChecked()=false", false); //cancelReminder(TodoID);
+				
+	}*/
+	
+	private void foo()
+	{
+		// ***********************************************************************************
+		int defaultTodoStatus = 0;
+		
+		String categorySelected = tagNameLastSelected;  
+		
+		DatabaseHelper db = new DatabaseHelper(getApplicationContext());
+		
+		if (categorySelected.equals(spinnerDefaultValue))
+			categorySelected = defaultInternalTagName;
+		
+		long tagID = 0;		
+		if (!(db.getAllTags().contains(categorySelected)))
+		{
+			Tag tag = new Tag(categorySelected);
+			tagID = db.createTag(tag);
+		}
+		else 
+		{
+			List<Tag> tags = db.getAllTags();
+			for (Tag tag : tags)
+			{
+				if ( categorySelected.equals(tag.getTagName()) )
+					tagID  = tag.getId();					
+			}				 
+		}		
+		
+		
+		
+		EditText todoNote = (EditText) findViewById(R.id.eText_title);
+		Todo newTodo = new Todo(todoNote.getText().toString(), defaultTodoStatus);
+		
+		TextView tv_DueDateDate = (TextView) findViewById(R.id.tv_DDDate_ant);
+	    String reqDueDateDate = tv_DueDateDate.getText().toString();
+	    TextView tv_DueDateTime = (TextView) findViewById(R.id.tv_DDTime_ant);
+	    String reqDueDateTime = tv_DueDateTime.getText().toString();
+	    String reqDueDate = reqDueDateDate.toString() + " " + reqDueDateTime.toString();		
+	    newTodo.setDueDate(reqDueDate); 
+	    // TODO:  NotifNewImp to copy
+	    CheckBox reminder = (CheckBox) findViewById(R.id.cb_notif_nt);
+		if (reminder.isChecked())
+			newTodo.setNotification(Todo.NOTIFICATION_STATUS_ENABLED);
+		else newTodo.setNotification(Todo.NOTIFICATION_STATUS_DISABLED);
+		
+		
+		
+		
+		long newTodoID = db.createToDo(newTodo, new long[] {tagID});
+		
+		db.closeDB();
+		
+		if (reminder.isChecked())
+		{
+			int year = DateTimeServices.getYearOfDateFormat(reqDueDateDate)
+					, month = (DateTimeServices.getMonthOfDateFormat(reqDueDateDate))-1 // 0 based 
+					, day = DateTimeServices.getDayOfDateFormat(reqDueDateDate) 
+					, hourOfDay = DateTimeServices.getHourOfTimeFormat(reqDueDateTime)
+					, minute = DateTimeServices.getMinuteOfTimeFormat(reqDueDateTime);
+				Calendar c = Calendar.getInstance();
+			    c.set(year, month, day, hourOfDay, minute);
+				scheduleClient.setAlarmForNotification(c, (int) newTodoID);  //setReminder(TodoID, date);
+		}
+		
+	}
+	
+	
 	private void launchDatePickerDialog()
 	{
 		DatePickerFragment df = new DatePickerFragment();		
