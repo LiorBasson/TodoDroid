@@ -472,7 +472,7 @@ public class MainActivity extends Activity
 								public boolean onMenuItemClick(MenuItem item) {
 									int id = item.getItemId();
 									int idg = item.getGroupId();
-									deleteTodo(idg);
+									deleteTodo(idg); 
 									
 									toastDebugInfo("TR onMenuItemClick() was invoked for menuItemID= " + id + " GroupID= " + idg, false);
 									return false;
@@ -557,12 +557,17 @@ public class MainActivity extends Activity
 		fillUpTableFromDB();		
 	}
 	
-	// Delete todo (int todoID)  include its tag if not in use elsewhere
+	// Delete todo (int todoID)  include its tag if not in use elsewhere and cancel notification reminder if exists
 	private void deleteTodo(int todoID)
 	{
 		DatabaseHelper db = new DatabaseHelper(getApplicationContext());
+		Todo todoToDelete = db.getTodo(todoID);
 		db.deleteToDo(todoID, true); 
 		db.closeDB();
+		
+		// TODO: test as it is a new imp 		
+		if (todoToDelete.getNotification().equals(Todo.NOTIFICATION_STATUS_ENABLED))
+			scheduleClient.cancelAlarmForNotification(todoID);
 		
 		try
 		{	

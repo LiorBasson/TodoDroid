@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import android.R.integer;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.Intent;
@@ -30,7 +31,6 @@ import com.lb.tododroid.dialogs.MyArrayAdapter;
 import com.lb.tododroid.dialogs.TimePickerFragment;
 import com.lb.tododroid.model.Tag;
 import com.lb.tododroid.model.Todo;
-import com.lb.tododroid.serviceapp.NotifyService;
 import com.lb.tododroid.serviceapp.ScheduleClient;
 import com.lb.tododroid.services.DatabaseHelper;
 import com.lb.tododroid.services.DateTimeServices;
@@ -307,8 +307,41 @@ public class EditTodo extends FragmentActivity
 	
 	private void collectAndUpdateData()
 	{
+		boolean shouldCheckIfDDIsDirty = false;
+		boolean isReminderDirty = false;		
+		boolean isDDDirty = false;
+		boolean isReminderLoadedAsChecked = false;
 		DatabaseHelper db = new DatabaseHelper(getApplicationContext());
 		Todo updatedTodo = db.getTodo(m_todoID);
+		CheckBox reminder = (CheckBox) findViewById(R.id.cb_notif_nt);
+		
+		
+		// TODO: BL for isDirty() implementation option#1
+		/*if (updatedTodo.getNotification().equals(Todo.NOTIFICATION_STATUS_ENABLED))
+			if (reminder.isChecked())
+				{
+					isReminderDirty = false; // basically since false is default can be removed?
+					shouldCheckIfDDIsDirty = true;
+				}
+			else 
+				{
+					isReminderDirty = true;
+					shouldCheckIfDDIsDirty = false; // basically since false is default can be removed?
+					boolean cancelNotif = true;
+				}
+		else if (reminder.isChecked())
+				{
+					isReminderDirty = true;
+					shouldCheckIfDDIsDirty = false; // basically since false is default can be removed?
+					boolean setNotifRegardlessDDIsDirty = true;
+				}
+			else
+				{
+					isReminderDirty = false; // basically since false is default can be removed?
+					shouldCheckIfDDIsDirty = false; // basically since false is default can be removed?
+				}*/
+			
+			
 		// refers to a single tag for current implementation and support
 		List<Tag> allTags = db.getAllTags();
 		for (Tag tag : allTags)
@@ -329,9 +362,16 @@ public class EditTodo extends FragmentActivity
 	    String reqDueDateDate = tv_DueDateDate.getText().toString();
 	    TextView tv_DueDateTime = (TextView) findViewById(R.id.tv_DDTime_ant);
 	    String reqDueDateTime = tv_DueDateTime.getText().toString();
-	    String reqDueDate = reqDueDateDate.toString() + " " + reqDueDateTime.toString();		
+	    String reqDueDate = reqDueDateDate.toString() + " " + reqDueDateTime.toString();	
+	    
+	    
+	    // TODO: Pay Attention! it is significant that these two checks will be executed before updatedTodo object is being updated, since it is checks the original value  
+	    isDDDirty = !(updatedTodo.getDueDate().equals(reqDueDate));
+	    isReminderLoadedAsChecked = updatedTodo.getNotification().equals(Todo.NOTIFICATION_STATUS_ENABLED); 	    
+	    
+	    
 	    updatedTodo.setDueDate(reqDueDate); 
-	    CheckBox reminder = (CheckBox) findViewById(R.id.cb_notif_nt);
+	    // CheckBox reminder = (CheckBox) findViewById(R.id.cb_notif_nt);
 		if (reminder.isChecked())
 			updatedTodo.setNotification(Todo.NOTIFICATION_STATUS_ENABLED);
 		else updatedTodo.setNotification(Todo.NOTIFICATION_STATUS_DISABLED);	
@@ -343,22 +383,35 @@ public class EditTodo extends FragmentActivity
 				
 		db.closeDB();
 		
-		// TODO: take care of BL to determine if to call setAlarm or to update (by cancel and set)
-		if (true)// reminder.isDirty()) // commented for the meantime due to API Level issues
+		
+		// TODO: take care of BL to determine if to call setAlarm or to update (by cancel and set or otherwise)
+		// TODO: option#2 either this or that (option#1) will work		
+		if ((!reminder.isChecked()) && isReminderLoadedAsChecked)
+			scheduleClient.cancelAlarmForNotification((int) updatedTodo.getId());
+		if (reminder.isChecked() && (!isReminderLoadedAsChecked))
 			{
-				if (reminder.isChecked())
-				{
-					int year = DateTimeServices.getYearOfDateFormat(reqDueDateDate)
-							, month = (DateTimeServices.getMonthOfDateFormat(reqDueDateDate))-1 // 0 based 
-							, day = DateTimeServices.getDayOfDateFormat(reqDueDateDate) 
-							, hourOfDay = DateTimeServices.getHourOfTimeFormat(reqDueDateTime)
-							, minute = DateTimeServices.getMinuteOfTimeFormat(reqDueDateTime);
-						Calendar c = Calendar.getInstance();
-					    c.set(year, month, day, hourOfDay, minute);
-						scheduleClient.setAlarmForNotification(c, (int) updatedTodo.getId());  //setReminder(TodoID, date);
-				}
-				else toastDebugInfo("reminder.isDirty()=true and reminder.isChecked()=false", false); //cancelReminder(TodoID);
-			}	
+				int year = DateTimeServices.getYearOfDateFormat(reqDueDateDate)
+						, month = (DateTimeServices.getMonthOfDateFormat(reqDueDateDate))-1 // 0 based 
+						, day = DateTimeServices.getDayOfDateFormat(reqDueDateDate) 
+						, hourOfDay = DateTimeServices.getHourOfTimeFormat(reqDueDateTime)
+						, minute = DateTimeServices.getMinuteOfTimeFormat(reqDueDateTime);
+				Calendar c = Calendar.getInstance();
+				c.set(year, month, day, hourOfDay, minute);
+				scheduleClient.setAlarmForNotification(c, (int) updatedTodo.getId()); 
+			}			
+		if ((reminder.isChecked()) && isReminderLoadedAsChecked && isDDDirty)
+			{
+				int year = DateTimeServices.getYearOfDateFormat(reqDueDateDate)
+						, month = (DateTimeServices.getMonthOfDateFormat(reqDueDateDate))-1 // 0 based 
+						, day = DateTimeServices.getDayOfDateFormat(reqDueDateDate) 
+						, hourOfDay = DateTimeServices.getHourOfTimeFormat(reqDueDateTime)
+						, minute = DateTimeServices.getMinuteOfTimeFormat(reqDueDateTime);
+				Calendar c = Calendar.getInstance();
+				c.set(year, month, day, hourOfDay, minute);
+				scheduleClient.updateAlarmForNotification(c, (int) updatedTodo.getId());
+			}				
+			
+		
 	}
 	
 	private void onDateSetHandler(DatePicker view, int year, int monthOfYear, int dayOfMonth)
