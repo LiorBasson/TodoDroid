@@ -206,6 +206,37 @@ public class DatabaseHelper extends SQLiteOpenHelper
        return todos;
     }
     
+    // getting all todos with active reminder TODO: test!
+    public List<Todo> getAllToDosWithNotification() 
+    {
+       List<Todo> todos = new ArrayList<Todo>();
+    
+       String selectQuery = "SELECT  * FROM " + TABLE_TODO + " WHERE "
+    		   + KEY_NOTIFICATION + " = " + "'" + Todo.NOTIFICATION_STATUS_ENABLED + "'";
+				
+       Log.e(LOG, selectQuery);
+    
+       SQLiteDatabase db = this.getReadableDatabase();
+       Cursor c = db.rawQuery(selectQuery, null);
+    
+       // looping through all rows and adding to list
+       if (c.moveToFirst()) {
+           do {
+               Todo td = new Todo();
+               td.setId(c.getInt((c.getColumnIndex(KEY_ID))));
+               td.setNote((c.getString(c.getColumnIndex(KEY_TODO))));
+               td.setDueDate(c.getString(c.getColumnIndex(KEY_DUE_DATE)));
+               td.setStatus(c.getInt((c.getColumnIndex(KEY_STATUS))));
+               td.setNotification(c.getString(c.getColumnIndex(KEY_NOTIFICATION)));               
+    
+               // adding to todo list
+               todos.add(td);
+           } while (c.moveToNext());
+       }
+    
+       return todos;
+    }
+    
     // getting todo count
     public int getToDoCount() {
        String countQuery = "SELECT  * FROM " + TABLE_TODO;

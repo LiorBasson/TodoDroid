@@ -41,15 +41,9 @@
     </PreferenceCategory>
     <PreferenceCategory 
         android:title="Others"
-        android:key="pref_key_others_settings">
-         <CheckBoxPreference
-	            android:key="pref_key_debug_mode"
-	            android:summary="Show toast msgs and debug screen. Advanced users only!"
-	            android:title="Debug Mode"
-	            android:defaultValue="false" />
+        android:key="pref_key_others_settings">        
         <CheckBoxPreference
             android:key="pref_key_notification"
-            android:dependency="pref_key_debug_mode"
             android:summary="Comming soon!"
             android:title="Notifications"
             android:defaultValue="false" />
@@ -58,6 +52,11 @@
 	        android:dependency="pref_key_notification"
 	        android:ringtoneType="notification"
 	        android:summary="Comming soon!"
-	        android:title="notification tone"/>	        
+	        android:title="notification tone"/>	 
+	    <CheckBoxPreference
+	            android:key="pref_key_debug_mode"
+	            android:summary="Show toast msgs and debug screen. Advanced users only!"
+	            android:title="Debug Mode"
+	            android:defaultValue="false" />       
 	</PreferenceCategory>    
 </PreferenceScreen>

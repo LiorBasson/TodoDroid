@@ -3,6 +3,7 @@ package com.lb.tododroid.preferences;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.util.Log;
 
@@ -41,6 +42,23 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 			String key) 
 	{
+	
+		if (key.equals("pref_key_notification"))
+		{
+			boolean isNotifEnabled = sharedPreferences.getBoolean(key, false);
+			if (isNotifEnabled)
+				Log.d("", "msg");
+			// TODO: update summary with selected value
+				
+		}
+		
+		
+			
+//		{
+//			
+//
+//		}
+//		
 		// TODO update summary and etc upon specific pref changed
 		Log.d(LOG_TAG, "onSharedPreferenceChanged() was invoked");		
 	}

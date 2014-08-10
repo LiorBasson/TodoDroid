@@ -13,9 +13,15 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
+import android.provider.MediaStore.Audio;
+import android.provider.MediaStore.Audio.Media;
+import android.provider.Settings;
+import android.test.PerformanceTestCase;
 import android.util.Log;
  
 
@@ -88,53 +94,61 @@ public class NotifyService extends Service {
     @SuppressWarnings("deprecation")
 	private void showNotification() 
     {
-    	    	
-      DatabaseHelper db = new DatabaseHelper(getApplicationContext());
-      int m_todoID = todoID;
-		Todo updatedTodo = db.getTodo(m_todoID);
-		db.closeDB();    
-		
-		// This is the 'title' of the notification    	
-        CharSequence title = "ToDoDroid alarm! " + todoID;    	
-        // This is the icon to use on the notification
-        int icon = R.drawable.ic_notification_overlay;
-        // This is the scrolling text of the notification
-        CharSequence text = updatedTodo.getNote(); // "Tap to view Todo " + todoID;       
-        // What time to show on the notification
-        long time = System.currentTimeMillis();
-         
-        Notification notification = new Notification(icon, text, time);
-        
-        Uri notifSoundUri = Uri.parse("content://media/internal/audio/media/33");
-        
-        // TODO: for API 11 and higher. check later
-       /* Notification noti = new Notification.Builder(getApplicationContext())
-											        .setContentTitle(title)
-											        .setContentText(text)
-											        .setSmallIcon(icon)
-											        //.setLargeIcon(aBitmap)
-											        .setSound(soundUri)
-											        .setWhen(time)
-											        .build();
-*/
- 
-        // The PendingIntent to launch our activity if the user selects this notification
-        
-        Intent intentToInvoke = new Intent(this, EditTodo.class); // new Intent(this, MainActivity.class);
-        intentToInvoke.putExtra("com.lb.tododroid.edittodo.todoID", todoID);
-        intentToInvoke.putExtra("com.lb.tododroid.edittodo.sender", "NotifyService");
-        
-        PendingIntent contentIntent =  PendingIntent.getActivity(this, todoID, intentToInvoke, 0); // oneShot,Cancel, update - tried with no substantial diff. PendingIntent.getActivity(this, 0, intentToInvoke, 0);
- 
-        // Set the info for the views that show in the notification panel.
-        notification.setLatestEventInfo(this, title, text, contentIntent);
-        notification.sound = notifSoundUri;
- 
-        // Clear the notification when it is pressed
-        notification.flags |= Notification.FLAG_AUTO_CANCEL;
-         
-        // Send the notification to the system.
-        mNM.notify(todoID, notification); // mNM.notify(NOTIFICATION, notification);
+    	SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+    	boolean isNotifEnabled = sp.getBoolean("pref_key_notification", false);    	
+    	String notifPreferedTone =  sp.getString("pref_key_notif_selector", Settings.System.DEFAULT_NOTIFICATION_URI.toString());
+    	    
+    	if (isNotifEnabled)
+    	{
+    		 DatabaseHelper db = new DatabaseHelper(getApplicationContext());
+    	      int m_todoID = todoID;
+    			Todo updatedTodo = db.getTodo(m_todoID);
+    			db.closeDB();    
+    			
+    			// This is the 'title' of the notification    	
+    	        CharSequence title = "ToDoDroid alarm! " + todoID;    	
+    	        // This is the icon to use on the notification
+    	        int icon = R.drawable.ic_notification_overlay;
+    	        // This is the scrolling text of the notification
+    	        CharSequence text = updatedTodo.getNote(); // "Tap to view Todo " + todoID;       
+    	        // What time to show on the notification
+    	        long time = System.currentTimeMillis();
+    	         
+    	        Notification notification = new Notification(icon, text, time);
+    	        
+    	        Uri notifSoundUri =  Uri.parse(notifPreferedTone);
+    	        
+    	        // TODO: for API 11 and higher. check later
+    	       /* Notification noti = new Notification.Builder(getApplicationContext())
+    												        .setContentTitle(title)
+    												        .setContentText(text)
+    												        .setSmallIcon(icon)
+    												        //.setLargeIcon(aBitmap)
+    												        .setSound(soundUri)
+    												        .setWhen(time)
+    												        .build();
+    	*/
+    	 
+    	        // The PendingIntent to launch our activity if the user selects this notification
+    	        
+    	        Intent intentToInvoke = new Intent(this, EditTodo.class); // new Intent(this, MainActivity.class);
+    	        intentToInvoke.putExtra("com.lb.tododroid.edittodo.todoID", todoID);
+    	        intentToInvoke.putExtra("com.lb.tododroid.edittodo.sender", "NotifyService");
+    	        
+    	        PendingIntent contentIntent =  PendingIntent.getActivity(this, todoID, intentToInvoke, 0); // oneShot,Cancel, update - tried with no substantial diff. PendingIntent.getActivity(this, 0, intentToInvoke, 0);
+    	 
+    	        // Set the info for the views that show in the notification panel.
+    	        notification.setLatestEventInfo(this, title, text, contentIntent);
+    	        notification.sound = notifSoundUri;
+    	 
+    	        // Clear the notification when it is pressed
+    	        notification.flags |= Notification.FLAG_AUTO_CANCEL;
+    	         
+    	        // Send the notification to the system.
+    	        mNM.notify(todoID, notification); // mNM.notify(NOTIFICATION, notification);
+    		
+    		
+    	}     
                  
         // Stop the service when we are finished
         stopSelf();
