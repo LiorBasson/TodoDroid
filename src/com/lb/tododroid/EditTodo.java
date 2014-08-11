@@ -365,7 +365,8 @@ public class EditTodo extends FragmentActivity
 	    String reqDueDate = reqDueDateDate.toString() + " " + reqDueDateTime.toString();	
 	    
 	    
-	    // TODO: Pay Attention! it is significant that these two checks will be executed before updatedTodo object is being updated, since it is checks the original value  
+	    // Pay Attention! it is significant that these two checks will be executed
+	    // before updatedTodo object is being updated, since it is checks the original value  
 	    isDDDirty = !(updatedTodo.getDueDate().equals(reqDueDate));
 	    isReminderLoadedAsChecked = updatedTodo.getNotification().equals(Todo.NOTIFICATION_STATUS_ENABLED); 	    
 	    

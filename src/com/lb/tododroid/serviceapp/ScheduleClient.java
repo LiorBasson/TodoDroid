@@ -35,8 +35,6 @@ public class ScheduleClient {
     	ComponentName cm = mContext.startService(scheduleServiceIntent); //(new Intent(mContext, ScheduleService.class));
         // Establish a connection with our service
     	mIsBound = mContext.bindService(scheduleServiceIntent, mConnection, Context.BIND_AUTO_CREATE); // (new Intent(mContext, ScheduleService.class), mConnection, Context.BIND_AUTO_CREATE);
-    	int breakpointAnchor = 1;
-  //  	mIsBound = true;
     }
      
     /**

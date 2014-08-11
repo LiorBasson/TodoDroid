@@ -1,13 +1,6 @@
 package com.lb.tododroid.serviceapp;
 
 
-import com.lb.tododroid.EditTodo;
-import com.lb.tododroid.MainActivity;
-import com.lb.tododroid.model.Todo;
-import com.lb.tododroid.services.DatabaseHelper;
-
-
-import android.R;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -18,11 +11,12 @@ import android.net.Uri;
 import android.os.Binder;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore.Audio;
-import android.provider.MediaStore.Audio.Media;
 import android.provider.Settings;
-import android.test.PerformanceTestCase;
 import android.util.Log;
+
+import com.lb.tododroid.EditTodo;
+import com.lb.tododroid.model.Todo;
+import com.lb.tododroid.services.DatabaseHelper;
  
 
 /**
@@ -44,16 +38,11 @@ public class NotifyService extends Service {
         }
     }
  
-    // Unique id to identify the notification. TODO: probably replace with unique TODO_ID
-    private static final int NOTIFICATION = 123;
     // Name of an intent extra we can use to identify if this service was started to create a notification  
     public static final String INTENT_NOTIFY = "com.lb.tododroid.serviceapp.INTENT_NOTIFY";
     public static final String TODO_ID = "com.lb.tododroid.serviceapp.notifyservice.todoID";
-    public static final String NOTIFICATION_SOUND_URI = "com.lb.tododroid.serviceapp.NOTIFICATIONSOUNDURI";
-    
-    
+    public static final String NOTIFICATION_SOUND_URI = "com.lb.tododroid.serviceapp.NOTIFICATIONSOUNDURI";    
     private int todoID;
-    private String notifSoundUri;
     // The system notification manager
     private NotificationManager mNM;
  
@@ -67,14 +56,12 @@ public class NotifyService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i("LocalService", "Received start id " + startId + ": " + intent);
          
-        // If this service was started by out AlarmTask intent then we want to show our notification
+        // If this service was started by our AlarmTask intent then we want to show our notification
         if(intent.getBooleanExtra(INTENT_NOTIFY, false))
         {
         	todoID = intent.getIntExtra(TODO_ID, -1);
-        	notifSoundUri = intent.getStringExtra(NOTIFICATION_SOUND_URI);
         	showNotification();        	
-        }
-            
+        }            
          
         // We don't care if this service is stopped as we have already delivered our notification
         return START_NOT_STICKY;
@@ -108,7 +95,7 @@ public class NotifyService extends Service {
     			// This is the 'title' of the notification    	
     	        CharSequence title = "ToDoDroid alarm! " + todoID;    	
     	        // This is the icon to use on the notification
-    	        int icon = R.drawable.ic_notification_overlay;
+    	        int icon = android.R.drawable.ic_notification_overlay;
     	        // This is the scrolling text of the notification
     	        CharSequence text = updatedTodo.getNote(); // "Tap to view Todo " + todoID;       
     	        // What time to show on the notification

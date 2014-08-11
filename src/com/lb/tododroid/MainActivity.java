@@ -1,6 +1,5 @@
 package com.lb.tododroid;
 
-import java.util.Calendar;
 import java.util.List;
 
 import android.app.Activity;
@@ -80,37 +79,28 @@ public class MainActivity extends Activity
 		
 		
 		Button bt_search = (Button) findViewById(R.id.bt_Search);
-		//bt_search.setBackgroundColor(Color.parseColor(colorCodeForButtonsBG));
-		//bt_search.setTextColor(colorCodeForButtonsTxt);
 		bt_search.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) 
 			{
-				 notificationHandling(); // TODO: here for debugging, reposition once works properly
+				toastDebugInfo("Coming Soon!", true);
 			}
 		});
 		
 		Button bt_addToDo = (Button) findViewById(R.id.bt_AddTodo);
-		//bt_addToDo.setBackgroundColor(Color.parseColor(colorCodeForButtonsBG));
-		//bt_addToDo.setTextColor(colorCodeForButtonsTxt);
 		bt_addToDo.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				// TODO: cleanup and refactor name 
 				Intent todoTableViewer = new Intent(getApplicationContext(), AddNewToDo.class);
 				
-				todoTableViewer.putExtra("sentData", "blabla");
-				startActivityForResult(todoTableViewer, requestCode_AddNewToDo);	
-				
+				startActivityForResult(todoTableViewer, requestCode_AddNewToDo);					
 			}
 		});
 		
 		
 		Button bt_DebugScreen = (Button) findViewById(R.id.bt_ToDebugScr);
-		//bt_backToMain.setBackgroundColor(Color.parseColor(colorCodeForButtonsBG));
-		//bt_DebugScreen.setTextColor(colorCodeForButtonsTxt);
 		bt_DebugScreen.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -134,9 +124,7 @@ public class MainActivity extends Activity
 		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);			
 				
 		getThemeColorsFromPreferences(); 
-		updateElementsWithThemeColors();
-		
-		
+		updateElementsWithThemeColors();		
 	}
 	
 	
@@ -173,7 +161,7 @@ public class MainActivity extends Activity
 			else bt_DebugScreen.setVisibility(View.VISIBLE);
 		}			
 		
-		// TODO: check and Create a new service client and bind our activity to this service
+		// Creates a new service client and binds our activity to this service (for reminders / notifications handling
         scheduleClient = new ScheduleClient(getApplicationContext());
         scheduleClient.doBindService();   
         
@@ -182,17 +170,15 @@ public class MainActivity extends Activity
 		toastDebugInfo("MainActivity.onResume() invoked", true);		
 	}
 	
-	@Override
+	
+	@Override	
 	protected void onPause() {
 		super.onPause();
-		// TODO: if relevant to this class, register to preference changes, otherwise remove this overriden method
 		
-		// TODO:  When our activity is stopped ensure we also stop the connection to the service
-        // this stops us leaking our activity into the system *bad*
+		// When our activity is stopped ensure we also stop the connection to the service
         if(scheduleClient != null)
             scheduleClient.doUnbindService();
 	}
-	
 	
 	
 	@Override
@@ -200,9 +186,6 @@ public class MainActivity extends Activity
         
         super.onStop();
     }
-	
-	
-	
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -267,25 +250,7 @@ public class MainActivity extends Activity
 				
 			}
 		else toastDebugInfo("returned with !(Result_OK)", false);
-	}
-	
-	
-	private void notificationHandling()
-	{
-		// commented for debug and design
-		/*int year = 2014
-				, month = 4 // 0 based 
-				, day = 12
-				, hourOfDay = 11
-				, minute = 45;
-			Calendar c = Calendar.getInstance();
-		    c.set(year, month, day, hourOfDay, minute);
-			// Ask our service to set an alarm for that date, this activity talks to the client that talks to the service
-	        scheduleClient.setAlarmForNotification(c);*/
-	        
-		isNotify= false;
-	}
-		
+	}		
 	
 	private void fillUpTableFromDB()
 	{
@@ -500,37 +465,7 @@ public class MainActivity extends Activity
 		TableLayout todosTable = (TableLayout) findViewById(R.id.table_ToDos);
 		todosTable.removeViews(1, todosTable.getChildCount()-1);
 	}
-	
-	// TODO: redesign to handle all in AddNewTodo class - remove from here once done and tested
-	/*private void createToDo(String todoTitle, String categorySelected, String dueDate)
-	{
-		int defaultTodoStatus = 0;
-		// updates DB with new Todo
-		DatabaseHelper db = new DatabaseHelper(getApplicationContext());
-				
-		long tagID = 0;		
-		if (!(db.getAllTags().contains(categorySelected)))
-		{
-			Tag tag = new Tag(categorySelected);
-			tagID = db.createTag(tag);
-		}
-		else 
-		{
-			List<Tag> tags = db.getAllTags();
-			for (Tag tag : tags)
-			{
-				if ( categorySelected.equals(tag.getTagName()) )
-					tagID  = tag.getId();					
-			}				 
-		}		
-		Todo todo = new Todo(todoTitle, defaultTodoStatus);
-		todo.setDueDate(dueDate); 
-		db.createToDo(todo, new long[] {tagID});
-				
-		db.closeDB();
-	}*/
-				
-	// Get Todo  (int todoID)
+						
 	private Todo getTodoByID(int todoID)
 	{
 		Todo todo = null;
@@ -540,7 +475,6 @@ public class MainActivity extends Activity
 		return todo;		
 	}
 	
-	// Un/Check Todo as completed (int todoID)
 	private void toggleTodoStatus(int todoID)
 	{
 		// '1' represents Completed while '0' represents NotCompleted
@@ -557,7 +491,6 @@ public class MainActivity extends Activity
 		fillUpTableFromDB();		
 	}
 	
-	// Delete todo (int todoID)  include its tag if not in use elsewhere and cancel notification reminder if exists
 	private void deleteTodo(int todoID)
 	{
 		DatabaseHelper db = new DatabaseHelper(getApplicationContext());
@@ -565,7 +498,6 @@ public class MainActivity extends Activity
 		db.deleteToDo(todoID, true); 
 		db.closeDB();
 		
-		// TODO: test as it is a new imp 		
 		if (todoToDelete.getNotification().equals(Todo.NOTIFICATION_STATUS_ENABLED))
 			scheduleClient.cancelAlarmForNotification(todoID);
 		

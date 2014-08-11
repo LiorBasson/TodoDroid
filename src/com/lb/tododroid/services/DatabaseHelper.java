@@ -206,7 +206,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
        return todos;
     }
     
-    // getting all todos with active reminder TODO: test!
+    // getting all todos with active reminder 
     public List<Todo> getAllToDosWithNotification() 
     {
        List<Todo> todos = new ArrayList<Todo>();
@@ -346,7 +346,6 @@ public class DatabaseHelper extends SQLiteOpenHelper
 		}  
 		db.delete(TABLE_TODO, KEY_ID + " = ?",
 		      new String[] { String.valueOf(todo_id) });
-		// TODO: Test and add it (delete TodoTags table relevant row) written on 06032014 
 		db.delete(TABLE_TODO_TAG, KEY_TODO_ID + " = ?", new String[] { String.valueOf(todo_id) });
     }
     

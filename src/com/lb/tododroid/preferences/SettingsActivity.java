@@ -1,15 +1,22 @@
 package com.lb.tododroid.preferences;
 
+import java.net.URI;
+
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
-import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.preference.RingtonePreference;
 import android.util.Log;
 
 import com.lb.tododroid.R;
 
-public class SettingsActivity extends PreferenceActivity implements OnSharedPreferenceChangeListener {
+public class SettingsActivity extends PreferenceActivity implements OnSharedPreferenceChangeListener 
+{
+	
 	final String LOG_TAG = "SettingsActivity";	
 
 	@SuppressWarnings("deprecation")
@@ -18,50 +25,21 @@ public class SettingsActivity extends PreferenceActivity implements OnSharedPref
 	{
 		Log.d(LOG_TAG, "onCreate() was invoked");
 		super.onCreate(savedInstanceState);
-		addPreferencesFromResource(R.xml.preferences);
+		addPreferencesFromResource(R.xml.preferences);	
 		
-		elementsSpecialHandling();
-	}
+	}	
 	
-	private void elementsSpecialHandling()
-	{
-//		@SuppressWarnings("deprecation")
-//		EditTextPreference etp = (EditTextPreference) findPreference("pref_key_sms_delete_limit");
-//		etp.getText();
-//		etp.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-//			
-//			@Override
-//			public boolean onPreferenceClick(Preference preference) {
-//				// TODO: Remove when finish debugging
-//				return false;
-//			}
-//		});				
-	}
-	
+	@SuppressWarnings("deprecation")
 	@Override
-	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
-			String key) 
-	{
-	
-		if (key.equals("pref_key_notification"))
-		{
-			boolean isNotifEnabled = sharedPreferences.getBoolean(key, false);
-			if (isNotifEnabled)
-				Log.d("", "msg");
-			// TODO: update summary with selected value
-				
-		}
-		
-		
-			
-//		{
-//			
-//
-//		}
-//		
-		// TODO update summary and etc upon specific pref changed
+	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) 
+	{		
 		Log.d(LOG_TAG, "onSharedPreferenceChanged() was invoked");		
+		
+		
+
+		Log.d(LOG_TAG, "onSharedPreferenceChanged() was finished");		
 	}
+	
 
 	@SuppressWarnings("deprecation")
 	@Override

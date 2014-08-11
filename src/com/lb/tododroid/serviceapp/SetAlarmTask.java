@@ -39,7 +39,7 @@ public class SetAlarmTask implements Runnable{
      
     @Override
     public void run() {
-        // Request to start are service when the alarm date is upon us
+        // Request to start a service when the alarm required date comes
         // We don't start an activity as we just want to pop up a notification into the system bar not a full activity
     	Log.d("SetAlarmTask","run() started");
     	    	

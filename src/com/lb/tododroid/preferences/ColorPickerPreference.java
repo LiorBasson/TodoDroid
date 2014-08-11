@@ -49,8 +49,7 @@ public class ColorPickerPreference extends Preference
 			// rectangle on the left of the arrow.
 			// for example, 0xff000000 is black, 0xff0000ff is blue. Please be
 			// aware of the initial 0xff which is the alpha.
-			
-			// TODO: context as 'getContext()' might be problematic, if required I will change to getApplicationCon...			
+									
 			AmbilWarnaDialog am = new AmbilWarnaDialog(getContext(),
 					initialColor, new OnAmbilWarnaListener() {
 

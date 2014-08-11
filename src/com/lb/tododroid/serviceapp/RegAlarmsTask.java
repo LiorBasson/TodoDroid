@@ -17,32 +17,29 @@ public class RegAlarmsTask implements Runnable
 {
 	// The android system alarm manager
     private final AlarmManager am;
-	// The context to retrieve the alarm manager from
+	// The context to retrieve the alarm manager and DB from
     private final Context context;
     
     
 	public RegAlarmsTask(Context context)
 	{
-		Log.d("RegAlarmsTask","Constructor invoked");
+		Log.d("RegAlarmsTask","RegAlarmsTask constructor invoked");
 
 		this.context = context;
 		this.am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 		
-		Log.d("RegAlarmsTask","Constructor done");
+		Log.d("RegAlarmsTask","RegAlarmsTask constructor finished");
 	}
 
 	@Override
 	public void run() 
 	{
 		Log.d("RegAlarmsTask","run() started");
-		
-		// TODO: #1 check if Reminders are enabled in SharedProperties and only if does execute everything here? 
-		//  or should i register and keep the check in NotifyService? check here is to save time on reboot, 
-		//  but requires registering upon shared preference changed...
-		
-		// TODO: #2 req DB for records with reminder enabled and then foreach setAlarm
+				
+		// gets from DB all todo records with reminder enabled and then iterate foreach for Alarm manager to setAlarm
 		DatabaseHelper db = new DatabaseHelper(context);
 		List<Todo> reminderEnabledTodos = db.getAllToDosWithNotification();
+		db.closeDB();
 		
 		int remindersCnt = reminderEnabledTodos.size();
 				
@@ -72,7 +69,7 @@ public class RegAlarmsTask implements Runnable
 	        am.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);			
 		}	
         
-		Log.d("RegAlarmsTask","run() done");
+		Log.d("RegAlarmsTask","run() finished");
 	}
 
 }
