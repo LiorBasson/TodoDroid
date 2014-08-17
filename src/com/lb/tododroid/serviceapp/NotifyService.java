@@ -15,6 +15,7 @@ import android.provider.Settings;
 import android.util.Log;
 
 import com.lb.tododroid.EditTodo;
+import com.lb.tododroid.R;
 import com.lb.tododroid.model.Todo;
 import com.lb.tododroid.services.DatabaseHelper;
  
@@ -93,9 +94,9 @@ public class NotifyService extends Service {
     			db.closeDB();    
     			
     			// This is the 'title' of the notification    	
-    	        CharSequence title = "ToDoDroid alarm! " + todoID;    	
+    	        CharSequence title = "TodoDroid Reminder!";    	
     	        // This is the icon to use on the notification
-    	        int icon = android.R.drawable.ic_notification_overlay;
+    	        int icon = R.drawable.ic_launcher;
     	        // This is the scrolling text of the notification
     	        CharSequence text = updatedTodo.getNote(); // "Tap to view Todo " + todoID;       
     	        // What time to show on the notification
