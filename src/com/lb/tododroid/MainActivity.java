@@ -562,10 +562,10 @@ public class MainActivity extends Activity
 		{		
 			final TextView textView = new TextView(this);
 			
-			String versionName = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
-			String dialogContent = getString(R.string.dialogContent);
-			dialogContent = dialogContent.replace("1.1.2", versionName);
-			textView.setText(dialogContent);
+			//String versionName = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+			//String dialogContent = getString(R.string.dialogContent);
+			//dialogContent = dialogContent.replace("1.1.2", versionName);
+			textView.setText(R.string.dialogContent); //.setText(dialogContent);
 			textView.setMovementMethod(LinkMovementMethod.getInstance()); 
 			   
 			final AlertDialog.Builder aDBuilder = new AlertDialog.Builder(this);
